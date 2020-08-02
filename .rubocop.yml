@@ -1,4 +1,3 @@
-require: rubocop-rspec
 AllCops:
   Exclude:
     - 'db/schema.rb'
@@ -35,11 +34,3 @@ RSpec/MultipleExpectations:
 RSpec/DescribeClass:
   Exclude:
     - 'spec/matchers/*'
-
-# Temporary fix for bug
-Style/HashEachMethods:
-  Enabled: true
-Style/HashTransformKeys:
-  Enabled: true
-Style/HashTransformValues:
-  Enabled: true

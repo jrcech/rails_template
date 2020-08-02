@@ -1,11 +1,7 @@
 # frozen_string_literal: true
 
-def remove_file(file)
-  run("rm -f #{file}")
-end
-
-def remove_dir(dir)
-  run("rm -rf #{dir}")
+def source_paths
+  Array(super) + [File.expand_path(File.dirname(__FILE__))]
 end
 
 def remove_file_comments(file)
@@ -24,6 +20,16 @@ end
 
 def rubocop_file(file)
   run("rubocop -a #{file}")
+end
+
+def rubocop_correct_all
+  run("rubocop -a")
+end
+
+def rubocop_files(files)
+  files.each do |file|
+    rubocop_file file
+  end
 end
 
 def eslint
@@ -65,6 +71,34 @@ remove_comments(commented_files)
 remove_whitespaces 'config/environments/production.rb'
 remove_whitespaces 'config/environments/test.rb'
 remove_whitespaces 'config/puma.rb'
+
+copy_file 'files/.rubocop.yml', '.rubocop.yml'
+
+rubocop_files = %w[
+app/jobs/application_job.rb
+config/environments/development.rb
+config/environments/production.rb
+config/environments/test.rb
+config/initializers/application_controller_renderer.rb
+config/initializers/backtrace_silencers.rb
+config/initializers/content_security_policy.rb
+config/initializers/cookies_serializer.rb
+config/initializers/filter_parameter_logging.rb
+config/initializers/inflections.rb
+config/initializers/mime_types.rb
+config/initializers/wrap_parameters.rb
+config/application.rb
+config/boot.rb
+config/database.yml
+config/environment.rb
+config/puma.rb
+config/routes.rb
+config.ru
+Gemfile
+Rakefile
+]
+
+rubocop_correct_all
 
 # rubocop_file 'app/jobs/application_job.rb'
 # rubocop_file 'config/environments/development.rb'
