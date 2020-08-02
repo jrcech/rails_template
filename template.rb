@@ -19,7 +19,7 @@ def remove_comments(files)
 end
 
 def remove_whitespaces(file)
-  gsub_file(file, /^\s*#.*$\n/, '') # Find suitable regex
+  gsub_file(file, /\S\K([ ]{2,})/, ' ')
 end
 
 def rubocop_file(file)
@@ -62,9 +62,9 @@ Rakefile
 
 remove_comments(commented_files)
 
-# remove_whitespaces 'config/environments/production.rb'
-# remove_whitespaces 'config/environments/test.rb'
-# remove_whitespaces 'config/puma.rb'
+remove_whitespaces 'config/environments/production.rb'
+remove_whitespaces 'config/environments/test.rb'
+remove_whitespaces 'config/puma.rb'
 
 # rubocop_file 'app/jobs/application_job.rb'
 # rubocop_file 'config/environments/development.rb'
