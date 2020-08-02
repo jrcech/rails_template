@@ -1,0 +1,41 @@
+CommitMsg:
+  ALL:
+    on_warn: fail
+PreCommit:
+  ALL:
+    on_warn: fail
+  YamlSyntax:
+    enabled: true
+  JsonSyntax:
+    enabled: true
+  BundleCheck:
+    enabled: true
+  RailsSchemaUpToDate:
+    enabled: false
+  RuboCop:
+    enabled: true
+  Fasterer:
+    enabled: true
+  BundleAudit:
+    enabled: true
+  Reek:
+    enabled: true
+  RailsBestPractices:
+    enabled: true
+    command: ['rails_best_practices', 'app', '--spec']
+    flags: ['-c', '.rails_best_practices.yml']
+  EsLint:
+    enabled: true
+    required_executable: './node_modules/.bin/eslint'
+    include: 'app/javascript/**/*.js'
+  Stylelint:
+    enabled: true
+    required_executable: './node_modules/.bin/stylelint'
+    include: 'app/javascript/stylesheets/**/*.scss'
+  SlimLint:
+    enabled: true
+  Flay:
+    enabled: true
+PrePush:
+  Brakeman:
+    enabled: true

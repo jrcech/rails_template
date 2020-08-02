@@ -1,0 +1,44 @@
+require: rubocop-rspec
+AllCops:
+  Exclude:
+    - 'db/schema.rb'
+    - 'node_modules/**/*'
+Style/Documentation:
+  Enabled: false
+Style/RegexpLiteral:
+  AllowInnerSlashes: true
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented_relative_to_receiver
+Metrics/AbcSize:
+  Exclude:
+    - 'db/migrate/*'
+Metrics/MethodLength:
+  Exclude:
+    - 'db/migrate/*'
+Metrics/BlockLength:
+  ExcludedMethods: [
+    'describe',
+    'context',
+    'shared_examples',
+    'namespace'
+  ]
+  Exclude:
+    - 'config/environments/*'
+Style/MixinUsage:
+  Exclude:
+    - 'db/seeds.rb'
+    - 'bin/*'
+RSpec/MultipleExpectations:
+  Exclude:
+    - 'spec/matchers/*'
+RSpec/DescribeClass:
+  Exclude:
+    - 'spec/matchers/*'
+
+# Temporary fix for bug
+Style/HashEachMethods:
+  Enabled: true
+Style/HashTransformKeys:
+  Enabled: true
+Style/HashTransformValues:
+  Enabled: true
