@@ -1,26 +1,20 @@
 # frozen_string_literal: true
 
 def source_paths
-  Array(super) + [File.expand_path(File.dirname(__FILE__))]
+  [__dir__]
 end
 
 def remove_file_comments(file)
   gsub_file(file, /^\s*#.*$\n/, '')
 end
 
-def remove_all_comments(files)
-  files.each do |file|
-    remove_file_comments file
-  end
-end
-
 def remove_file_whitespaces(file)
   gsub_file(file, /\S\K([ ]{2,})/, ' ')
 end
 
-def remove_all_whitespaces(files)
+def change_files(files, change_file_method)
   files.each do |file|
-    remove_file_whitespaces file
+    send(change_file_method, file)
   end
 end
 
@@ -72,7 +66,7 @@ Gemfile
 Rakefile
 ]
 
-remove_all_comments commented_files
+change_files commented_files, :remove_file_comments
 
 multiple_whitespace_files = %w[
 config/environments/production.rb
@@ -80,7 +74,11 @@ config/environments/test.rb
 config/puma.rb
 ]
 
-remove_all_whitespaces multiple_whitespace_files
+change_files multiple_whitespace_files, :remove_file_whitespaces
 
 copy_file 'files/.rubocop.yml', '.rubocop.yml'
-rubocop_correct_all
+
+after_bundle do
+  say 'After Bundle'
+  rubocop_correct_all
+end
