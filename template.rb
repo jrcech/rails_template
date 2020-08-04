@@ -9,7 +9,7 @@ def remove_file_comments(file)
 end
 
 def remove_file_whitespaces(file)
-  gsub_file(file, /\S\K(.{2,})/, ' ')
+  gsub_file(file, /\S\K([ ]{2,})/, ' ')
 end
 
 def change_files(files, change_file_method)
@@ -121,8 +121,16 @@ after_bundle do
   # Fix rubocop
   run('rubocop --auto-correct-all')
 
-  # Install overcommit
+  # Install overcommit and configure .gitignore
+  gitignore_files = %w[
+    .DS_Store
+    .idea
+    .env
+    .env.*
+  ]
+
   run('overcommit --install')
+  prepend_to_file('.gitginore', gitignore_files.join("\n"))
 
   # Initialize git and commit
   git :init
