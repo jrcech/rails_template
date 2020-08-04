@@ -4,5 +4,6 @@ AllCops:
   Exclude:
     - 'bin/*'
     - 'node_modules/**/*'
+    - 'db/schema.rb'
 Style/Documentation:
   Enabled: false

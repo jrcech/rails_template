@@ -143,6 +143,10 @@ after_bundle do
   run('rubocop --auto-correct-all')
   run('yarn run eslint . --fix')
 
+  # Create DB
+  rails_command 'db:create'
+  rails_command 'db:migrate'
+
   # Install overcommit and configure .gitignore
   gitignore_files = %w[
     .DS_Store
