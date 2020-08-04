@@ -10,8 +10,6 @@ PreCommit:
     enabled: true
   BundleCheck:
     enabled: true
-  RailsSchemaUpToDate:
-    enabled: false
   RuboCop:
     enabled: true
   Fasterer:

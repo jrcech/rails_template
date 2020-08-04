@@ -71,11 +71,13 @@ multiple_whitespace_files = %w[
 change_files multiple_whitespace_files, :remove_file_whitespaces
 
 copy_file 'files/.rubocop.yml', '.rubocop.yml'
+copy_file 'files/.rails_best_practices.yml', '.rails_best_practices.yml'
+copy_file 'files/.reek.yml', '.reek.yml'
+copy_file 'files/.overcommit.yml', '.overcommit.yml'
 
 gem_group :development do
   gem 'brakeman'
   gem 'bundler-audit'
-  gem 'rspec-expectations'
   gem 'fasterer'
   gem 'flay'
   gem 'overcommit'
@@ -89,5 +91,11 @@ end
 
 after_bundle do
   say 'After Bundle'
-  rubocop_correct_all
+
+  run('rubocop --auto-correct-all')
+  run('overcommit --install')
+
+  git :init
+  git add: '.'
+  git commit: "-a -m 'Initial commit'"
 end
