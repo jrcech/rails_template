@@ -9,7 +9,7 @@ def remove_file_comments(file)
 end
 
 def remove_file_whitespaces(file)
-  gsub_file(file, /\S\K([ ]{2,})/, ' ')
+  gsub_file(file, /\S\K(.{2,})/, ' ')
 end
 
 def change_files(files, change_file_method)
@@ -64,20 +64,20 @@ multiple_whitespace_files = %w[
 ]
 
 yarn_dev_packages = %w[
-    babel-eslint
-    eslint
-    eslint-config-airbnb-base
-    eslint-config-prettier
-    eslint-import-resolver-webpack
-    eslint-plugin-import
-    eslint-plugin-prettier
-    prettier
+  babel-eslint
+  eslint
+  eslint-config-airbnb-base
+  eslint-config-prettier
+  eslint-import-resolver-webpack
+  eslint-plugin-import
+  eslint-plugin-prettier
+  prettier
 ]
 
 yarn_packages = %w[
-    postcss-import
-    postcss-flexbugs-fixes
-    postcss-preset-env
+  postcss-import
+  postcss-flexbugs-fixes
+  postcss-preset-env
 ]
 
 remove_dir 'app/assets'
