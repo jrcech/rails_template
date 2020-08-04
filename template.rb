@@ -8,6 +8,14 @@ def remove_file_comments(file)
   gsub_file(file, /^\s*#.*$\n/, '')
 end
 
+def remove_js_file_comments(file)
+  gsub_file(file, /^\s*\/\/.*$\n/, '')
+end
+
+def remove_file_inline_comments(file)
+  gsub_file(file, /#[\w\s]*\./, '')
+end
+
 def remove_file_whitespaces(file)
   gsub_file(file, /\S\K([ ]{2,})/, ' ')
 end
@@ -51,10 +59,18 @@ commented_files = %w[
   config/puma.rb
   config/routes.rb
   config/storage.yml
+  config/webpacker.yml
   .gitignore
   config.ru
   Gemfile
   Rakefile
+]
+
+commented_js_files = %w[
+  app/javascript/channels/consumer.js
+  app/javascript/channels/index.js
+  app/javascript/controllers/index.js
+  app/javascript/packs/application.js
 ]
 
 multiple_whitespace_files = %w[
@@ -82,9 +98,7 @@ yarn_packages = %w[
 
 remove_dir 'app/assets'
 remove_file 'db/seeds.rb'
-
-change_files commented_files, :remove_file_comments
-change_files multiple_whitespace_files, :remove_file_whitespaces
+remove_file 'app/javascript/controllers/hello_controller.js'
 
 copy_file 'files/.rubocop.yml', '.rubocop.yml'
 copy_file 'files/.rails_best_practices.yml', '.rails_best_practices.yml'
@@ -113,13 +127,19 @@ after_bundle do
   run("yarn add #{yarn_dev_packages.join(' ')} --dev")
   run("yarn add #{yarn_packages.join(' ')}")
 
-  # Fix eslint
+  # Remove comments
+  change_files commented_files, :remove_file_comments
+  change_files multiple_whitespace_files, :remove_file_whitespaces
+  change_files commented_js_files, :remove_js_file_comments
+  remove_file_inline_comments 'config/boot.rb'
+
+  # Fix js files
   prepend_to_file('postcss.config.js', "/* eslint-disable global-require */\n\n")
   gsub_file('babel.config.js', 'function(api)', '(api) =>')
-  run('yarn run eslint . --fix')
 
-  # Fix rubocop
+  # Run autocorrection
   run('rubocop --auto-correct-all')
+  run('yarn run eslint . --fix')
 
   # Install overcommit and configure .gitignore
   gitignore_files = %w[
@@ -130,8 +150,7 @@ after_bundle do
   ]
 
   run('overcommit --install')
-  append_to_file('.gitignore', gitignore_files.join("\n"))
-  append_to_file('.gitignore', "\n")
+  append_to_file('.gitignore', "\n" << gitignore_files.join("\n") << "\n")
 
   # Initialize git and commit
   git :init
