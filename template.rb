@@ -104,6 +104,7 @@ copy_file 'files/.rails_best_practices.yml', '.rails_best_practices.yml'
 copy_file 'files/.reek.yml', '.reek.yml'
 copy_file 'files/.overcommit.yml', '.overcommit.yml'
 copy_file 'files/.eslintrc', '.eslintrc'
+copy_file 'files/procfile', 'procfile'
 
 gem_group :development do
   gem 'brakeman'

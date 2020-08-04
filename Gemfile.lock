@@ -23,7 +23,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  rubocop (~> 0.80.0)
+  rubocop
 
 RUBY VERSION
    ruby 2.7.0p0
