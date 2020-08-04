@@ -28,9 +28,3 @@ Style/MixinUsage:
   Exclude:
     - 'db/seeds.rb'
     - 'bin/*'
-RSpec/MultipleExpectations:
-  Exclude:
-    - 'spec/matchers/*'
-RSpec/DescribeClass:
-  Exclude:
-    - 'spec/matchers/*'
