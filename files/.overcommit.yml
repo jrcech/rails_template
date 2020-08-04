@@ -36,8 +36,6 @@ PreCommit:
     include: 'app/javascript/stylesheets/**/*.scss'
   YamlSyntax:
     enabled: true
-  YamlLint:
-    enabled: true
 PrePush:
   Brakeman:
     enabled: true
