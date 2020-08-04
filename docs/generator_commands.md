@@ -2,7 +2,7 @@
 
 ## Generate base app
 ```bash
-rails new base -STB --database=postgresql --skip-spring --skip-turbolinks --skip-system-test --webpack=stimulus --skip-webpack-install
+rails new base -ST --database=postgresql --skip-spring --skip-turbolinks --skip-system-test --webpack=stimulus
 ```
 
 ## Generate complete app using template
