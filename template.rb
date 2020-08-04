@@ -98,7 +98,6 @@ yarn_packages = %w[
 
 remove_dir 'app/assets'
 remove_file 'db/seeds.rb'
-remove_file 'app/javascript/controllers/hello_controller.js'
 
 copy_file 'files/.rubocop.yml', '.rubocop.yml'
 copy_file 'files/.rails_best_practices.yml', '.rails_best_practices.yml'
@@ -122,6 +121,8 @@ end
 
 after_bundle do
   say 'After Bundle'
+
+  remove_file 'app/javascript/controllers/hello_controller.js'
 
   # Add yarn packages
   run("yarn add #{yarn_dev_packages.join(' ')} --dev")
