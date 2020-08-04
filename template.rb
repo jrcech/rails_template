@@ -150,7 +150,7 @@ after_bundle do
   ]
 
   run('overcommit --install')
-  append_to_file('.gitignore', "\n" << gitignore_files.join("\n") << "\n")
+  append_to_file('.gitignore', +"\n" << gitignore_files.join("\n") << +"\n")
 
   # Initialize git and commit
   git :init
