@@ -7,3 +7,6 @@ AllCops:
     - 'db/schema.rb'
 Style/Documentation:
   Enabled: false
+Metrics/BlockLength:
+  Exclude:
+    - 'config/environments/*'

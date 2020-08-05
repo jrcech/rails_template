@@ -5,11 +5,11 @@ def source_paths
 end
 
 def remove_file_comments(file)
-  gsub_file(file, /^\s*#.*$\n/, '')
+  gsub_file(file, /^[ ]*#.*$\n/, '')
 end
 
 def remove_js_file_comments(file)
-  gsub_file(file, /^\s*\/\/.*$\n/, '')
+  gsub_file(file, /^[ ]*\/\/.*$\n/, '')
 end
 
 def remove_file_inline_comments(file)
@@ -38,6 +38,19 @@ def eslint
   run('yarn run eslint --fix .')
 end
 
+def append_to_file_line(file, search_line, append_string)
+  replace_string = "#{search_line}#{append_string}\n"
+  gsub_file(file, search_line, replace_string)
+end
+
+gitignore_files = %w[
+    .DS_Store
+    .idea
+    .env
+    .env.*
+    /coverage
+]
+
 commented_files = %w[
   app/jobs/application_job.rb
   config/environments/development.rb
@@ -60,6 +73,8 @@ commented_files = %w[
   config/routes.rb
   config/storage.yml
   config/webpacker.yml
+  spec/rails_helper.rb
+  spec/spec_helper.rb
   .gitignore
   config.ru
   Gemfile
@@ -96,6 +111,15 @@ yarn_packages = %w[
   postcss-preset-env
 ]
 
+bullet_environment_settings = %(
+  config.after_initialize do
+    Bullet.enable = true
+    Bullet.bullet_logger = true
+    Bullet.rails_logger = true
+    Bullet.add_footer = true
+  end
+)
+
 remove_dir 'app/assets'
 remove_file 'db/seeds.rb'
 
@@ -120,14 +144,64 @@ gem_group :development do
   gem 'slim_lint'
 end
 
-after_bundle do
-  say 'After Bundle'
+gem_group :development do
+  gem 'better_errors'
+  gem 'binding_of_caller'
+  gem 'letter_opener'
+  gem 'meta_request'
+  gem 'pry-awesome_print'
+  gem 'pry-rails'
+end
 
+gem_group :development, :test do
+  gem 'awesome_print'
+  gem 'bullet'
+  gem 'factory_bot_rails'
+  gem 'pry-byebug'
+  gem 'rspec-rails'
+end
+
+run('bundle install')
+
+after_bundle do
+  # Add yarn packages
+  run("yarn add --dev #{yarn_dev_packages.join(' ')}")
+  run("yarn add #{yarn_packages.join(' ')}")
+
+  # Create DB
+  rails_command 'db:create'
+  rails_command 'db:migrate'
+
+  # Configure .gitignore
+  append_to_file('.gitignore', +"\n" << gitignore_files.join("\n") << +"\n")
+
+  # Remove redundant generated files
   remove_file 'app/javascript/controllers/hello_controller.js'
 
-  # Add yarn packages
-  run("yarn add #{yarn_dev_packages.join(' ')} --dev")
-  run("yarn add #{yarn_packages.join(' ')}")
+  # Configure bullet gem
+  append_to_file_line(
+  'config/environments/development.rb',
+  'ActiveSupport::EventedFileUpdateChecker',
+  bullet_environment_settings
+  )
+
+  # RSpec
+  rails_command 'generate rspec:install'
+  append_to_file('.rspec', "--format documentation\n--color\n")
+  run('rubocop spec/spec_helper.rb --auto-correct-all')
+  prepend_to_file('spec/rails_helper.rb', "require 'simplecov'\nSimpleCov.start\n\n")
+
+  rails_helper_inject = %(
+    require 'capybara/rails'
+
+    Dir[Rails.root.join('spec', 'support', '**', '*.rb')].sort.each { |f| require f }
+  )
+
+  append_to_file_line(
+        'spec/rails_helper.rb',
+        "require 'rspec/rails'",
+        rails_helper_inject
+  )
 
   # Remove comments
   change_files commented_files, :remove_file_comments
@@ -143,22 +217,8 @@ after_bundle do
   run('rubocop --auto-correct-all')
   run('yarn run eslint . --fix')
 
-  # Create DB
-  rails_command 'db:create'
-  rails_command 'db:migrate'
-
-  # Install overcommit and configure .gitignore
-  gitignore_files = %w[
-    .DS_Store
-    .idea
-    .env
-    .env.*
-  ]
-
+  # Initialize git, install overcommit and commit
   run('overcommit --install')
-  append_to_file('.gitignore', +"\n" << gitignore_files.join("\n") << +"\n")
-
-  # Initialize git and commit
   git :init
   git add: '.'
   git commit: "-a -m 'Initial commit'"
