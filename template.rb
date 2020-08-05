@@ -39,7 +39,7 @@ def eslint
 end
 
 def append_to_file_line(file, search_line, append_string)
-  replace_string = "#{search_line}#{append_string}\n"
+  replace_string = "#{search_line}\n#{append_string}\n"
   gsub_file(file, search_line, replace_string)
 end
 
@@ -60,6 +60,7 @@ commented_files = %w[
   config/initializers/backtrace_silencers.rb
   config/initializers/content_security_policy.rb
   config/initializers/cookies_serializer.rb
+  config/initializers/devise.rb
   config/initializers/filter_parameter_logging.rb
   config/initializers/inflections.rb
   config/initializers/mime_types.rb
@@ -129,6 +130,8 @@ copy_file 'files/.reek.yml', '.reek.yml'
 copy_file 'files/.overcommit.yml', '.overcommit.yml'
 copy_file 'files/.eslintrc', '.eslintrc'
 copy_file 'files/procfile', 'procfile'
+directory 'files/spec/support', 'spec/support'
+directory 'files/spec/system', 'spec/system'
 
 gem_group :development do
   gem 'brakeman'
@@ -161,7 +164,21 @@ gem_group :development, :test do
   gem 'rspec-rails'
 end
 
-run('bundle install')
+gem_group :test do
+  gem 'capybara'
+  gem 'geckodriver-helper'
+  gem 'selenium-webdriver'
+  gem 'shoulda-matchers'
+  gem 'simplecov', require: false
+  gem 'vcr'
+  gem 'w3c_validators'
+  gem 'webmock'
+end
+
+gem 'devise'
+gem 'rolify'
+
+run 'bundle install'
 
 after_bundle do
   # Add yarn packages
@@ -172,8 +189,11 @@ after_bundle do
   rails_command 'db:create'
   rails_command 'db:migrate'
 
+  # Add routes
+  route "root to: 'admin/frontend_test#index'"
+
   # Configure .gitignore
-  append_to_file('.gitignore', +"\n" << gitignore_files.join("\n") << +"\n")
+  append_to_file '.gitignore', +"\n" << gitignore_files.join("\n") << +"\n"
 
   # Remove redundant generated files
   remove_file 'app/javascript/controllers/hello_controller.js'
@@ -186,21 +206,44 @@ after_bundle do
   )
 
   # RSpec
-  rails_command 'generate rspec:install'
-  append_to_file('.rspec', "--format documentation\n--color\n")
-  run('rubocop spec/spec_helper.rb --auto-correct-all')
-  prepend_to_file('spec/rails_helper.rb', "require 'simplecov'\nSimpleCov.start\n\n")
+  generate 'rspec:install'
+  append_to_file '.rspec', "--format documentation\n--color\n"
+  run 'rubocop spec/spec_helper.rb --auto-correct-all'
+  prepend_to_file 'spec/rails_helper.rb', "require 'simplecov'\nSimpleCov.start\n\n"
 
   rails_helper_inject = %(
     require 'capybara/rails'
 
     Dir[Rails.root.join('spec', 'support', '**', '*.rb')].sort.each { |f| require f }
   )
-
   append_to_file_line(
         'spec/rails_helper.rb',
         "require 'rspec/rails'",
         rails_helper_inject
+  )
+
+  # Devise
+  generate 'devise:install'
+
+  devise_config = %(
+    config.lock_strategy = :failed_attempts
+    config.unlock_keys = [:email]
+    config.unlock_strategy = :email
+    config.maximum_attempts = 10
+    config.last_attempt_warning = true
+  )
+  append_to_file_line(
+      'config/initializers/devise.rb',
+      'config.sign_out_via = :delete',
+      devise_config
+  )
+  append_to_file_line(
+      'config/environments/development.rb',
+      'config.action_mailer.perform_caching = false',
+      %(
+        config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+        config.action_mailer.delivery_method = :letter_opener
+      )
   )
 
   # Remove comments
@@ -210,15 +253,15 @@ after_bundle do
   remove_file_inline_comments 'config/boot.rb'
 
   # Fix js files
-  prepend_to_file('postcss.config.js', "/* eslint-disable global-require */\n\n")
-  gsub_file('babel.config.js', 'function(api)', '(api) =>')
+  prepend_to_file 'postcss.config.js', "/* eslint-disable global-require */\n\n"
+  gsub_file 'babel.config.js', 'function(api)', '(api) =>'
 
   # Run autocorrection
-  run('rubocop --auto-correct-all')
-  run('yarn run eslint . --fix')
+  run 'rubocop --auto-correct-all'
+  run 'yarn run eslint . --fix'
 
   # Initialize git, install overcommit and commit
-  run('overcommit --install')
+  run 'overcommit --install'
   git :init
   git add: '.'
   git commit: "-a -m 'Initial commit'"

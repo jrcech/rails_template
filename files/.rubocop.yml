@@ -10,3 +10,5 @@ Style/Documentation:
 Metrics/BlockLength:
   Exclude:
     - 'config/environments/*'
+  ExcludedMethods:
+    - 'describe'
