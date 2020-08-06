@@ -51,8 +51,13 @@ def eslint
 end
 
 def append_to_file_line(file, search_line, append_string)
-  replace_string = "#{search_line}\n#{append_string}\n"
+  replace_string = "#{search_line}#{append_string}"
   gsub_file(file, search_line, replace_string)
+end
+
+def append_to_text(file, search_text, append_string)
+  replace_string = "#{search_text}#{append_string}"
+  gsub_file(file, search_text, replace_string)
 end
 
 gitignore_files = %w[
@@ -65,8 +70,10 @@ gitignore_files = %w[
 
 commented_files = %w[
   app/jobs/application_job.rb
+  app/models/user.rb
   config/application.rb
   config/environment.rb
+  config/routes.rb
   spec/rails_helper.rb
   spec/spec_helper.rb
   .gitignore
@@ -87,6 +94,7 @@ commented_config_files = %w[
   config/initializers/filter_parameter_logging.rb
   config/initializers/inflections.rb
   config/initializers/mime_types.rb
+  config/initializers/rolify.rb
   config/initializers/wrap_parameters.rb
   config/locales/en.yml
   config/boot.rb
@@ -95,6 +103,7 @@ commented_config_files = %w[
   config/routes.rb
   config/storage.yml
   config/webpacker.yml
+  lib/tasks/auto_annotate_models.rake
 ]
 
 commented_js_files = %w[
@@ -192,15 +201,23 @@ end
 
 gem 'devise'
 gem 'rolify'
+gem 'omniauth-facebook'
+gem 'omniauth-google-oauth2'
+
+gem_group :development do
+  gem 'annotate'
+  gem 'seedbank'
+end
 
 run 'bundle install'
 
 after_bundle do
   # Add yarn packages
-  run("yarn add --dev #{yarn_dev_packages.join(' ')}")
-  run("yarn add #{yarn_packages.join(' ')}")
+  run "yarn add --dev #{yarn_dev_packages.join(' ')}"
+  run "yarn add #{yarn_packages.join(' ')}"
 
   # Create DB
+  rails_command 'db:drop'
   rails_command 'db:create'
   rails_command 'db:migrate'
 
@@ -214,11 +231,9 @@ after_bundle do
   remove_file 'app/javascript/controllers/hello_controller.js'
 
   # Configure bullet gem
-  append_to_file_line(
-  'config/environments/development.rb',
-  'ActiveSupport::EventedFileUpdateChecker',
-  bullet_environment_settings
-  )
+  append_to_file_line 'config/environments/development.rb',
+                      'ActiveSupport::EventedFileUpdateChecker',
+                      bullet_environment_settings
 
   # RSpec
   generate 'rspec:install'
@@ -231,11 +246,11 @@ after_bundle do
 
     Dir[Rails.root.join('spec', 'support', '**', '*.rb')].sort.each { |f| require f }
   )
-  append_to_file_line(
-        'spec/rails_helper.rb',
-        "require 'rspec/rails'",
-        rails_helper_inject
-  )
+  append_to_file_line 'spec/rails_helper.rb',
+                      "require 'rspec/rails'",
+                      rails_helper_inject
+
+  run 'rails credentials:edit --environment development'
 
   # Devise
   generate 'devise:install'
@@ -246,20 +261,108 @@ after_bundle do
     config.unlock_strategy = :email
     config.maximum_attempts = 10
     config.last_attempt_warning = true
+    config.omniauth :facebook,
+                    Rails.application.credentials.omniauth[:facebook_app_id],
+                    Rails.application.credentials.omniauth[:facebook_app_secret]
+    config.omniauth :google_oauth2,
+                    Rails.application.credentials.omniauth[:google_client_id],
+                    Rails.application.credentials.omniauth[:google_client_secret],
+                    name: :google
   )
   append_to_file_line(
       'config/initializers/devise.rb',
       'config.sign_out_via = :delete',
       devise_config
   )
-  append_to_file_line(
-      'config/environments/development.rb',
-      'config.action_mailer.perform_caching = false',
-      %(
-        config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
-        config.action_mailer.delivery_method = :letter_opener
-      )
+  append_to_file_line 'config/environments/development.rb',
+                      'config.action_mailer.perform_caching = false',
+                      %(
+                          config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+                          config.action_mailer.delivery_method = :letter_opener
+                      )
+
+  generate 'devise User'
+  uncomment_lines Dir['./db/migrate/*_devise_create_users.rb'].first,
+                  /t\.|add/
+
+  generate 'rolify Role User'
+  rails_command 'db:migrate'
+  uncomment_lines 'config/initializers/rolify.rb',
+                  /config.use_dynamic_shortcuts/
+
+  remove_file_comments 'app/models/user.rb'
+
+  devise_model = %(
+    devise :database_authenticatable, :registerable,
+           :recoverable, :rememberable, :validatable
   )
+  gsub_file 'app/models/user.rb',
+            devise_model,
+            ''
+
+  devise_user_model = %(
+    devise :database_authenticatable,
+           :registerable,
+           :recoverable,
+           :rememberable,
+           :validatable,
+           :trackable,
+           :confirmable,
+           :lockable,
+           :omniauthable,
+           omniauth_providers: %i[facebook google]
+
+    after_create :assign_default_role
+
+    def assign_default_role
+      add_role(:user) if roles.blank?
+    end
+
+    def self.from_omniauth(auth)
+      where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
+        process_user(user, auth)
+        user.skip_confirmation!
+      end
+    end
+
+    def self.process_user(user, auth)
+      info = auth.info
+
+      user.email = info.email
+      user.password = Devise.friendly_token[0, 20]
+      user.first_name = info.first_name
+      user.last_name = info.last_name
+    end
+  )
+  append_to_file_line 'app/models/user.rb',
+                      'rolify',
+                      devise_user_model
+
+  devise_routes = %(
+    devise_for :users,
+               only: :omniauth_callbacks,
+               controllers: {
+                 omniauth_callbacks: 'users/omniauth_callbacks'
+               }
+
+  )
+
+  gsub_file 'config/routes.rb',
+            'devise_for :users',
+            devise_routes
+
+  copy_file 'files/app/controllers/users/omniauth_callbacks_controller.rb',
+            'app/controllers/users/omniauth_callbacks_controller.rb'
+
+  # omniauth:
+  #   facebook_app_id: 123
+  #   facebook_app_secret: 345
+  #   google_client_id: 678
+  #   google_client_secret: 9
+
+  # Annotate
+  generate 'annotate:install'
+  remove_file 'lib/tasks/.keep'
 
   # Remove comments
   change_files commented_files, :remove_file_comments
@@ -275,6 +378,7 @@ after_bundle do
   # Run autocorrection
   run 'rubocop --auto-correct-all'
   run 'yarn run eslint . --fix'
+  run 'annotate'
 
   # Initialize git, install overcommit and commit
   run 'overcommit --install'

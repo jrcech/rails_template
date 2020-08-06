@@ -10,5 +10,12 @@ Style/Documentation:
 Metrics/BlockLength:
   Exclude:
     - 'config/environments/*'
+    - 'lib/tasks/auto_annotate_models.rake'
   ExcludedMethods:
     - 'describe'
+Metrics/MethodLength:
+  Exclude:
+    - 'db/migrate/*'
+Metrics/AbcSize:
+  Exclude:
+    - 'db/migrate/*'
