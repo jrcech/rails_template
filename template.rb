@@ -4,25 +4,37 @@ def source_paths
   [__dir__]
 end
 
-def remove_file_comments(file)
-  gsub_file(file, /^[ ]*#.*$\n/, '')
+def remove_file_comments(file, options = {})
+  if options[:delete_blank_lines]
+    regex = /^\s*#.*$\n/
+  else
+    regex = /^[ ]*#.*$\n/
+  end
+
+  gsub_file(file, regex, '')
 end
 
-def remove_js_file_comments(file)
-  gsub_file(file, /^[ ]*\/\/.*$\n/, '')
+def remove_js_file_comments(file, options = {})
+  if options[:delete_blank_lines]
+    regex = /^\s*\/\/.*$\n/
+  else
+    regex = /^[ ]*\/\/.*$\n/
+  end
+
+  gsub_file(file, regex, '')
 end
 
-def remove_file_inline_comments(file)
+def remove_file_inline_comments(file, options = {})
   gsub_file(file, /#[\w\s]*\./, '')
 end
 
-def remove_file_whitespaces(file)
+def remove_file_whitespaces(file, options = {})
   gsub_file(file, /\S\K([ ]{2,})/, ' ')
 end
 
-def change_files(files, change_file_method)
+def change_files(files, change_file_method, options = {})
   files.each do |file|
-    send(change_file_method, file)
+    send(change_file_method, file, options)
   end
 end
 
@@ -53,6 +65,17 @@ gitignore_files = %w[
 
 commented_files = %w[
   app/jobs/application_job.rb
+  config/application.rb
+  config/environment.rb
+  spec/rails_helper.rb
+  spec/spec_helper.rb
+  .gitignore
+  config.ru
+  Gemfile
+  Rakefile
+]
+
+commented_config_files = %w[
   config/environments/development.rb
   config/environments/production.rb
   config/environments/test.rb
@@ -66,20 +89,12 @@ commented_files = %w[
   config/initializers/mime_types.rb
   config/initializers/wrap_parameters.rb
   config/locales/en.yml
-  config/application.rb
   config/boot.rb
   config/database.yml
-  config/environment.rb
   config/puma.rb
   config/routes.rb
   config/storage.yml
   config/webpacker.yml
-  spec/rails_helper.rb
-  spec/spec_helper.rb
-  .gitignore
-  config.ru
-  Gemfile
-  Rakefile
 ]
 
 commented_js_files = %w[
@@ -248,6 +263,7 @@ after_bundle do
 
   # Remove comments
   change_files commented_files, :remove_file_comments
+  change_files commented_config_files, :remove_file_comments, delete_blank_lines: true
   change_files multiple_whitespace_files, :remove_file_whitespaces
   change_files commented_js_files, :remove_js_file_comments
   remove_file_inline_comments 'config/boot.rb'
