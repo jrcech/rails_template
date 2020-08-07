@@ -181,7 +181,7 @@ gem_group :development do
 end
 
 gem_group :development, :test do
-  gem 'awesome_print'
+  gem 'amazing_print'
   gem 'bullet'
   gem 'factory_bot_rails'
   gem 'pry-byebug'
@@ -199,15 +199,15 @@ gem_group :test do
   gem 'webmock'
 end
 
-gem 'devise'
-gem 'rolify'
-gem 'omniauth-facebook'
-gem 'omniauth-google-oauth2'
-
 gem_group :development do
   gem 'annotate'
   gem 'seedbank'
 end
+
+gem 'devise'
+gem 'rolify'
+gem 'omniauth-facebook'
+gem 'omniauth-google-oauth2'
 
 run 'bundle install'
 
@@ -250,8 +250,6 @@ after_bundle do
                       "require 'rspec/rails'",
                       rails_helper_inject
 
-  run 'rails credentials:edit --environment development'
-
   # Devise
   generate 'devise:install'
 
@@ -262,11 +260,11 @@ after_bundle do
     config.maximum_attempts = 10
     config.last_attempt_warning = true
     config.omniauth :facebook,
-                    Rails.application.credentials.omniauth[:facebook_app_id],
-                    Rails.application.credentials.omniauth[:facebook_app_secret]
+                    Rails.application.credentials.dig(:omniauth, :facebook_app_id),
+                    Rails.application.credentials.dig(:omniauth, :facebook_app_secret)
     config.omniauth :google_oauth2,
-                    Rails.application.credentials.omniauth[:google_client_id],
-                    Rails.application.credentials.omniauth[:google_client_secret],
+                    Rails.application.credentials.dig(:omniauth, :google_client_id),
+                    Rails.application.credentials.dig(:omniauth, :google_client_secret),
                     name: :google
   )
   append_to_file_line(
@@ -292,12 +290,12 @@ after_bundle do
 
   remove_file_comments 'app/models/user.rb'
 
-  devise_model = %(
-    devise :database_authenticatable, :registerable,
-           :recoverable, :rememberable, :validatable
-  )
   gsub_file 'app/models/user.rb',
-            devise_model,
+            'devise :database_authenticatable, :registerable,',
+            ''
+
+  gsub_file 'app/models/user.rb',
+            ':recoverable, :rememberable, :validatable',
             ''
 
   devise_user_model = %(
@@ -353,12 +351,6 @@ after_bundle do
 
   copy_file 'files/app/controllers/users/omniauth_callbacks_controller.rb',
             'app/controllers/users/omniauth_callbacks_controller.rb'
-
-  # omniauth:
-  #   facebook_app_id: 123
-  #   facebook_app_secret: 345
-  #   google_client_id: 678
-  #   google_client_secret: 9
 
   # Annotate
   generate 'annotate:install'

@@ -5,7 +5,7 @@ PreCommit:
   ALL:
     on_warn: fail
   BundleAudit:
-    enabled: true
+    enabled: false
   BundleCheck:
     enabled: true
   BundleOutdated:
