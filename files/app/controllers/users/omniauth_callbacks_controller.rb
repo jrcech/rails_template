@@ -8,7 +8,7 @@ module Users
       auth_data = request.env['omniauth.auth'].except(:extra)
       @user = User.from_omniauth(auth_data)
 
-      process_request(auth_data)
+      process_request auth_data
     end
 
     def failure
@@ -25,7 +25,7 @@ module Users
 
       if user.persisted?
         sign_in_and_redirect user, event: :authentication
-        set_flash_message(:notice, :success, kind: provider.capitalize) if is_navigational_format?
+        set_flash_message :notice, :success, kind: provider.capitalize if is_navigational_format?
       else
         session["devise.#{provider}_data"] = auth_data
         redirect_to new_user_registration_url

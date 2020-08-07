@@ -352,6 +352,33 @@ after_bundle do
   copy_file 'files/app/controllers/users/omniauth_callbacks_controller.rb',
             'app/controllers/users/omniauth_callbacks_controller.rb'
 
+  users_factory = %(
+    email { 'user@example.com' }
+    password { 'MyString' }
+    reset_password_token { 'MyString' }
+    reset_password_sent_at { '2019-03-08 15:33:28' }
+    remember_created_at { '2019-03-08 15:33:28' }
+    sign_in_count { 1 }
+    current_sign_in_at { '2019-03-08 15:33:28' }
+    last_sign_in_at { '2019-03-08 15:33:28' }
+    current_sign_in_ip { '' }
+    last_sign_in_ip { '' }
+    confirmation_token { 'MyString' }
+    confirmed_at { '2019-03-08 15:33:28' }
+    confirmation_sent_at { '2019-03-08 15:33:28' }
+    unconfirmed_email { 'MyString' }
+    created_at { '2019-03-08 15:33:28' }
+    updated_at { '2019-03-08 15:33:28' }
+  )
+
+  append_to_text 'spec/factories/users.rb',
+                 'factory :user do',
+                 users_factory
+
+  append_to_text 'spec/factories/roles.rb',
+                 'factory :role do',
+                 "name { 'MyString' }"
+
   # Annotate
   generate 'annotate:install'
   remove_file 'lib/tasks/.keep'
