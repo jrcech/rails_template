@@ -134,6 +134,7 @@ yarn_packages = %w[
   postcss-import
   postcss-flexbugs-fixes
   postcss-preset-env
+  turbolinks
 ]
 
 bullet_environment_settings = %(
@@ -160,6 +161,8 @@ directory 'files/controllers/admin', 'controllers/admin'
 directory 'files/views', 'views'
 directory 'files/utilities', 'utilities'
 copy_file 'files/config/initializers/locale.rb', 'config/initializers/locale.rb'
+copy_file 'files/javascript/controllers/frontend_test_controller.rb',
+          'javascript/controllers/frontend_test_controller.rb'
 
 gem_group :development do
   gem 'brakeman'
@@ -413,6 +416,17 @@ after_bundle do
   append_to_text 'app/controllers/application_controller.rb',
                  'class ApplicationController < ActionController::Base',
                  i18n_config
+
+  # Turbolinks
+  turbolinks_config = %(
+    const turbolinks = require("turbolinks");
+
+    turbolinks.start();
+  )
+
+  append_to_text 'app/controllers/application_controller.rb',
+                 'const context = require.context("controllers", true, /_controller\.js$/);',
+                 turbolinks_config
 
   # Annotate
   generate 'annotate:install'
