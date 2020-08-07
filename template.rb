@@ -156,6 +156,10 @@ copy_file 'files/.eslintrc', '.eslintrc'
 copy_file 'files/procfile', 'procfile'
 directory 'files/spec/support', 'spec/support'
 directory 'files/spec/system', 'spec/system'
+directory 'files/controllers/admin', 'controllers/admin'
+directory 'files/views', 'views'
+directory 'files/utilities', 'utilities'
+copy_file 'files/config/initializers/locale.rb', 'config/initializers/locale.rb'
 
 gem_group :development do
   gem 'brakeman'
@@ -208,6 +212,8 @@ gem 'devise'
 gem 'rolify'
 gem 'omniauth-facebook'
 gem 'omniauth-google-oauth2'
+gem 'slim-rails'
+gem 'mailgun-ruby'
 
 run 'bundle install'
 
@@ -343,6 +349,18 @@ after_bundle do
                  omniauth_callbacks: 'users/omniauth_callbacks'
                }
 
+     scope '(:locale)', locale: /en|cs/ do
+       devise_for :users, skip: :omniauth_callbacks
+
+       namespace :admin do
+         get :frontend_test, to: 'frontend_test#index'
+         root to: 'dashboard#index'
+       end
+
+       get '/:locale', to: 'admin/dashboard#index'
+       root to: 'admin/frontend_test#index'
+     end
+
   )
 
   gsub_file 'config/routes.rb',
@@ -378,6 +396,23 @@ after_bundle do
   append_to_text 'spec/factories/roles.rb',
                  'factory :role do',
                  "name { 'MyString' }"
+
+  # I18n
+  i18n_config = %(
+    before_action :set_locale
+
+    def set_locale
+      I18n.locale = params[:locale] || I18n.default_locale
+    end
+
+    def default_url_options
+      { locale: I18n.locale }
+    end
+  )
+
+  append_to_text 'app/controllers/application_controller.rb',
+                 'class ApplicationController < ActionController::Base',
+                 i18n_config
 
   # Annotate
   generate 'annotate:install'

@@ -1,0 +1,3 @@
+- flash.each do |type, message|
+  div class="alert alert-#{bootstrap_flash(type)[:class]}"
+    = fa_icon(bootstrap_flash(type)[:icon], fixed_width: true, text: message)
