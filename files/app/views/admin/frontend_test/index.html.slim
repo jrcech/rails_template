@@ -1,0 +1,26 @@
+/ frozen_string_literal: true
+
+h1 Frontend tests
+
+div data-controller="frontend-test"
+  p data-target="frontend-test.stimulusTest"
+  p data-target="frontend-test.jqueryTest"
+  p data-target="frontend-test.turbolinksTest"
+
+p class="css-test" CSS not loaded if this text is visible
+
+span Font Awesome
+'
+= fa_icon('check', text: 'working')
+
+br
+
+p class="d-none" Bootstrap CSS not loaded if this text is visible
+
+button [
+  type="button"
+  class="btn btn-secondary"
+  data-toggle="tooltip"
+  data-placement="top"
+  title="Fully loaded"
+] Bootstrap?

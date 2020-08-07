@@ -131,6 +131,11 @@ yarn_dev_packages = %w[
 ]
 
 yarn_packages = %w[
+  @fortawesome/fontawesome-free
+  bootstrap
+  jquery
+  jquery-ujs
+  popper.js
   postcss-import
   postcss-flexbugs-fixes
   postcss-preset-env
@@ -148,6 +153,7 @@ bullet_environment_settings = %(
 
 remove_dir 'app/assets'
 remove_file 'db/seeds.rb'
+remove_file 'app/views/layouts/application.html.erb'
 
 copy_file 'files/.rubocop.yml', '.rubocop.yml'
 copy_file 'files/.rails_best_practices.yml', '.rails_best_practices.yml'
@@ -157,12 +163,16 @@ copy_file 'files/.eslintrc', '.eslintrc'
 copy_file 'files/procfile', 'procfile'
 directory 'files/spec/support', 'spec/support'
 directory 'files/spec/system', 'spec/system'
-directory 'files/controllers/admin', 'controllers/admin'
-directory 'files/views', 'views'
-directory 'files/utilities', 'utilities'
+directory 'files/app/helpers/utilities', 'app/helpers/utilities'
+directory 'files/app/controllers/admin', 'app/controllers/admin'
+directory 'files/app/views', 'app/views'
 copy_file 'files/config/initializers/locale.rb', 'config/initializers/locale.rb'
-copy_file 'files/javascript/controllers/frontend_test_controller.rb',
-          'javascript/controllers/frontend_test_controller.rb'
+copy_file 'files/app/javascript/controllers/frontend_test_controller.js',
+          'app/javascript/controllers/frontend_test_controller.js'
+directory 'files/config/webpack/plugins',
+          'config/webpack/plugins'
+directory 'files/app/javascript/stylesheets',
+          'app/javascript/stylesheets'
 
 gem_group :development do
   gem 'brakeman'
@@ -229,9 +239,6 @@ after_bundle do
   rails_command 'db:drop'
   rails_command 'db:create'
   rails_command 'db:migrate'
-
-  # Add routes
-  route "root to: 'admin/frontend_test#index'"
 
   # Configure .gitignore
   append_to_file '.gitignore', +"\n" << gitignore_files.join("\n") << +"\n"
@@ -398,7 +405,7 @@ after_bundle do
 
   append_to_text 'spec/factories/roles.rb',
                  'factory :role do',
-                 "name { 'MyString' }"
+                 "\nname { 'MyString' }"
 
   # I18n
   i18n_config = %(
@@ -416,17 +423,6 @@ after_bundle do
   append_to_text 'app/controllers/application_controller.rb',
                  'class ApplicationController < ActionController::Base',
                  i18n_config
-
-  # Turbolinks
-  turbolinks_config = %(
-    const turbolinks = require("turbolinks");
-
-    turbolinks.start();
-  )
-
-  append_to_text 'app/controllers/application_controller.rb',
-                 'const context = require.context("controllers", true, /_controller\.js$/);',
-                 turbolinks_config
 
   # Annotate
   generate 'annotate:install'
@@ -447,6 +443,32 @@ after_bundle do
   run 'rubocop --auto-correct-all'
   run 'yarn run eslint . --fix'
   run 'annotate'
+
+  # JS
+  js_config = %(
+    import "stylesheets/application.scss";
+    import "jquery";
+    import "jquery-ujs";
+    import "bootstrap";
+    import "@fortawesome/fontawesome-free/js/all";
+
+    require("turbolinks").start();
+  )
+
+  append_to_text 'app/javascript/packs/application.js',
+                 %(import "controllers";),
+                 js_config
+
+  # Provide plugin
+  provide_config = %(
+    const pluginProvide = require("./plugins/provide");
+
+    environment.plugins.prepend("Provide", pluginProvide.plugin);
+  )
+
+  append_to_text 'config/webpack/environment.js',
+                 %(const { environment } = require("@rails/webpacker");),
+                 provide_config
 
   # Initialize git, install overcommit and commit
   run 'overcommit --install'
