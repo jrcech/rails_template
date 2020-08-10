@@ -128,6 +128,10 @@ yarn_dev_packages = %w[
   eslint-plugin-import
   eslint-plugin-prettier
   prettier
+  stylelint
+  stylelint-config-sass-guidelines
+  stylelint-config-standard
+  stylelint-scss
 ]
 
 yarn_packages = %w[
@@ -173,6 +177,11 @@ directory 'files/config/webpack/plugins',
           'config/webpack/plugins'
 directory 'files/app/javascript/stylesheets',
           'app/javascript/stylesheets'
+copy_file 'files/.stylelintrc', '.stylelintrc'
+
+gsub_file 'Gemfile',
+          "gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]",
+          ''
 
 gem_group :development do
   gem 'brakeman'
@@ -456,7 +465,7 @@ after_bundle do
   )
 
   append_to_text 'app/javascript/packs/application.js',
-                 %(import "controllers";),
+                 'import "controllers";',
                  js_config
 
   # Provide plugin
@@ -467,7 +476,7 @@ after_bundle do
   )
 
   append_to_text 'config/webpack/environment.js',
-                 %(const { environment } = require("@rails/webpacker");),
+                 'const { environment } = require("@rails/webpacker");',
                  provide_config
 
   # Initialize git, install overcommit and commit
