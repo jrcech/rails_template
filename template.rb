@@ -188,6 +188,8 @@ after_bundle do
   # Devise
   generate 'devise:install'
 
+  remove_file 'config/locales/devise.en.yml'
+
   inject_into_file(
     'config/initializers/devise.rb',
     File.read('./insert_files/config/initializers/devise.rb'),
