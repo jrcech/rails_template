@@ -88,25 +88,7 @@ remove_dir 'app/assets'
 remove_file 'db/seeds.rb'
 remove_file 'app/views/layouts/application.html.erb'
 
-copy_file 'files/.rubocop.yml', '.rubocop.yml'
-copy_file 'files/.rails_best_practices.yml', '.rails_best_practices.yml'
-copy_file 'files/.reek.yml', '.reek.yml'
-copy_file 'files/.overcommit.yml', '.overcommit.yml'
-copy_file 'files/.eslintrc', '.eslintrc'
-copy_file 'files/procfile', 'procfile'
-directory 'files/spec/support', 'spec/support'
-directory 'files/spec/system', 'spec/system'
-directory 'files/app/helpers/utilities', 'app/helpers/utilities'
-directory 'files/app/controllers/admin', 'app/controllers/admin'
-directory 'files/app/views', 'app/views'
-copy_file 'files/config/initializers/locale.rb', 'config/initializers/locale.rb'
-copy_file 'files/app/javascript/controllers/frontend_test_controller.js',
-          'app/javascript/controllers/frontend_test_controller.js'
-directory 'files/config/webpack/plugins',
-          'config/webpack/plugins'
-directory 'files/app/javascript/stylesheets',
-          'app/javascript/stylesheets'
-copy_file 'files/.stylelintrc', '.stylelintrc'
+directory 'files', './'
 directory 'insert_files', 'insert_files'
 
 gsub_file 'Gemfile',
@@ -186,15 +168,18 @@ after_bundle do
   remove_file 'app/javascript/controllers/hello_controller.js'
 
   # Configure bullet gem
-  inject_into_file 'config/environments/development.rb',
-                   File.read('./insert_files/config/environments/development_bullet.rb'),
-                   after: "ActiveSupport::EventedFileUpdateChecker\n"
+  inject_into_file(
+    'config/environments/development.rb',
+    File.read('./insert_files/config/environments/development_bullet.rb'),
+    after: "ActiveSupport::EventedFileUpdateChecker\n"
+  )
 
   # RSpec
   generate 'rspec:install'
   append_to_file '.rspec', "--format documentation\n--color\n"
   run 'rubocop spec/spec_helper.rb --auto-correct-all'
-  prepend_to_file 'spec/rails_helper.rb', "require 'simplecov'\nSimpleCov.start\n\n"
+  prepend_to_file 'spec/rails_helper.rb',
+                  "require 'simplecov'\nSimpleCov.start\n\n"
 
   inject_into_file 'spec/rails_helper.rb',
                    File.read('./insert_files/spec/rails_helper.rb'),
@@ -203,13 +188,17 @@ after_bundle do
   # Devise
   generate 'devise:install'
 
-  inject_into_file 'config/initializers/devise.rb',
-                   File.read('./insert_files/config/initializers/devise.rb'),
-                   after: "config.sign_out_via = :delete\n"
+  inject_into_file(
+    'config/initializers/devise.rb',
+    File.read('./insert_files/config/initializers/devise.rb'),
+    after: "config.sign_out_via = :delete\n"
+  )
 
-  inject_into_file 'config/environments/development.rb',
-                   File.read('./insert_files/config/environments/development_mailer.rb'),
-                   after: "config.action_mailer.perform_caching = false\n"
+  inject_into_file(
+    'config/environments/development.rb',
+    File.read('./insert_files/config/environments/development_mailer.rb'),
+    after: "config.action_mailer.perform_caching = false\n"
+  )
 
   generate 'devise User'
   uncomment_lines Dir['./db/migrate/*_devise_create_users.rb'].first,
@@ -250,9 +239,11 @@ after_bundle do
                    after: "factory :role do\n"
 
   # I18n
-  inject_into_file 'app/controllers/application_controller.rb',
-                   File.read('./insert_files/app/controllers/application_controller_i18n.rb'),
-                   after: "class ApplicationController < ActionController::Base\n"
+  inject_into_file(
+    'app/controllers/application_controller.rb',
+    File.read('./insert_files/app/controllers/application_controller_i18n.rb'),
+    after: "class ApplicationController < ActionController::Base\n"
+  )
 
   # Annotate
   generate 'annotate:install'
@@ -260,7 +251,9 @@ after_bundle do
 
   # Remove comments
   change_files commented_files, :remove_file_comments
-  change_files commented_config_files, :remove_file_comments, delete_blank_lines: true
+  change_files commented_config_files,
+               :remove_file_comments,
+               delete_blank_lines: true
   change_files multiple_whitespace_files, :remove_file_whitespaces
   change_files commented_js_files, :remove_js_file_comments
   remove_file_inline_comments 'config/boot.rb'
@@ -270,13 +263,17 @@ after_bundle do
   gsub_file 'babel.config.js', 'function(api)', '(api) =>'
 
   # JS
-  prepend_to_file 'app/javascript/packs/application.js',
-                  File.read('./insert_files/app/javascript/packs/application.js')
+  prepend_to_file(
+    'app/javascript/packs/application.js',
+    File.read('./insert_files/app/javascript/packs/application.js')
+  )
 
   # Provide plugin
-  inject_into_file 'config/webpack/environment.js',
-                   File.read('./insert_files/config/webpack/environment.js'),
-                   after: "const { environment } = require('@rails/webpacker')\n"
+  inject_into_file(
+    'config/webpack/environment.js',
+    File.read('./insert_files/config/webpack/environment.js'),
+    after: "const { environment } = require('@rails/webpacker')\n"
+  )
 
   # Remove insert files
   remove_dir 'insert_files'
