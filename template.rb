@@ -196,6 +196,8 @@ after_bundle do
   generate 'devise:install'
 
   remove_file 'config/locales/devise.en.yml'
+  copy_file 'insert_files/config/locales/devise.en.yml',
+            'config/locales/devise.en.yml'
 
   inject_into_file(
     'config/initializers/devise.rb',
