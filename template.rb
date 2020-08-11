@@ -174,6 +174,13 @@ after_bundle do
     after: "ActiveSupport::EventedFileUpdateChecker\n"
   )
 
+  # Config application generators
+  gsub_file(
+    'config/application.rb',
+    'config.generators.system_tests = nil',
+    File.read('./insert_files/config/application_generators.rb')
+  )
+
   # RSpec
   generate 'rspec:install'
   append_to_file '.rspec', "--format documentation\n--color\n"

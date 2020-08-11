@@ -9,9 +9,11 @@ scope '(:locale)', locale: /en|cs/ do
 
   namespace :admin do
     get :frontend_test, to: 'frontend_test#index'
+
     root to: 'dashboard#index'
   end
 
-  get '/:locale', to: 'admin/dashboard#index'
-  root to: 'admin/frontend_test#index'
+  get '/:locale', to: 'homepage#index'
+
+  root to: 'homepage#index'
 end
