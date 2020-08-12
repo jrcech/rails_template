@@ -123,7 +123,10 @@ after_bundle do
   inject_into_file 'spec/factories/roles.rb',
                    "\nname { 'MyString' }",
                    after: "factory :role do\n"
-
+  generate 'migration AddNameToUser first_name last_name username'
+  generate 'migration AddOmniauthToUser provider uid'
+  rails_command 'db:migrate'
+  
   # I18n
   inject_into_file(
     'app/controllers/application_controller.rb',
