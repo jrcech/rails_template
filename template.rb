@@ -1,88 +1,16 @@
 # frozen_string_literal: true
 
 require_relative 'support/support'
+require_relative 'support/commented_config_files'
+require_relative 'support/commented_files'
+require_relative 'support/commented_js_files'
+require_relative 'support/multiple_whitespace_files'
+require_relative 'support/yarn_dev_packages'
+require_relative 'support/yarn_packages'
 
 def source_paths
   [__dir__]
 end
-
-commented_files = %w[
-  app/jobs/application_job.rb
-  app/models/user.rb
-  config/application.rb
-  config/environment.rb
-  config/routes.rb
-  spec/rails_helper.rb
-  spec/spec_helper.rb
-  .gitignore
-  config.ru
-  Gemfile
-  Rakefile
-]
-
-commented_config_files = %w[
-  config/environments/development.rb
-  config/environments/production.rb
-  config/environments/test.rb
-  config/initializers/application_controller_renderer.rb
-  config/initializers/backtrace_silencers.rb
-  config/initializers/content_security_policy.rb
-  config/initializers/cookies_serializer.rb
-  config/initializers/devise.rb
-  config/initializers/filter_parameter_logging.rb
-  config/initializers/inflections.rb
-  config/initializers/mime_types.rb
-  config/initializers/rolify.rb
-  config/initializers/wrap_parameters.rb
-  config/locales/en.yml
-  config/boot.rb
-  config/database.yml
-  config/puma.rb
-  config/routes.rb
-  config/storage.yml
-  config/webpacker.yml
-  lib/tasks/auto_annotate_models.rake
-]
-
-commented_js_files = %w[
-  app/javascript/channels/consumer.js
-  app/javascript/channels/index.js
-  app/javascript/controllers/index.js
-  app/javascript/packs/application.js
-]
-
-multiple_whitespace_files = %w[
-  config/environments/production.rb
-  config/environments/test.rb
-  config/puma.rb
-]
-
-yarn_dev_packages = %w[
-  babel-eslint
-  eslint
-  eslint-config-airbnb-base
-  eslint-config-prettier
-  eslint-import-resolver-webpack
-  eslint-plugin-import
-  eslint-plugin-prettier
-  prettier
-  stylelint
-  stylelint-config-sass-guidelines
-  stylelint-config-standard
-  stylelint-scss
-]
-
-yarn_packages = %w[
-  @fortawesome/fontawesome-free
-  bootstrap
-  jquery
-  jquery-ujs
-  popper.js
-  postcss-import
-  postcss-flexbugs-fixes
-  postcss-preset-env
-  turbolinks
-]
 
 remove_dir 'app/assets'
 remove_file 'db/seeds.rb'
@@ -91,70 +19,17 @@ remove_file 'app/views/layouts/application.html.erb'
 directory 'files', './'
 directory 'insert_files', 'insert_files'
 
+# Gems
 gsub_file 'Gemfile',
           "gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]",
           ''
-
-gem_group :development do
-  gem 'brakeman'
-  gem 'bundler-audit'
-  gem 'fasterer'
-  gem 'flay'
-  gem 'overcommit'
-  gem 'rails_best_practices'
-  gem 'reek'
-  gem 'rubocop', require: false
-  gem 'rubocop-rspec', require: false
-  gem 'rubycritic', require: false
-  gem 'slim_lint'
-end
-
-gem_group :development do
-  gem 'better_errors'
-  gem 'binding_of_caller'
-  gem 'letter_opener'
-  gem 'meta_request'
-  gem 'pry-awesome_print'
-  gem 'pry-rails'
-end
-
-gem_group :development, :test do
-  gem 'amazing_print'
-  gem 'bullet'
-  gem 'factory_bot_rails'
-  gem 'pry-byebug'
-  gem 'rspec-rails'
-end
-
-gem_group :test do
-  gem 'capybara'
-  gem 'geckodriver-helper'
-  gem 'selenium-webdriver'
-  gem 'shoulda-matchers'
-  gem 'simplecov', require: false
-  gem 'vcr'
-  gem 'w3c_validators'
-  gem 'webmock'
-end
-
-gem_group :development do
-  gem 'annotate'
-  gem 'seedbank'
-end
-
-gem 'devise'
-gem 'rolify'
-gem 'omniauth-facebook'
-gem 'omniauth-google-oauth2'
-gem 'slim-rails'
-gem 'mailgun-ruby'
-
+append_to_file 'Gemfile', File.read('./insert_files/Gemfile')
 run 'bundle install'
 
 after_bundle do
   # Add yarn packages
-  run "yarn add --dev #{yarn_dev_packages.join(' ')}"
-  run "yarn add #{yarn_packages.join(' ')}"
+  run "yarn add --dev #{YarnDevPackages.list.join(' ')}"
+  run "yarn add #{YarnPackages.list.join(' ')}"
 
   # Create DB
   rails_command 'db:drop'
@@ -261,12 +136,12 @@ after_bundle do
   remove_file 'lib/tasks/.keep'
 
   # Remove comments
-  change_files commented_files, :remove_file_comments
-  change_files commented_config_files,
+  change_files CommentedFiles.list, :remove_file_comments
+  change_files CommentedConfigFiles.list,
                :remove_file_comments,
                delete_blank_lines: true
-  change_files multiple_whitespace_files, :remove_file_whitespaces
-  change_files commented_js_files, :remove_js_file_comments
+  change_files MultipleWhitespaceFiles.list, :remove_file_whitespaces
+  change_files CommentedJsFiles.list, :remove_js_file_comments
   remove_file_inline_comments 'config/boot.rb'
 
   # Fix js files
@@ -293,6 +168,9 @@ after_bundle do
   run 'rubocop --auto-correct-all'
   run 'yarn run eslint . --fix'
   run 'annotate'
+
+  rails_command 'db:seed'
+  run 'rspec'
 
   # Initialize git, install overcommit and commit
   run 'overcommit --install'

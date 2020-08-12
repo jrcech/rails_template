@@ -20,3 +20,6 @@ Metrics/MethodLength:
 Metrics/AbcSize:
   Exclude:
     - 'db/migrate/*'
+Style/MixinUsage:
+  Exclude:
+    - 'db/seeds.rb'

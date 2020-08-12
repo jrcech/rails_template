@@ -1,0 +1,57 @@
+gem 'devise'
+gem 'mailgun-ruby'
+gem 'omniauth-facebook'
+gem 'omniauth-google-oauth2'
+gem 'rolify'
+gem 'slim-rails'
+
+# Code quality
+group :development do
+  gem 'brakeman'
+  gem 'bundler-audit'
+  gem 'fasterer'
+  gem 'flay'
+  gem 'overcommit'
+  gem 'rails_best_practices'
+  gem 'reek'
+  gem 'rubocop', require: false
+  gem 'rubocop-rspec', require: false
+  gem 'rubycritic', require: false
+  gem 'slim_lint'
+end
+
+# Debug
+group :development do
+  gem 'better_errors'
+  gem 'binding_of_caller'
+  gem 'letter_opener'
+  gem 'meta_request'
+  gem 'pry-awesome_print'
+  gem 'pry-rails'
+end
+
+# Testing and debug tools
+group :development, :test do
+  gem 'amazing_print'
+  gem 'bullet'
+  gem 'factory_bot_rails'
+  gem 'pry-byebug'
+  gem 'rspec-rails'
+end
+
+# Testing tools
+group :test do
+  gem 'capybara'
+  gem 'geckodriver-helper'
+  gem 'selenium-webdriver'
+  gem 'shoulda-matchers'
+  gem 'simplecov', require: false
+  gem 'vcr'
+  gem 'w3c_validators'
+  gem 'webmock'
+end
+
+group :development do
+  gem 'annotate'
+  gem 'seedbank'
+end
