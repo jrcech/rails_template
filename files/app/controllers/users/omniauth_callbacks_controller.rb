@@ -4,19 +4,15 @@ module Users
   class OmniauthCallbacksController < Devise::OmniauthCallbacksController
     attr_reader :user
 
-    def all
+    def provider
       auth_data = request.env['omniauth.auth'].except(:extra)
       @user = User.from_omniauth(auth_data)
 
       process_request auth_data
     end
 
-    def failure
-      redirect_to root_path
-    end
-
-    alias facebook all
-    alias google all
+    alias facebook provider
+    alias google provider
 
     private
 
