@@ -93,7 +93,7 @@ after_bundle do
   generate 'rolify Role User'
   rails_command 'db:migrate'
   uncomment_lines 'config/initializers/rolify.rb',
-                  /config.use_dynamic_shortcuts/
+                  'config.use_dynamic_shortcuts'
 
   remove_file_comments 'app/models/user.rb'
 
