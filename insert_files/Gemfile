@@ -1,4 +1,5 @@
 gem 'devise'
+gem 'email_validator'
 gem 'mailgun-ruby'
 gem 'omniauth-facebook'
 gem 'omniauth-google-oauth2'
@@ -35,6 +36,7 @@ group :development, :test do
   gem 'amazing_print'
   gem 'bullet'
   gem 'factory_bot_rails'
+  gem 'faker'
   gem 'pry-byebug'
   gem 'rspec-rails'
 end

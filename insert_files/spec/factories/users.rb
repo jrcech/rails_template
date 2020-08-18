@@ -1,4 +1,7 @@
-email { 'user@example.com' }
+sequence(:email) { |n| "tester.#{n}@example.com" }
+username { 'MyString' }
+first_name { 'MyString' }
+last_name { 'MyString' }
 password { 'MyString' }
 reset_password_token { 'MyString' }
 reset_password_sent_at { '2019-03-08 15:33:28' }

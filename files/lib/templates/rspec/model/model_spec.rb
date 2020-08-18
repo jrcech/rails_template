@@ -2,6 +2,8 @@ require 'rails_helper'
 
 <% module_namespacing do -%>
 RSpec.describe <%= class_name %>, <%= type_metatag(:model) %> do
+  subject(:<%= class_name.underscore %>) { described_class.new }
+
   it 'has a valid factory' do
     expect(FactoryBot.build(:<%= class_name.underscore %>)).to be_valid
   end

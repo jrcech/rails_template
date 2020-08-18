@@ -45,10 +45,17 @@ class Article {
   content: Text
 }
 
+class Tag <<acts_as_taggable_on>> {
+
+}
+
 User "*" <--> "*" Role
 
 User "1" <-- "*" Article
-Article "*" <--> "*" Article
+Article "1" <-- "*" Article : Previous
+Article "1" <-- "*" Article : Next
+
+Article "*" <--> "*" Tag
 
 @enduml
 ```

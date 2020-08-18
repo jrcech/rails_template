@@ -19,6 +19,12 @@ def install_devise
     after: "config.action_mailer.perform_caching = false\n"
   )
 
+  inject_into_file(
+    'config/environments/test.rb',
+    File.read('./insert_files/config/environments/test_mailer.rb'),
+    after: "config.action_mailer.perform_caching = false\n"
+  )
+
   generate 'devise User'
   uncomment_lines Dir['./db/migrate/*_devise_create_users.rb'].first,
                   /t\.|add/
@@ -38,9 +44,15 @@ def install_devise
             ':recoverable, :rememberable, :validatable',
             ''
 
-  inject_into_file 'app/models/user.rb',
-                   File.read('./insert_files/app/models/user_devise.rb'),
-                   after: "rolify\n"
+  gsub_file 'app/models/user.rb',
+            'rolify',
+            File.read('./insert_files/app/models/user_devise.rb')
+
+  inject_into_file(
+    'spec/models/user_spec.rb',
+    File.read('./insert_files/spec/models/user_spec.rb'),
+    after: "be_valid\nend\n"
+  )
 
   gsub_file 'config/routes.rb',
             'devise_for :users',

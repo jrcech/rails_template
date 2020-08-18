@@ -1,19 +1,22 @@
-devise :database_authenticatable,
-       :registerable,
-       :recoverable,
-       :rememberable,
-       :validatable,
-       :trackable,
-       :confirmable,
-       :lockable,
-       :omniauthable,
-       omniauth_providers: %i[facebook google]
+validates :email, presence: true, uniqueness: true, email: true
+validates :first_name, presence: true
+validates :last_name, presence: true
 
 after_create :assign_default_role
 
-def assign_default_role
-  add_role(:user) if roles.blank?
-end
+rolify
+devise(
+  :database_authenticatable,
+  :registerable,
+  :recoverable,
+  :rememberable,
+  :validatable,
+  :trackable,
+  :confirmable,
+  :lockable,
+  :omniauthable,
+  omniauth_providers: %i[facebook google]
+)
 
 def self.from_omniauth(auth)
   where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
@@ -29,4 +32,12 @@ def self.process_user(user, auth)
   user.password = Devise.friendly_token[0, 20]
   user.first_name = info.first_name
   user.last_name = info.last_name
+end
+
+def assign_default_role
+  add_role(:user) if roles.blank?
+end
+
+def full_name
+  "#{first_name} #{last_name}"
 end
