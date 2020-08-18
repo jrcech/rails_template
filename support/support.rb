@@ -50,3 +50,13 @@ def append_to_file_line(file, search_line, append_string)
   replace_string = "#{search_line}\n#{append_string}"
   gsub_file(file, search_line, replace_string)
 end
+
+def append_to_file_names(dir, append_string)
+  files = File.join(dir, '**', '*.rb')
+
+  Dir.glob(files).each do |file|
+    replace_string = "#{file}#{append_string}"
+
+    File.rename(file, replace_string)
+  end
+end

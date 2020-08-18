@@ -19,6 +19,8 @@ remove_file 'app/views/layouts/application.html.erb'
 directory 'files', './'
 directory 'insert_files', 'insert_files'
 
+append_to_file_names 'lib', '.tt'
+
 # Gems
 gsub_file 'Gemfile',
           "gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]",
