@@ -19,7 +19,11 @@ class Foo1 {
   End of class
 }
 
-class User {
+class Role <<rolify>> {
+  name: String
+}
+
+class User <<devise>> {
   email: String
   username: String
   first_name: String
@@ -41,7 +45,10 @@ class Article {
   content: Text
 }
 
+User "*" <--> "*" Role
+
 User "1" <-- "*" Article
+Article "*" <--> "*" Article
 
 @enduml
 ```

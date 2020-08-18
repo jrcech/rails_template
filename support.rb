@@ -1,21 +1,28 @@
 # frozen_string_literal: true
 
+require_relative 'support/commented_config_files'
+require_relative 'support/commented_files'
+require_relative 'support/commented_js_files'
+require_relative 'support/multiple_whitespace_files'
+require_relative 'support/yarn_dev_packages'
+require_relative 'support/yarn_packages'
+
 def remove_file_comments(file, options = {})
-  if options[:delete_blank_lines]
-    regex = /^\s*#.*$\n/
-  else
-    regex = /^[ ]*#.*$\n/
-  end
+  regex = if options[:delete_blank_lines]
+    /^\s*#.*$\n/
+          else
+    /^[ ]*#.*$\n/
+          end
 
   gsub_file(file, regex, '')
 end
 
 def remove_js_file_comments(file, options = {})
-  if options[:delete_blank_lines]
-    regex = /^\s*\/\/.*$\n/
-  else
-    regex = /^[ ]*\/\/.*$\n/
-  end
+  regex = if options[:delete_blank_lines]
+    /^\s*\/\/.*$\n/
+          else
+    /^[ ]*\/\/.*$\n/
+          end
 
   gsub_file(file, regex, '')
 end
