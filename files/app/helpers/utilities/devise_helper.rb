@@ -64,7 +64,8 @@ module Utilities
       resource_class.omniauth_providers.each do |provider|
         html += link_to t('devise.shared.links.sign_with_provider',
                           provider: OmniAuth::Utils.camelize(provider)),
-                        omniauth_authorize_path(resource_name, provider)
+                        omniauth_authorize_path(resource_name, provider),
+                        method: :post
         html += '</br>'
       end
 
