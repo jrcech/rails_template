@@ -5,7 +5,8 @@ PreCommit:
   ALL:
     on_warn: fail
   BundleAudit:
-    enabled: false
+    enabled: true
+    command: ['bundle-audit', '--ignore', 'CVE-2015-9284']
   BundleCheck:
     enabled: true
   BundleOutdated:
