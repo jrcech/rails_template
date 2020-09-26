@@ -59,9 +59,10 @@ def append_to_file_line(file, search_line, append_string)
 end
 
 def append_to_file_names(dir, append_string)
-  files = File.join(dir, '**', '*.rb')
+  rb_files = File.join(dir, '**', '*.rb')
+  slim_files = File.join(dir, '**', '*.slim')
 
-  Dir.glob(files).each do |file|
+  Dir.glob([rb_files, slim_files]).each do |file|
     replace_string = "#{file}#{append_string}"
 
     File.rename(file, replace_string)

@@ -12,10 +12,12 @@ remove_dir 'app/assets'
 remove_file 'db/seeds.rb'
 remove_file 'app/views/layouts/application.html.erb'
 
+directory 'templates', './'
 directory 'files', './'
 directory 'insert_files', 'insert_files'
 
-append_to_file_names 'lib', '.tt'
+append_to_file_names 'lib/generators/layout/templates', '.tt'
+append_to_file_names 'lib/templates', '.tt'
 
 # Gems
 gsub_file 'Gemfile',
