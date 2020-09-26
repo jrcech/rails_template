@@ -29,6 +29,9 @@ after_bundle do
   run "yarn add --dev #{YarnDevPackages.list.join(' ')}"
   run "yarn add #{YarnPackages.list.join(' ')}"
 
+  pg_status = `pg_ctl status`
+  run 'pg_ctl start' unless pg_status.include? 'server is running'
+
   # Create DB
   rails_command 'db:drop'
   rails_command 'db:create'
@@ -70,9 +73,13 @@ after_bundle do
 
   # Remove comments
   change_files CommentedFiles.list, :remove_file_comments
-  change_files CommentedConfigFiles.list,
-               :remove_file_comments,
-               delete_blank_lines: true
+
+  change_files(
+    CommentedConfigFiles.list,
+    :remove_file_comments,
+    delete_blank_lines: true
+  )
+
   change_files MultipleWhitespaceFiles.list, :remove_file_whitespaces
   change_files CommentedJsFiles.list, :remove_js_file_comments
   remove_file_inline_comments 'config/boot.rb'

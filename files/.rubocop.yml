@@ -23,3 +23,6 @@ Metrics/AbcSize:
 Style/MixinUsage:
   Exclude:
     - 'db/seeds.rb'
+Lint/EmptyFile:
+  Exclude:
+    - 'config/initializers/*'

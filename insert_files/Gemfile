@@ -12,6 +12,7 @@ group :development do
   gem 'bundler-audit'
   gem 'fasterer'
   gem 'flay'
+  gem 'magic_frozen_string_literal'
   gem 'overcommit'
   gem 'rails_best_practices'
   gem 'reek'
