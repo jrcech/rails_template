@@ -8,6 +8,7 @@ module CommentedFiles
       config/application.rb
       config/environment.rb
       config/routes.rb
+      lib/tasks/auto_generate_diagram.rake
       spec/rails_helper.rb
       spec/spec_helper.rb
       .gitignore

@@ -73,6 +73,9 @@ after_bundle do
   generate 'annotate:install'
   remove_file 'lib/tasks/.keep'
 
+  # ERD
+  generate 'erd:install'
+
   # Remove comments
   change_files CommentedFiles.list, :remove_file_comments
 
