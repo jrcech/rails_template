@@ -34,9 +34,17 @@ after_bundle do
   # Frontend linters
   run "yarn add --dev #{File.read('./tmp/inserts/yarn_linters').tr("\n", ' ')}"
   directory 'files/frontend_linters', './'
+  prepend_to_file 'postcss.config.js', "/* eslint-disable global-require */\n\n"
+  gsub_file 'babel.config.js', 'function(api)', '(api) =>'
+  run "yarn add #{File.read('./tmp/inserts/yarn_postcss').tr("\n", ' ')}"
+
+  run 'yarn run eslint . --fix'
 
   # Later
   # Overcommit
+  append_to_file 'Gemfile', File.read('./tmp/inserts/Gemfile_overcommit')
+  run 'bundle install'
+  directory 'files/overcommit', './'
   run 'overcommit --install'
   run 'overcommit -r'
 

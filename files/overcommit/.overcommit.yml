@@ -11,7 +11,7 @@ PreCommit:
   BundleOutdated:
     enabled: true
   EsLint:
-    enabled: false
+    enabled: true
     required_executable: './node_modules/.bin/eslint'
     include: 'app/javascript/**/*.js'
   Fasterer:
@@ -31,7 +31,7 @@ PreCommit:
   SlimLint:
     enabled: false
   Stylelint:
-    enabled: false
+    enabled: true
     required_executable: './node_modules/.bin/stylelint'
     include: 'app/javascript/stylesheets/**/*.scss'
   YamlSyntax:

@@ -90,8 +90,6 @@ partition "Initial generation" {
   }  
 }
 
-:overcommit --install;
-
 partition "Frontend linters" {
   :install frontend linters;
   note right
@@ -103,11 +101,27 @@ partition "Frontend linters" {
     eslint-plugin-prettier
     prettier
     stylelint
-    stylelint-config-sass-guidelines
     stylelint-config-standard
-    stylelint-scss
   end note
+  
+  :copy configuration files;
+  note left 
+    .eslintr
+    .prettierrc.json
+    .stylelint.json
+  end note
+  
+  :format files;
+  note left 
+    fix babel.config.js
+    fix postcss.config.js
+    add postcss dependencies
+  end note
+  
+  :yarn run eslint . --fix;
 }
+
+:overcommit --install;
 
 stop
 

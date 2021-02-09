@@ -11,6 +11,18 @@
     "ecmaVersion": 12,
     "sourceType": "module"
   },
+  "settings": {
+    "import/resolver": {
+      "webpack": {
+        "config": {
+          "resolve": {
+            "modules": "app/javascript"
+          }
+        }
+      }
+    }
+  },
+  "ignorePatterns": ["tmp"],
   "rules": {
     "prettier/prettier": "warn"
   }
