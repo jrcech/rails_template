@@ -31,6 +31,10 @@ after_bundle do
 
   run 'rubocop --auto-correct-all'
 
+  # Frontend linters
+  run "yarn add --dev #{File.read('./tmp/inserts/yarn_linters').tr("\n", ' ')}"
+  directory 'files/frontend_linters', './'
+
   # Later
   # Overcommit
   run 'overcommit --install'

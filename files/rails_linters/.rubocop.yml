@@ -6,6 +6,8 @@ AllCops:
     - 'db/schema.rb'
     - 'node_modules/**/*'
     - 'tmp/**/*'
+Lint:
+  Severity: info
 Style/Documentation:
   Enabled: false
 Metrics/BlockLength:

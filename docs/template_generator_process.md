@@ -92,6 +92,23 @@ partition "Initial generation" {
 
 :overcommit --install;
 
+partition "Frontend linters" {
+  :install frontend linters;
+  note right
+    eslint
+    eslint-config-airbnb-base
+    eslint-config-prettier
+    eslint-import-resolver-webpack
+    eslint-plugin-import
+    eslint-plugin-prettier
+    prettier
+    stylelint
+    stylelint-config-sass-guidelines
+    stylelint-config-standard
+    stylelint-scss
+  end note
+}
+
 stop
 
 @enduml

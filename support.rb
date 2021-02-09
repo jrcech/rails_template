@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require_relative 'support/commented_files'
-require_relative 'support/yarn_dev_packages'
 require_relative 'support/yarn_packages'
 
 def remove_comments_from_files(files, inline = false)

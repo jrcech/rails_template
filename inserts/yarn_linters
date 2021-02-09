@@ -1,0 +1,10 @@
+@babel/core
+@babel/eslint-parser
+eslint
+eslint-config-airbnb-base
+eslint-config-prettier
+eslint-plugin-import
+eslint-plugin-prettier
+prettier
+prettier-airbnb-config
+prettier-eslint
