@@ -1,0 +1,11 @@
+group :development do
+  gem 'brakeman'
+  gem 'bundler-audit'
+  gem 'fasterer'
+  gem 'flay'
+  gem 'overcommit'
+  gem 'rails_best_practices'
+  gem 'reek'
+  gem 'rubocop', require: false
+  gem 'rubycritic', require: false
+end

@@ -1,19 +1,23 @@
-require: rubocop-rspec
 AllCops:
   NewCops: enable
   Exclude:
     - 'bin/*'
-    - 'node_modules/**/*'
+    - 'config/initializers/*'
     - 'db/schema.rb'
+    - 'node_modules/**/*'
+    - 'tmp/**/*'
 Style/Documentation:
   Enabled: false
 Metrics/BlockLength:
   Exclude:
     - 'config/environments/*'
     - 'lib/tasks/auto_annotate_models.rake'
-  ExcludedMethods:
+  IgnoredMethods:
     - 'describe'
+    - 'context'
     - 'shared_examples'
+    - 'draw'
+    - 'define'
 Metrics/MethodLength:
   Exclude:
     - 'db/migrate/*'
@@ -23,6 +27,3 @@ Metrics/AbcSize:
 Style/MixinUsage:
   Exclude:
     - 'db/seeds.rb'
-Lint/EmptyFile:
-  Exclude:
-    - 'config/initializers/*'

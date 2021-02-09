@@ -8,9 +8,6 @@ module YarnPackages
       jquery
       jquery-ujs
       popper.js
-      postcss-import
-      postcss-flexbugs-fixes
-      postcss-preset-env
       turbolinks
     ]
   end

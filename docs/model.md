@@ -4,23 +4,26 @@
 skinparam monochrome true
 skinparam shadowing false
 
-class Foo1 {
-  You can use
-  several lines
-  ..
-  as you want
-  and group
-  ==
-  things together.
-  __
-  You can have as many groups
-  as you want
-  --
-  End of class
-}
-
-class Role <<rolify>> {
-  name: String
+class Application {
+  -- layout --
+  application
+  admin
+  -- template engine --
+  slim
+  -- test framework --
+  rspec
+  faker
+  capybara
+  factory_bot
+  -- mailer --
+  mailgun
+  -- localization --
+  i18n
+  globalize
+  -- overcommit --
+  all
+  -- debug --
+  all
 }
 
 class User <<devise>> {
@@ -28,34 +31,38 @@ class User <<devise>> {
   username: String
   first_name: String
   last_name: String
-
-  .. Simple Getter ..
-  + getName()
-  + getAddress()
-  .. Some setter ..
-  + setName()
-  __ private data __
-  int age
-  -- encrypted --
-  String password
+  -- search --
+  email
+  username
+  first_name
+  last_name
+  -- devise --
+  database_authenticatable
+  registerable
+  recoverable
+  rememberable
+  validatable
+  trackable
+  confirmable
+  lockable
+  omniauthable
+  -- omniauth providers --
+  facebook
+  google
+  -- rolify --
+  member
+  admin
+  owner
 }
 
-class Article {
+class Article <<acts_as_taggable_on>> {
   title: String
   content: Text
+  -- search --
+  title
 }
-
-class Tag <<acts_as_taggable_on>> {
-
-}
-
-User "*" <--> "*" Role
 
 User "1" <-- "*" Article
-Article "1" <-- "*" Article : Previous
-Article "1" <-- "*" Article : Next
-
-Article "*" <--> "*" Tag
 
 @enduml
 ```

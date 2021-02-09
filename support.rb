@@ -1,56 +1,64 @@
 # frozen_string_literal: true
 
-require_relative 'support/commented_config_files'
 require_relative 'support/commented_files'
-require_relative 'support/commented_js_files'
-require_relative 'support/multiple_whitespace_files'
 require_relative 'support/yarn_dev_packages'
 require_relative 'support/yarn_packages'
 
-def remove_file_comments(file, options = {})
-  regex = if options[:delete_blank_lines]
-    /^\s*#.*$\n/
-          else
-    /^[ ]*#.*$\n/
-          end
-
-  gsub_file(file, regex, '')
-end
-
-def remove_js_file_comments(file, options = {})
-  regex = if options[:delete_blank_lines]
-    /^\s*\/\/.*$\n/
-          else
-    /^[ ]*\/\/.*$\n/
-          end
-
-  gsub_file(file, regex, '')
-end
-
-def remove_file_inline_comments(file, options = {})
-  gsub_file(file, /#[\w\s]*\./, '')
-end
-
-def remove_file_whitespaces(file, options = {})
-  gsub_file(file, /\S\K([ ]{2,})/, ' ')
-end
-
-def change_files(files, change_file_method, options = {})
+def remove_comments_from_files(files, inline = false)
   files.each do |file|
-    send(change_file_method, file, options)
+    remove_comments_from_file file, inline
   end
 end
 
-def rubocop_file(file)
-  run("rubocop -a #{file}")
+def remove_comments_from_file(file, inline = false)
+  file_extension = File.extname(file)
+
+  case file_extension
+  when '.rb', '.yml'
+    regex = ruby_comment_regex inline
+  when '.js'
+    regex = js_comment_regex
+  else
+    regex = ruby_comment_regex inline
+  end
+
+  gsub_file file, regex, ''
 end
 
-def rubocop_correct_all
-  run('rubocop -a')
+def ruby_comment_regex(inline)
+  return /#[\w\s]*\./ if inline.present?
+
+  /^\s*#.*$\n/
 end
 
-def eslint
-  run('yarn run eslint --fix .')
+def js_comment_regex
+  /^\s*\/\/.*$\n/
+end
+
+def remove_lines(file, term)
+  file_lines = ''
+
+  IO.readlines(file).each do |line|
+    file_lines += line unless line.include? term
+  end
+
+  File.open(file, 'w') do |opened_file|
+    opened_file.puts file_lines
+  end
+end
+
+def add_blank_line(file, term)
+  file_lines = ''
+
+  IO.readlines(file).each do |line|
+    next file_lines += "#{line}\n" if line.include? term
+
+    file_lines += line
+  end
+
+  File.open(file, 'w') do |opened_file|
+    opened_file.puts file_lines
+  end
 end
 
 def append_to_file_line(file, search_line, append_string)

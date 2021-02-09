@@ -3,16 +3,15 @@ CommitMsg:
     on_warn: fail
 PreCommit:
   ALL:
-    on_warn: fail
+    on_fail: warn
   BundleAudit:
     enabled: true
-    command: ['bundle-audit', '--ignore', 'CVE-2015-9284']
   BundleCheck:
     enabled: true
   BundleOutdated:
     enabled: true
   EsLint:
-    enabled: true
+    enabled: false
     required_executable: './node_modules/.bin/eslint'
     include: 'app/javascript/**/*.js'
   Fasterer:
@@ -30,9 +29,9 @@ PreCommit:
   RuboCop:
     enabled: true
   SlimLint:
-    enabled: true
+    enabled: false
   Stylelint:
-    enabled: true
+    enabled: false
     required_executable: './node_modules/.bin/stylelint'
     include: 'app/javascript/stylesheets/**/*.scss'
   YamlSyntax:
