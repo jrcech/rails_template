@@ -2,7 +2,6 @@
 
 require_relative 'support'
 require_relative 'support/templates/devise'
-require_relative 'support/templates/rspec'
 
 def source_paths
   [__dir__]
@@ -24,32 +23,86 @@ after_bundle do
   remove_comments_from_file 'config/boot.rb', true
   add_blank_line 'Gemfile', "gem 'rails'"
 
-  # Ruby on Rails linters
+  install_rails_linters
+  install_frontend_lintes
+  install_tests
+  install_overcommit
+
+  # Cleanup
+  remove_dir 'tmp/inserts'
+end
+
+def install_rails_linters
   append_to_file 'Gemfile', File.read('./tmp/inserts/Gemfile_linters')
   run 'bundle install'
   directory 'files/rails_linters', './'
-
   run 'rubocop --auto-correct-all'
+end
 
-  # Frontend linters
+def install_frontend_lintes
   run "yarn add --dev #{File.read('./tmp/inserts/yarn_linters').tr("\n", ' ')}"
   directory 'files/frontend_linters', './'
   prepend_to_file 'postcss.config.js', "/* eslint-disable global-require */\n\n"
   gsub_file 'babel.config.js', 'function(api)', '(api) =>'
   run "yarn add #{File.read('./tmp/inserts/yarn_postcss').tr("\n", ' ')}"
-
   run 'yarn run eslint . --fix'
+end
 
-  # Later
-  # Overcommit
+def install_tests
+  append_to_file 'Gemfile', File.read('./tmp/inserts/Gemfile_tests')
+  run 'bundle install'
+
+  # RSpec
+  run 'DISABLE_SPRING=1 rails generate rspec:install'
+
+  run 'rubocop spec/rails_helper.rb --auto-correct-all'
+  remove_comments_from_file 'spec/rails_helper.rb'
+  remove_comments_from_file 'spec/rails_helper.rb'
+  remove_comments_from_file 'spec/spec_helper.rb'
+
+  append_to_file '.rspec', "--format documentation\n--color\n"
+
+  inject_into_file(
+    'spec/rails_helper.rb',
+    File.read('./tmp/inserts/rspec/spec/rails_helper'),
+    after: "require 'rspec/rails'\n"
+  )
+
+  # Capybara
+  inject_into_file(
+    'spec/rails_helper.rb',
+    "require 'capybara/rails'",
+    after: "require 'rspec/rails'\n"
+  )
+
+  # Simplecov
+  inject_into_file(
+    'spec/rails_helper.rb',
+    "require 'simplecov'\nSimpleCov.start\n\n",
+    before: "require 'spec_helper'"
+  )
+
+  # Bullet
+  inject_into_file(
+    'config/environments/development.rb',
+    File.read('./tmp/inserts/bullet/config/environments/development'),
+    after: "ActiveSupport::EventedFileUpdateChecker\n"
+  )
+
+  # Configure RSpec tool
+  directory 'files/rspec/spec/support', './spec/support'
+
+  run 'rubocop spec --auto-correct-all'
+  run 'rubocop config/environments/development.rb --auto-correct-all'
+end
+
+# Later
+def install_overcommit
   append_to_file 'Gemfile', File.read('./tmp/inserts/Gemfile_overcommit')
   run 'bundle install'
   directory 'files/overcommit', './'
   run 'overcommit --install'
   run 'overcommit -r'
-
-  # Cleanup
-  remove_dir 'tmp/inserts'
 end
 
 # Old

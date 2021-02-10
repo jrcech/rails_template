@@ -29,7 +29,7 @@ PreCommit:
   RuboCop:
     enabled: true
   SlimLint:
-    enabled: false
+    enabled: true
   Stylelint:
     enabled: true
     required_executable: './node_modules/.bin/stylelint'

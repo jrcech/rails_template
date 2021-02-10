@@ -1,0 +1,28 @@
+
+group :development do
+  gem 'better_errors'
+  gem 'binding_of_caller'
+  gem 'letter_opener'
+  gem 'pry-awesome_print'
+  gem 'pry-rails'
+end
+
+group :development, :test do
+  gem 'amazing_print'
+  gem 'bullet'
+  gem 'factory_bot_rails'
+  gem 'faker'
+  gem 'pry-byebug'
+  gem 'rspec-rails'
+end
+
+group :test do
+  gem 'capybara'
+  gem 'selenium-webdriver'
+  gem 'shoulda-matchers'
+  gem 'simplecov', require: false
+  gem 'vcr'
+  gem 'w3c_validators'
+  gem 'webdrivers', require: false
+  gem 'webmock'
+end

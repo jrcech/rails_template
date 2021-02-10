@@ -25,70 +25,72 @@ partition "Initial generation" {
   
   :bundle install;
   
-  :after bundle;
-  note left
-    Including nodejs process
-  end note
-  
-  :remove redundant dirs;
-  note right
-    app/assets
-  end note
-  
-  :add inserts;
-  note right
-    to tmp
-  end note
-  
-  :append_to_file '.gitignore';
-  note left
-    .DS_Store
-    .idea
-    .env
-    .env.*
-    /coverage
-  end note
-  
-  :format files;
-  note right
-    Remove comments
-    Add space after rails gem in Gemfile
-  end note
-  
-  partition "Rails linters" {
-    :add rails linters gems;
-    note left
-      Append to Gemfile:
-      
-      group :development do
-        gem 'brakeman'
-        gem 'bundler-audit'
-        gem 'fasterer'
-        gem 'flay'
-        gem 'overcommit'
-        gem 'rails_best_practices'
-        gem 'reek'
-        gem 'rubocop', require: false
-        TODO: gem 'rubocop-rspec', require: false
-        gem 'rubycritic', require: false
-        TODO: gem 'slim_lint'
-      end
-    end note
-    
-    :bundle install;
-    
-    :copy configuration files;
-    note right 
-      copy_file './files/.flayignore', './'
-      copy_file './files/.overcommit.yml', './'
-      copy_file './files/.rails_best_practices.yml', './'
-      copy_file './files/.reek.yml', './'
-      copy_file './files/.rubocop.yml', './'
-    end note
-    
-    :rubocop --auto-correct-all;
-  }  
 }
+
+:after bundle;
+note left
+  Including nodejs process
+end note
+
+:remove redundant dirs;
+note right
+  app/assets
+end note
+
+:add inserts;
+note right
+  to tmp
+end note
+
+:append_to_file '.gitignore';
+note left
+  .DS_Store
+  .idea
+  .env
+  .env.*
+  /coverage
+end note
+
+:format files;
+note right
+  Remove comments
+  Add space after rails gem in Gemfile
+end note
+
+partition "Rails linters" {
+  :add rails linters gems;
+  note left
+    Append to Gemfile:
+    
+    group :development do
+      gem 'brakeman'
+      gem 'bundler-audit'
+      gem 'fasterer'
+      gem 'flay'
+      gem 'overcommit'
+      gem 'rails_best_practices'
+      gem 'reek'
+      gem 'rubocop', require: false
+      gem 'rubocop-rspec', require: false
+      gem 'rubycritic', require: false
+      gem 'slim_lint'
+    end
+  end note
+  
+  :bundle install;
+  
+  :copy configuration files;
+  note right 
+    copy_file './files/.flayignore', './'
+    copy_file './files/.overcommit.yml', './'
+    copy_file './files/.rails_best_practices.yml', './'
+    copy_file './files/.reek.yml', './'
+    copy_file './files/.rubocop.yml', './'
+  end note
+  
+  :rubocop --auto-correct-all;
+}  
+
 
 partition "Frontend linters" {
   :install frontend linters;
@@ -119,6 +121,41 @@ partition "Frontend linters" {
   end note
   
   :yarn run eslint . --fix;
+}
+
+partition "Test Suite" {
+  :add test gems;
+  note left
+    Append to Gemfile:
+    
+    group :development do
+      gem 'better_errors' # No config
+      gem 'binding_of_caller' # No config
+      gem 'letter_opener' # Config
+      gem 'pry-awesome_print' # No config
+      gem 'pry-rails' # No config
+    end
+    
+    group :development, :test do
+      gem 'amazing_print' # No config
+      gem 'bullet' # Config
+      gem 'factory_bot_rails' # No config
+      gem 'faker' # No config
+      gem 'pry-byebug' # No config
+      gem 'rspec-rails' # Config
+    end
+    
+    group :test do
+      gem 'capybara' # Config
+      gem 'selenium-webdriver'
+      gem 'shoulda-matchers'
+      gem 'simplecov', require: false # Config
+      gem 'vcr' # Config
+      gem 'w3c_validators'
+      gem 'webdrivers', require: false
+      gem 'webmock'
+    end
+  end note
 }
 
 :overcommit --install;
