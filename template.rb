@@ -26,10 +26,64 @@ after_bundle do
   install_rails_linters
   install_frontend_lintes
   install_tests
+
+  configure_application
+
   install_overcommit
 
   # Cleanup
   remove_dir 'tmp/inserts'
+end
+
+def configure_application
+  # Add Procfile
+  copy_file 'files/configure_application/Procfile', './Procfile'
+
+  # Config application generators
+  gsub_file(
+    'config/application.rb',
+    'config.generators.system_tests = nil',
+    File.read('./tmp/inserts/configure_application/config/application')
+  )
+  run 'rubocop config/application.rb --auto-correct-all'
+
+  # Config mailer
+  inject_into_file(
+    'config/environments/development.rb',
+    File.read('./tmp/inserts/configure_application/config/environments/development'),
+    before: 'config.action_mailer.perform_caching = false'
+  )
+  inject_into_file(
+    'config/environments/test.rb',
+    File.read('./tmp/inserts/configure_application/config/environments/test'),
+    before: 'config.action_mailer.perform_caching = false'
+  )
+  run 'rubocop config/environments/development.rb --auto-correct-all'
+  run 'rubocop config/environments/test.rb --auto-correct-all'
+
+  # I18n
+  inject_into_file(
+    'app/controllers/application_controller.rb',
+    File.read('./tmp/inserts/configure_application/app/controllers/application_controller'),
+    after: "class ApplicationController < ActionController::Base\n"
+  )
+  run 'rubocop app/controllers/application_controller.rb --auto-correct-all'
+
+  # Install gems
+  append_to_file 'Gemfile', File.read('./tmp/inserts/configure_application/Gemfile')
+  run 'bundle install'
+
+  # Annotate
+  run 'DISABLE_SPRING=1 rails generate annotate:install'
+  remove_file 'lib/tasks/.keep'
+
+  # ERD
+  run 'DISABLE_SPRING=1 rails generate erd:install'
+  append_to_file_names 'lib/templates', '.tt'
+
+  # Seedbank
+  remove_file 'db/seeds.rb'
+  directory 'files/configure_application/db', './db'
 end
 
 def install_rails_linters

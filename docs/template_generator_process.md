@@ -156,6 +156,37 @@ partition "Test Suite" {
       gem 'webmock'
     end
   end note
+  
+  :bundle install;
+  
+  :rails generate rspec:install;
+  note right
+    DISABLE_SPRING=1
+  end note
+  
+  :format files;
+  note left
+    spec/rails_helper.rb
+    spec/spec_helper.rb
+  end note
+  
+  :install capybara;
+  
+  :install simplecov;
+  
+  :install bullet;
+  
+  :configure rspec to work with tools;
+  note left
+    copy directory spec/support
+  end note
+  
+  :lint new files with rubocop;
+}
+
+partition "Application configuration" {
+  :add Procfile;
+  
 }
 
 :overcommit --install;
