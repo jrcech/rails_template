@@ -1,4 +1,6 @@
 
+gem 'slim-rails'
+
 group :development do
   gem 'annotate'
   gem 'rails-erd'

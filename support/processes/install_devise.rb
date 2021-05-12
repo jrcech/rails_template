@@ -5,12 +5,9 @@ def install_devise
   run 'bundle install'
 
   run 'DISABLE_SPRING=1 rails generate devise:install'
-
   remove_file 'config/locales/devise.en.yml'
 
-  # TODO
-  # copy_file './tmp/inserts/install_devise/config/locales/devise.en.yml',
-  #           'config/locales/devise.en.yml'
+  directory 'files/install_devise', './'
 
   remove_comments_from_file 'config/initializers/devise.rb'
 
@@ -54,9 +51,6 @@ def install_devise
   gsub_file 'config/routes.rb',
             'devise_for :users',
             File.read('./tmp/inserts/install_devise/config/routes.rb')
-
-  copy_file 'files/install_devise/app/controllers/users/omniauth_callbacks_controller.rb',
-            'app/controllers/users/omniauth_callbacks_controller.rb'
 
   run 'DISABLE_SPRING=1 rails generate migration AddNameToUser first_name last_name username'
   run 'DISABLE_SPRING=1 rails generate migration AddOmniauthToUser provider uid'

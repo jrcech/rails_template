@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 def install_tests
-  append_to_file 'Gemfile', File.read('./tmp/inserts/Gemfile_tests')
+  append_to_file 'Gemfile', File.read('./tmp/inserts/install_tests/Gemfile')
   run 'bundle install'
 
   # RSpec
@@ -20,13 +20,6 @@ def install_tests
     after: "require 'rspec/rails'\n"
   )
 
-  # Capybara
-  inject_into_file(
-    'spec/rails_helper.rb',
-    "require 'capybara/rails'",
-    after: "require 'rspec/rails'\n"
-  )
-
   # Simplecov
   inject_into_file(
     'spec/rails_helper.rb',
@@ -37,12 +30,12 @@ def install_tests
   # Bullet
   inject_into_file(
     'config/environments/development.rb',
-    File.read('./tmp/inserts/bullet/config/environments/development'),
+    File.read('./tmp/inserts/install_tests/config/environments/development'),
     after: "ActiveSupport::EventedFileUpdateChecker\n"
   )
 
   # Configure RSpec tool
-  directory 'files/rspec/spec/support', './spec/support'
+  directory 'files/install_tests/spec/support', './spec/support'
 
   run 'rubocop spec --auto-correct-all'
   run 'rubocop config/environments/development.rb --auto-correct-all'

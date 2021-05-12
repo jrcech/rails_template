@@ -27,7 +27,7 @@ after_bundle do
   add_blank_line 'Gemfile', "gem 'rails'"
 
   install_rails_linters
-  install_frontend_lintes
+  install_frontend_linters
   install_tests
   install_devise
 
@@ -40,8 +40,10 @@ after_bundle do
 end
 
 def configure_application
-  # Add Procfile
-  copy_file 'files/configure_application/Procfile', './Procfile'
+  remove_file 'db/seeds.rb'
+  remove_file 'app/views/layouts/application.html.erb'
+
+  directory 'files/configure_application', './'
 
   # Config application generators
   gsub_file(
@@ -85,9 +87,22 @@ def configure_application
   run 'DISABLE_SPRING=1 rails generate erd:install'
   append_to_file_names 'lib/templates', '.tt'
 
-  # Seedbank
-  remove_file 'db/seeds.rb'
-  directory 'files/configure_application/db', './db'
+  # Fix js files
+  prepend_to_file 'postcss.config.js', "/* eslint-disable global-require */\n\n"
+  gsub_file 'babel.config.js', 'function(api)', '(api) =>'
+
+  # JS
+  prepend_to_file(
+    'app/javascript/packs/application.js',
+    File.read('./tmp/inserts/configure_application/app/javascript/packs/application.js')
+  )
+
+  # Provide plugin
+  inject_into_file(
+    'config/webpack/environment.js',
+    File.read('./tmp/inserts/configure_application/config/webpack/environment.js'),
+    after: "const { environment } = require('@rails/webpacker')\n"
+  )
 end
 
 # Old

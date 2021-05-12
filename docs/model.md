@@ -4,6 +4,14 @@
 skinparam monochrome true
 skinparam shadowing false
 
+class DevOps {
+  docker
+  ansible
+  terraForm
+  docker_compose
+  gitlab_ci
+}
+
 class Application {
   -- layout --
   application

@@ -5,7 +5,7 @@ module Users
     attr_reader :user
 
     def provider
-      auth_data = request.env['omniauth.auth'].except(:extra)
+      auth_data = request.env['omniauth.auth']
       @user = User.from_omniauth(auth_data)
 
       process_request auth_data
@@ -23,7 +23,7 @@ module Users
         sign_in_and_redirect user, event: :authentication
         set_flash_message :notice, :success, kind: provider.capitalize if is_navigational_format?
       else
-        session["devise.#{provider}_data"] = auth_data
+        session["devise.#{provider}_data"] = auth_data.except(:extra)
         redirect_to new_user_registration_url
       end
     end

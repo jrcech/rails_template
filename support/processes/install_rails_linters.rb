@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 def install_rails_linters
-  append_to_file 'Gemfile', File.read('./tmp/inserts/Gemfile_linters')
+  append_to_file 'Gemfile', File.read('./tmp/inserts/install_rails_linters/Gemfile')
   run 'bundle install'
-  directory 'files/rails_linters', './'
+  directory 'files/install_rails_linters', './'
   run 'rubocop --auto-correct-all'
 end

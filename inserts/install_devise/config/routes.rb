@@ -11,7 +11,7 @@ scope '(:locale)', locale: /en|cs/ do
   devise_for :users, skip: :omniauth_callbacks
 
   namespace :admin do
-    get :frontend_test, to: 'frontend_test#index'
+    get :system_test, to: 'system_test#index'
 
     root to: 'dashboard#index'
   end
