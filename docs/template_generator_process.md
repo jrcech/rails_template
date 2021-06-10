@@ -86,9 +86,7 @@ partition "Rails linters" {
     copy_file './files/.rails_best_practices.yml', './'
     copy_file './files/.reek.yml', './'
     copy_file './files/.rubocop.yml', './'
-  end note
-  
-  :rubocop --auto-correct-all;
+  end note  
 }  
 
 
@@ -119,8 +117,6 @@ partition "Frontend linters" {
     fix postcss.config.js
     add postcss dependencies
   end note
-  
-  :yarn run eslint . --fix;
 }
 
 partition "Test Suite" {
@@ -180,8 +176,49 @@ partition "Test Suite" {
   note left
     copy directory spec/support
   end note
+}
+
+partition "Devise" {
+  :add test gems;  
+  note left
+    Append to Gemfile:
+    
+    gem 'devise'
+    gem 'email_validator'
+    gem 'omniauth'
+    gem 'omniauth-facebook'
+    gem 'omniauth-google-oauth2'
+    gem 'omniauth-rails_csrf_protection'
+    gem 'rolify'
+  end note
   
-  :lint new files with rubocop;
+  :bundle install;
+  
+  :rails generate devise:install;
+  
+  :remove generated locales;
+  
+  :copy directory;
+  
+  :remove comments from devise initializer;
+  
+  :configure devise initializer;
+  
+  :rails generate devise User;
+  
+  :remove comments from user.rb;
+  
+  :uncomment lines in devise user migration;
+  
+  :rails generate rolify Role User;
+  
+  :rails db:migrate;
+  
+  :uncomment lines in rolify initializer;
+  
+  :configure User model;
+  
+  
 }
 
 partition "Application configuration" {

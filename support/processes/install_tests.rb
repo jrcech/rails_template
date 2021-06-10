@@ -5,12 +5,11 @@ def install_tests
   run 'bundle install'
 
   # RSpec
-  run 'DISABLE_SPRING=1 rails generate rspec:install'
+  run 'rails generate rspec:install'
 
-  run 'rubocop spec/rails_helper.rb --auto-correct-all'
-  remove_comments_from_file 'spec/rails_helper.rb'
-  remove_comments_from_file 'spec/rails_helper.rb'
-  remove_comments_from_file 'spec/spec_helper.rb'
+  # remove_comments_from_file 'spec/rails_helper.rb'
+  # remove_comments_from_file 'spec/rails_helper.rb'
+  # remove_comments_from_file 'spec/spec_helper.rb'
 
   append_to_file '.rspec', "--format documentation\n--color\n"
 
@@ -36,7 +35,4 @@ def install_tests
 
   # Configure RSpec tool
   directory 'files/install_tests/spec/support', './spec/support'
-
-  run 'rubocop spec --auto-correct-all'
-  run 'rubocop config/environments/development.rb --auto-correct-all'
 end

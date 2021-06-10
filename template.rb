@@ -22,9 +22,11 @@ after_bundle do
   append_to_file '.gitignore', File.read('./tmp/inserts/.gitignore')
 
   # Format files
-  remove_comments_from_files CommentedFiles.list
-  remove_comments_from_file 'config/boot.rb', true
+  # remove_comments_from_files CommentedFiles.list
+  # remove_comments_from_file 'config/boot.rb', true
   add_blank_line 'Gemfile', "gem 'rails'"
+
+  run 'spring stop'
 
   install_rails_linters
   install_frontend_linters
@@ -37,6 +39,10 @@ after_bundle do
 
   # Cleanup
   remove_dir 'tmp/inserts'
+
+  # Run autocorrection
+  # run 'rubocop --auto-correct-all'
+  # run 'yarn run eslint . --fix'
 end
 
 def configure_application
@@ -51,7 +57,6 @@ def configure_application
     'config.generators.system_tests = nil',
     File.read('./tmp/inserts/configure_application/config/application')
   )
-  run 'rubocop config/application.rb --auto-correct-all'
 
   # Config mailer
   inject_into_file(
@@ -64,8 +69,6 @@ def configure_application
     File.read('./tmp/inserts/configure_application/config/environments/test'),
     before: 'config.action_mailer.perform_caching = false'
   )
-  run 'rubocop config/environments/development.rb --auto-correct-all'
-  run 'rubocop config/environments/test.rb --auto-correct-all'
 
   # I18n
   inject_into_file(
@@ -73,21 +76,20 @@ def configure_application
     File.read('./tmp/inserts/configure_application/app/controllers/application_controller'),
     after: "class ApplicationController < ActionController::Base\n"
   )
-  run 'rubocop app/controllers/application_controller.rb --auto-correct-all'
 
   # Install gems
   append_to_file 'Gemfile', File.read('./tmp/inserts/configure_application/Gemfile')
   run 'bundle install'
 
   # Install Stimulus and Turbo
-  run 'DISABLE_SPRING=1 rails hotwire:install'
+  run 'rails hotwire:install'
 
   # Annotate
-  run 'DISABLE_SPRING=1 rails generate annotate:install'
+  run 'rails generate annotate:install'
   remove_file 'lib/tasks/.keep'
 
   # ERD
-  run 'DISABLE_SPRING=1 rails generate erd:install'
+  run 'rails generate erd:install'
   append_to_file_names 'lib/templates', '.tt'
 
   # Fix js files
