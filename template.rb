@@ -15,7 +15,7 @@ remove_lines 'Gemfile', 'tzinfo-data'
 run 'bundle install'
 
 after_bundle do
-  remove_dir 'app/assets'
+  #remove_dir 'app/assets' #TODO Keep assets for hotwire generator bug
 
   directory 'inserts', 'tmp/inserts'
 
@@ -78,6 +78,9 @@ def configure_application
   # Install gems
   append_to_file 'Gemfile', File.read('./tmp/inserts/configure_application/Gemfile')
   run 'bundle install'
+
+  # Install Stimulus and Turbo
+  run 'DISABLE_SPRING=1 rails hotwire:install'
 
   # Annotate
   run 'DISABLE_SPRING=1 rails generate annotate:install'

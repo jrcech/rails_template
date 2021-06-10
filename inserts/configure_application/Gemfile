@@ -1,4 +1,5 @@
 
+gem 'hotwire-rails'
 gem 'slim-rails'
 
 group :development do

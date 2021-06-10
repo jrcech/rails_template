@@ -1,5 +1,5 @@
 
-gem 'devise', github: 'heartcombo/devise', branch: 'ca-omniauth-2'
+gem 'devise'
 gem 'email_validator'
 gem 'omniauth'
 gem 'omniauth-facebook'

@@ -26,7 +26,7 @@ DEPENDENCIES
   rubocop
 
 RUBY VERSION
-   ruby 2.7.1p83
+   ruby 2.7.3p183
 
 BUNDLED WITH
    2.1.4

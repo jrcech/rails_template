@@ -5,7 +5,6 @@ module CommentedFiles
     %w[
       app/javascript/channels/consumer.js
       app/javascript/channels/index.js
-      app/javascript/controllers/index.js
       app/javascript/packs/application.js
       app/jobs/application_job.rb
       config/environments/development.rb
