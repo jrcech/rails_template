@@ -13,7 +13,7 @@ def install_devise
 
   inject_into_file(
     'config/initializers/devise.rb',
-    File.read('./tmp/inserts/install_devise/config/initializers/devise.rb'),
+    File.read('./tmp/inserts/install_devise/config/initializers/devise'),
     after: "config.sign_out_via = :delete\n"
   )
 
@@ -43,19 +43,20 @@ def install_devise
   gsub_file(
     'app/models/user.rb',
     'rolify',
-    File.read('./tmp/inserts/install_devise/app/models/user_devise.rb')
+    File.read('./tmp/inserts/install_devise/app/models/user')
   )
 
+  # TODO
   inject_into_file(
     'spec/models/user_spec.rb',
-    File.read('./tmp/inserts/install_devise/spec/models/user_spec.rb'),
+    File.read('./tmp/inserts/install_devise/spec/models/user_spec'),
     after: "be_valid\nend\n"
   )
 
   gsub_file(
     'config/routes.rb',
     'devise_for :users',
-    File.read('./tmp/inserts/install_devise/config/routes.rb')
+    File.read('./tmp/inserts/install_devise/config/routes')
   )
 
   run 'rails generate migration AddNameToUser first_name last_name username'
@@ -65,13 +66,13 @@ def install_devise
 
   inject_into_file(
     'spec/factories/users.rb',
-    File.read('./tmp/inserts/install_devise/spec/factories/users.rb'),
+    File.read('./tmp/inserts/install_devise/spec/factories/users'),
     after: "factory :user do\n"
   )
 
   inject_into_file(
     'spec/factories/roles.rb',
-    "\nname { 'MyString' }",
+    "    name { 'MyString' }",
     after: "factory :role do\n"
   )
 end

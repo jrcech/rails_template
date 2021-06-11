@@ -62,12 +62,12 @@ def configure_application
   inject_into_file(
     'config/environments/development.rb',
     File.read('./tmp/inserts/configure_application/config/environments/development'),
-    before: 'config.action_mailer.perform_caching = false'
+    after: "config.action_mailer.perform_caching = false\n"
   )
   inject_into_file(
     'config/environments/test.rb',
     File.read('./tmp/inserts/configure_application/config/environments/test'),
-    before: 'config.action_mailer.perform_caching = false'
+    after: "config.action_mailer.perform_caching = false\n"
   )
 
   # I18n
@@ -99,13 +99,13 @@ def configure_application
   # JS
   prepend_to_file(
     'app/javascript/packs/application.js',
-    File.read('./tmp/inserts/configure_application/app/javascript/packs/application.js')
+    File.read('./tmp/inserts/configure_application/app/javascript/packs/application')
   )
 
   # Provide plugin
   inject_into_file(
     'config/webpack/environment.js',
-    File.read('./tmp/inserts/configure_application/config/webpack/environment.js'),
+    File.read('./tmp/inserts/configure_application/config/webpack/environment'),
     after: "const { environment } = require('@rails/webpacker')\n"
   )
 end

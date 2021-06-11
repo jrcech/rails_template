@@ -1,4 +1,3 @@
-
 import "stylesheets/application.scss";
 import "jquery";
 import "jquery-ujs";
