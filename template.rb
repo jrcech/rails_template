@@ -2,7 +2,7 @@
 
 require_relative 'support'
 
-Dir[File.join(__dir__, 'support', '**', '*.rb')].sort.each { |f| require f }
+Dir[File.join(__dir__, 'support', '**', '*.rb')].each { |f| require f }
 
 def source_paths
   [__dir__]
@@ -17,7 +17,7 @@ remove_lines 'Gemfile', 'tzinfo-data'
 run 'bundle install'
 
 after_bundle do
-  #remove_dir 'app/assets' #TODO Keep assets for hotwire generator bug
+  # remove_dir 'app/assets' #TODO Keep assets for hotwire generator bug
 
   directory 'inserts', 'tmp/inserts'
 
@@ -41,6 +41,8 @@ after_bundle do
 
   # Cleanup
   remove_dir 'tmp/inserts'
+
+  run 'rspec'
 
   # Run autocorrection
   # run 'rubocop --auto-correct-all'
