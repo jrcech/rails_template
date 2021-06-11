@@ -82,6 +82,6 @@ def unlock_templates(dir)
   end
 end
 
-def read_template_file(file)
-  File.read(File.join(__dir__, 'support', file))
+def read_support_file(file)
+  File.read(File.join(__dir__, 'support', @process, file))
 end
