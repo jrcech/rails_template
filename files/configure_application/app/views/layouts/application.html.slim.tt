@@ -4,22 +4,26 @@ doctype html
 html lang="en"
   head
     title <%= camelized %>
-    = csrf_meta_tags
-    = csp_meta_tag
 
     meta charset="utf-8"
     meta [
       name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+      content="width=device-width, initial-scale=1"
     ]
+
+    = csrf_meta_tags
+    = csp_meta_tag
 
     = stylesheet_pack_tag 'application',
       media: 'all',
-      'data-turbolinks-track': 'reload'
+      'data-turbo-track': 'reload'
 
     = javascript_pack_tag 'application',
-      'data-turbolinks-track': 'reload'
+      'data-turbo-track': 'reload'
 
   body class="container-fluid"
-    = flash_messages
-    == yield
+    == render 'application/navigation/navigation'
+
+    div class="container"
+      = flash_messages
+      == yield

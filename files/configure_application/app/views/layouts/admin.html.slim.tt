@@ -3,22 +3,23 @@
 doctype html
 html lang="en"
   head
-    title SkillRoad
-    = csrf_meta_tags
-    = csp_meta_tag
+    title <%= camelized %>
 
     meta charset="utf-8"
     meta [
       name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+      content="width=device-width, initial-scale=1"
     ]
+
+    = csrf_meta_tags
+    = csp_meta_tag
 
     = stylesheet_pack_tag 'application',
       media: 'all',
-      'data-turbolinks-track': 'reload'
+      'data-turbo-track': 'reload'
 
     = javascript_pack_tag 'application',
-      'data-turbolinks-track': 'reload'
+      'data-turbo-track': 'reload'
 
   body
     == render 'application/navigation/navigation'

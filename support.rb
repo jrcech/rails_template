@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require_relative 'support/commented_files'
-require_relative 'support/yarn_packages'
 
 def remove_comments_from_files(files, inline = false)
   files.each do |file|
@@ -82,4 +81,8 @@ def unlock_templates(dir)
 
     File.rename(file, rename_string)
   end
+end
+
+def read_template_file(file)
+  File.read(File.join(__dir__, 'support', file))
 end
