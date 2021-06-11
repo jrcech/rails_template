@@ -9,8 +9,6 @@ def install_devise
 
   directory 'files/install_devise', './'
 
-  # remove_comments_from_file 'config/initializers/devise.rb'
-
   inject_into_file(
     'config/initializers/devise.rb',
     File.read('./tmp/inserts/install_devise/config/initializers/devise'),
@@ -18,8 +16,6 @@ def install_devise
   )
 
   run 'rails generate devise User'
-
-  # remove_comments_from_file 'app/models/user.rb'
 
   uncomment_lines Dir['./db/migrate/*_devise_create_users.rb'].first, /t\.|add/
 

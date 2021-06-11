@@ -4,12 +4,7 @@ def install_tests
   append_to_file 'Gemfile', File.read('./tmp/inserts/install_tests/Gemfile')
   run 'bundle install'
 
-  # RSpec
   run 'rails generate rspec:install'
-
-  # remove_comments_from_file 'spec/rails_helper.rb'
-  # remove_comments_from_file 'spec/rails_helper.rb'
-  # remove_comments_from_file 'spec/spec_helper.rb'
 
   append_to_file '.rspec', "--format documentation\n--color\n"
 

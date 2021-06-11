@@ -17,6 +17,8 @@ Layout/LineLength:
   Max: 80
 Style/Documentation:
   Enabled: false
+Style/RegexpLiteral:
+  AllowInnerSlashes: true
 Metrics/BlockLength:
   Exclude:
     - 'config/environments/*'

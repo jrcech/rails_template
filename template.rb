@@ -12,19 +12,15 @@ install_generators
 
 configure_database
 
+add_blank_line 'Gemfile', "gem 'rails'"
 remove_lines 'Gemfile', 'tzinfo-data'
+
+directory 'inserts', 'tmp/inserts'
 
 run 'bundle install'
 
 after_bundle do
   # remove_dir 'app/assets' #TODO Keep assets for hotwire generator bug
-
-  directory 'inserts', 'tmp/inserts'
-
-  # Format files
-  # remove_comments_from_files CommentedFiles.list
-  # remove_comments_from_file 'config/boot.rb', true
-  add_blank_line 'Gemfile', "gem 'rails'"
 
   run 'spring stop'
 

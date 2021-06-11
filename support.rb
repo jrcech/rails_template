@@ -2,23 +2,22 @@
 
 require_relative 'support/commented_files'
 
-def remove_comments_from_files(files, inline = false)
+def remove_comments_from_files(files, inline: false)
   files.each do |file|
-    remove_comments_from_file file, inline
+    remove_comments_from_file file, inline: inline
   end
 end
 
-def remove_comments_from_file(file, inline = false)
+def remove_comments_from_file(file, inline: false)
   file_extension = File.extname(file)
 
-  case file_extension
-  when '.rb', '.yml'
-    regex = ruby_comment_regex inline
-  when '.js'
-    regex = js_comment_regex
-  else
-    regex = ruby_comment_regex inline
-  end
+  regex =
+    case file_extension
+    when '.js'
+      js_comment_regex
+    else
+      ruby_comment_regex inline
+    end
 
   gsub_file file, regex, ''
 end
