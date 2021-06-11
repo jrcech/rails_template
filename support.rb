@@ -75,3 +75,11 @@ def append_to_file_names(dir, append_string)
     File.rename(file, replace_string)
   end
 end
+
+def unlock_templates(dir)
+  Dir.glob(File.join(dir, '**', '*.ttl')).each do |file|
+    rename_string = file.gsub('.ttl', '.tt')
+
+    File.rename(file, rename_string)
+  end
+end

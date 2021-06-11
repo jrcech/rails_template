@@ -8,6 +8,8 @@ def source_paths
   [__dir__]
 end
 
+install_generators
+
 configure_database
 
 remove_lines 'Gemfile', 'tzinfo-data'
@@ -90,7 +92,6 @@ def configure_application
 
   # ERD
   run 'rails generate erd:install'
-  append_to_file_names 'lib/templates', '.tt'
 
   # Fix js files
   prepend_to_file 'postcss.config.js', "/* eslint-disable global-require */\n\n"

@@ -46,11 +46,10 @@ def install_devise
     File.read('./tmp/inserts/install_devise/app/models/user')
   )
 
-  # TODO
   inject_into_file(
     'spec/models/user_spec.rb',
     File.read('./tmp/inserts/install_devise/spec/models/user_spec'),
-    after: "be_valid\nend\n"
+    before: /^end/
   )
 
   gsub_file(
