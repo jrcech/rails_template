@@ -102,3 +102,15 @@ end
 def process_directory
   directory File.join('files', @process), './'
 end
+
+def last_end
+  /^end/
+end
+
+def second_last_end
+  /^\s\send/
+end
+
+def third_last_end
+  /^\s\s\s\send/
+end

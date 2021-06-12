@@ -74,7 +74,7 @@ def configure_user_model
 end
 
 def configure_user_spec
-  template_into_file 'spec/models/user_spec.rb', before: /^end/
+  template_into_file 'spec/models/user_spec.rb', before: last_end
 end
 
 def configure_users_factory
@@ -89,6 +89,6 @@ def configure_routes
 
   template_into_file(
     'config/routes.rb',
-    after: 'Rails.application.routes.draw do'
+    after: "Rails.application.routes.draw do\n"
   )
 end

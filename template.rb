@@ -30,6 +30,7 @@ after_bundle do
   install_devise
 
   configure_application
+  configure_frontend
 
   install_overcommit
 
