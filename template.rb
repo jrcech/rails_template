@@ -20,7 +20,7 @@ directory 'inserts', 'tmp/inserts'
 run 'bundle install'
 
 after_bundle do
-  # remove_dir 'app/assets' #TODO Keep assets for hotwire generator bug
+  remove_dir 'app/assets'
 
   run 'spring stop'
 
