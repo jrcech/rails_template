@@ -25,4 +25,19 @@ RSpec.describe 'System test', type: :system do
   it 'ensures styles are loaded', js: true do
     expect(page).to have_css 'p.css-test', visible: :hidden
   end
+
+  it 'ensures font awesome is loaded', js: true do
+    expect(page).to have_css 'svg.fa-check', visible: :visible
+  end
+
+  describe 'bootstrap components' do
+    it 'ensures styles are loaded', js: true do
+      expect(page).to have_css 'p.d-none', visible: :hidden
+    end
+
+    it 'ensures javascript is loaded', js: true do
+      find_button('Bootstrap?').hover
+      expect(page).to have_css 'div.tooltip'
+    end
+  end
 end
