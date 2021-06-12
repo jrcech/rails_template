@@ -1,15 +1,15 @@
 import { Controller } from "stimulus";
 
 export default class extends Controller {
-  static targets = ["stimulusTest", "jqueryTest", "turbolinksTest"];
+  static targets = ["stimulusTest", "jqueryTest", "turboTest"];
 
   connect() {
     this.stimulusTestTarget.textContent = "Stimulus loaded";
 
-    if (typeof Turbolinks === "undefined") {
-      this.turbolinksTestTarget.textContent = "Turbolinks not loaded";
+    if (typeof Turbo === "undefined") {
+      this.turboTestTarget.textContent = "Turbo not loaded";
     } else {
-      this.turbolinksTestTarget.textContent = "Turbolinks loaded";
+      this.turboTestTarget.textContent = "Turbo loaded";
     }
 
     if (typeof jQuery === "undefined") {

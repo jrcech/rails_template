@@ -7,5 +7,8 @@ def install_overcommit
   directory 'files/install_overcommit', './'
 
   run 'overcommit --install'
-  run 'overcommit -r'
+
+  #   git :init
+  #   git add: '.'
+  #   git commit: "-a -m 'Initial commit'"
 end

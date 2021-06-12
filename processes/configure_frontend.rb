@@ -7,6 +7,7 @@ def configure_frontend
 
   install_hotwire
   # restyle_js_files
+  install_frontend
   configure_js
   configure_provide_plugin
 end
@@ -32,4 +33,8 @@ def configure_provide_plugin
     'config/webpack/environment.js',
     after: "const { environment } = require('@rails/webpacker')\n"
   )
+end
+
+def install_frontend
+  run "yarn add #{read_support_file('yarn_frontend').tr("\n", ' ')}"
 end

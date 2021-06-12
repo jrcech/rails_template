@@ -17,8 +17,8 @@ RSpec.describe 'System test', type: :system do
       expect(page).to have_text 'jQuery loaded'
     end
 
-    it 'ensures turbolinks are loaded', js: true do
-      expect(page).to have_text 'Turbolinks loaded'
+    it 'ensures turbo is loaded', js: true do
+      expect(page).to have_text 'Turbo loaded'
     end
   end
 
