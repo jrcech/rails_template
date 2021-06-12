@@ -1,73 +1,94 @@
 # frozen_string_literal: true
 
 def install_devise
-  append_to_file 'Gemfile', File.read('./tmp/inserts/install_devise/Gemfile')
-  run 'bundle install'
+  @process = __method__.to_s
 
+  install_gems
+
+  configure_devise
+  configure_rolify
+  configure_users
+  configure_routes
+
+  process_directory
+
+  run 'rails db:migrate'
+end
+
+def configure_devise
   run 'rails generate devise:install'
   remove_file 'config/locales/devise.en.yml'
 
-  directory 'files/install_devise', './'
-
-  inject_into_file(
+  template_into_file(
     'config/initializers/devise.rb',
-    File.read('./tmp/inserts/install_devise/config/initializers/devise'),
     after: "config.sign_out_via = :delete\n"
   )
 
+  generate_devise_user
+end
+
+def generate_devise_user
   run 'rails generate devise User'
-
   uncomment_lines Dir['./db/migrate/*_devise_create_users.rb'].first, /t\.|add/
+end
 
+def configure_rolify
   run 'rails generate rolify Role User'
 
-  rails_command 'db:migrate'
-  uncomment_lines 'config/initializers/rolify.rb', 'config.use_dynamic_shortcuts'
-
-  gsub_file(
-    'app/models/user.rb',
-    'devise :database_authenticatable, :registerable,',
-    ''
+  uncomment_lines(
+    'config/initializers/rolify.rb',
+    'config.use_dynamic_shortcuts'
   )
 
-  gsub_file(
-    'app/models/user.rb',
-    ':recoverable, :rememberable, :validatable',
-    ''
-  )
+  configure_roles_factory
+end
 
-  gsub_file(
-    'app/models/user.rb',
-    'rolify',
-    File.read('./tmp/inserts/install_devise/app/models/user')
+def configure_roles_factory
+  template_into_file(
+    'spec/factories/roles.rb',
+    after: "factory :role do\n"
   )
+end
 
-  inject_into_file(
-    'spec/models/user_spec.rb',
-    File.read('./tmp/inserts/install_devise/spec/models/user_spec'),
-    before: /^end/
-  )
+def configure_users
+  generate_user_migrations
+  configure_user_model
+  configure_user_spec
+  configure_users_factory
+end
 
-  gsub_file(
-    'config/routes.rb',
-    'devise_for :users',
-    File.read('./tmp/inserts/install_devise/config/routes')
-  )
-
+def generate_user_migrations
   run 'rails generate migration AddNameToUser first_name last_name username'
   run 'rails generate migration AddOmniauthToUser provider uid'
+end
 
-  rails_command 'db:migrate'
+def configure_user_model
+  remove_lines 'app/models/user.rb', 'devise :database_authenticatable'
+  remove_lines 'app/models/user.rb', ':recoverable'
+  remove_lines 'app/models/user.rb', 'rolify'
 
-  inject_into_file(
+  template_into_file(
+    'app/models/user.rb',
+    after: "class User < ApplicationRecord\n"
+  )
+end
+
+def configure_user_spec
+  template_into_file 'spec/models/user_spec.rb', before: /^end/
+end
+
+def configure_users_factory
+  template_into_file(
     'spec/factories/users.rb',
-    File.read('./tmp/inserts/install_devise/spec/factories/users'),
     after: "factory :user do\n"
   )
+end
 
-  inject_into_file(
-    'spec/factories/roles.rb',
-    "    name { 'MyString' }",
-    after: "factory :role do\n"
+def configure_routes
+  remove_lines 'config/routes.rb', 'devise_for :users'
+
+  template_into_file(
+    'config/routes.rb',
+    after: 'Rails.application.routes.draw do'
   )
 end
