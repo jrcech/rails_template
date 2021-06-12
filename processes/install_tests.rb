@@ -1,33 +1,38 @@
 # frozen_string_literal: true
 
 def install_tests
-  append_to_file 'Gemfile', File.read('./tmp/inserts/install_tests/Gemfile')
-  run 'bundle install'
+  @process = __method__.to_s
 
+  install_gems
+
+  configure_rspec
+  configure_simplecov
+  configure_bullet
+
+  process_directory
+end
+
+def configure_rspec
   run 'rails generate rspec:install'
+  uncomment_lines 'spec/rails_helper.rb', /'spec', 'support'/
+  append_to_file '.rspec', read_insert_file('.rspec')
+end
 
-  append_to_file '.rspec', "--format documentation\n--color\n"
+def configure_capybara
+  template_into_file 'spec/rails_helper.rb', after: "require 'rspec/rails'\n"
+end
 
-  inject_into_file(
+def configure_simplecov
+  insert_into_file(
     'spec/rails_helper.rb',
-    File.read('./tmp/inserts/install_tests/spec/rails_helper'),
-    after: "require 'rspec/rails'\n"
-  )
-
-  # Simplecov
-  inject_into_file(
-    'spec/rails_helper.rb',
-    "require 'simplecov'\nSimpleCov.start\n\n",
+    read_insert_file('spec/rails_helper_simplecov'),
     before: "require 'spec_helper'"
   )
+end
 
-  # Bullet
-  inject_into_file(
+def configure_bullet
+  template_into_file(
     'config/environments/development.rb',
-    File.read('./tmp/inserts/install_tests/config/environments/development'),
     after: "ActiveSupport::EventedFileUpdateChecker\n"
   )
-
-  # Configure RSpec tool
-  directory 'files/install_tests/spec/support', './spec/support'
 end

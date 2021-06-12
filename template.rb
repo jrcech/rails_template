@@ -33,7 +33,6 @@ after_bundle do
 
   install_overcommit
 
-  # Cleanup
   remove_dir 'tmp/inserts'
 
   run 'rspec'

@@ -85,3 +85,20 @@ end
 def read_support_file(file)
   File.read(File.join(__dir__, 'support', @process, file))
 end
+
+def read_insert_file(file)
+  File.read(File.join('./tmp', 'inserts', @process, file))
+end
+
+def template_into_file(file, **args)
+  insert_into_file file, read_insert_file(file.split('.').first), args
+end
+
+def install_gems
+  append_to_file 'Gemfile', read_insert_file('Gemfile')
+  run 'bundle install'
+end
+
+def process_directory
+  directory File.join('files', @process), './'
+end
