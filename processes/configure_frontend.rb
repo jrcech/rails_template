@@ -14,6 +14,8 @@ end
 
 def install_hotwire
   run 'rails hotwire:install'
+
+  remove_file 'app/javascript/controllers/hello_controller.js'
 end
 
 def restyle_js_files

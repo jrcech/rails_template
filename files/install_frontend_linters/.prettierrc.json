@@ -1,1 +1,3 @@
-"prettier-airbnb-config"
+{
+  "singleQuote": true
+}
