@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 def configure_application
-  @process = __method__.to_s
-
   install_gems
 
   configure_generators

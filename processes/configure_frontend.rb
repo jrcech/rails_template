@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 def configure_frontend
-  @process = __method__.to_s
-
   install_gems
 
   install_hotwire

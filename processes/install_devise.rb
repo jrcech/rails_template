@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 def install_devise
-  @process = __method__.to_s
-
   install_gems
 
   configure_devise

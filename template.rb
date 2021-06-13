@@ -4,9 +4,14 @@ require_relative 'support'
 
 Dir[File.join(__dir__, 'processes', '**', '*.rb')].each { |f| require f }
 
+require_relative 'callbacks'
+
 def source_paths
   [__dir__]
 end
+
+hook_before_callback
+hook_after_callback
 
 install_generators
 
