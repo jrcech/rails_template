@@ -18,12 +18,10 @@ remove_lines 'Gemfile', 'tzinfo-data'
 
 directory 'inserts', 'tmp/inserts'
 
-run 'bundle install'
-
 after_bundle do
-  remove_dir 'app/assets'
-
   run 'spring stop'
+
+  remove_dir 'app/assets'
 
   install_rails_linters
   install_frontend_linters
@@ -40,6 +38,11 @@ after_bundle do
   run 'rails db:seed'
 
   run 'rspec'
+
+  run "lsof -n +c 0 | cut -f1 -d' ' | uniq -c | sort | tail"
+
+  git add: '.'
+  git commit: "-a -m 'Initial commit'"
 
   # run 'rubocop --auto-correct-all'
   # run 'yarn run eslint . --fix'

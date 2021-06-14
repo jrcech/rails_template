@@ -1,0 +1,10 @@
+# frozen_string_literal: true
+
+module Application
+  module Navigation
+    module RightNav
+      class RightNavComponent < Application::Navigation::NavigationComponent
+      end
+    end
+  end
+end

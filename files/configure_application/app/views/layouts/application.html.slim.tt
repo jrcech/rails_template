@@ -21,8 +21,8 @@ html lang="en"
     = javascript_pack_tag 'application',
       'data-turbo-track': 'reload'
 
-  body class="container-fluid"
-    == render 'application/navigation/navigation'
+  body
+    == render(Application::Navigation::NavigationComponent.new(current_user: current_user))
 
     div class="container"
       = flash_messages

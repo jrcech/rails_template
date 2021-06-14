@@ -1,0 +1,10 @@
+# frozen_string_literal: true
+
+module Application
+  module Navigation
+    module LeftNav
+      class LeftNavComponent < ViewComponent::Base
+      end
+    end
+  end
+end

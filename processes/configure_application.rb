@@ -9,6 +9,7 @@ def configure_application
   configure_seedbank
   configure_slim
   configure_git
+  install_view_components
   install_model_tools
 
   process_directory
@@ -54,4 +55,12 @@ end
 
 def configure_git
   append_to_file '.gitignore', read_insert_file('.gitignore')
+end
+
+def install_view_components
+  insert_into_file(
+    'config/application.rb',
+    read_insert_file('config/application_view_components'),
+    after: 'Bundler.require(*Rails.groups)'
+  )
 end

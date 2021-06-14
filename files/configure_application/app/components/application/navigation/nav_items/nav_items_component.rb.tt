@@ -1,0 +1,32 @@
+# frozen_string_literal: true
+
+module Application
+  module Navigation
+    module NavItems
+      class NavItemsComponent < Application::Navigation::NavigationComponent
+        include Utilities::LocaleHelper
+        include Utilities::FontAwesomeHelper
+        include Utilities::I18nHelper
+
+        def create_nav_items
+          @nav_items = [
+            {
+              title: I18n.locale.upcase,
+              dropdown_items: available_locales
+            },
+            {
+              title: @current_user.present? ? @current_user.full_name : nil,
+              dropdown_items: [
+                {
+                  title: fa_icon('power-off', text: 'Sign out', size: 'sm'),
+                  path: destroy_user_session_path,
+                  method: :delete
+                }
+              ]
+            }
+          ]
+        end
+      end
+    end
+  end
+end
