@@ -8,6 +8,8 @@ def configure_frontend
   install_frontend
   configure_js
   configure_provide_plugin
+
+  process_directory
 end
 
 def install_hotwire
@@ -22,9 +24,9 @@ def restyle_js_files
 end
 
 def configure_js
-  prepend_to_file(
+  template_to_file(
     'app/javascript/packs/application.js',
-    read_insert_file('app/javascript/packs/application')
+    after: "import \"channels\"\n"
   )
 end
 
@@ -37,4 +39,9 @@ end
 
 def install_frontend
   run "yarn add #{read_support_file('yarn_frontend').tr("\n", ' ')}"
+
+  template_into_file(
+    'app/views/layouts/admin.html.slim',
+    after: 'body'
+  )
 end

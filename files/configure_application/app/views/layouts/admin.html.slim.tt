@@ -22,9 +22,8 @@ html lang="en"
       'data-turbo-track': 'reload'
 
   body
-    == render 'application/navigation/navigation'
+    == render Navbar::Component.new current_user: current_user
 
-    div class="container" data-controller="application"
-      == render 'application/components/breadcrumbs'
+    div class="container"
       = flash_messages
       == yield

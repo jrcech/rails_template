@@ -1,6 +1,11 @@
 @import '~bootstrap/scss/bootstrap';
 @import 'modules/system_test';
 
+mark {
+  background-color: #ffed94;
+  padding: 0;
+}
+
 .dropdown > a:focus {
   box-shadow: none;
   outline: none;

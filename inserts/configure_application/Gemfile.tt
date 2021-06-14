@@ -1,4 +1,7 @@
 
+gem 'oj'
+gem 'pagy'
+gem 'simple_form'
 gem 'slim-rails'
 gem 'view_component'
 

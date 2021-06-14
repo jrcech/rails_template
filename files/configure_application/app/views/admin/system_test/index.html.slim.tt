@@ -2,12 +2,17 @@
 
 h1 System tests
 
+p Various system integrity tests for third party tools.
+
+h2 Hotwire
+
 div data-controller="system-test"
   p data-system-test-target="stimulusTest"
-  p data-system-test-target="jqueryTest"
   p data-system-test-target="turboTest"
 
 p class="css-test" CSS not loaded if this text is visible
+
+h2 Font Awesome 5
 
 span Font Awesome
 '
@@ -15,12 +20,24 @@ span Font Awesome
 
 br
 
+h2 Bootstrap 5
+
 p class="d-none" Bootstrap CSS not loaded if this text is visible
 
 button [
   type="button"
   class="btn btn-secondary"
-  data-toggle="tooltip"
-  data-placement="top"
-  title="Fully loaded"
-] Bootstrap?
+  data-bs-target="tooltip"
+  data-bs-placement="right"
+  title="Bootstrap tooltips are working"
+] Hover over to display a tooltip
+
+br
+
+button [
+  type="button"
+  class="btn btn btn-danger"
+  data-bs-target="popover"
+  title="Popover test"
+  data-bs-content="Bootstrap popovers are working"
+] Click to toggle popover
