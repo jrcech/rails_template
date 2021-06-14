@@ -1,0 +1,14 @@
+# frozen_string_literal: true
+
+module Navbar
+  module NavItems
+    class Component < ViewComponent::Base
+      include Utilities::NavigationHelper
+
+      def initialize(nav_items:, current_user: nil)
+        @current_user = current_user
+        @nav_items = nav_items
+      end
+    end
+  end
+end

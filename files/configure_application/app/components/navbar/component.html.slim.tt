@@ -1,11 +1,11 @@
 / frozen_string_literal: true
 
 nav class="navbar navbar-expand-lg navbar-dark bg-dark"
-  div class="container-fluid"
+  div class="container"
     a [
       class="navbar-brand"
       href="#{root_path}"
-    ] Nav
+    ] Navbar
     
     button [
       class="navbar-toggler"
@@ -19,5 +19,7 @@ nav class="navbar navbar-expand-lg navbar-dark bg-dark"
       span class="navbar-toggler-icon"
     
     div class="collapse navbar-collapse" id="navbarSupportedContent"
-      == render(Application::Navigation::LeftNav::LeftNavComponent.new)
-      == render(Application::Navigation::RightNav::RightNavComponent.new(current_user: current_user))
+      == render Navbar::LeftNav::Component.new
+
+      == render Navbar::RightNav::Component.new \
+        current_user: current_user

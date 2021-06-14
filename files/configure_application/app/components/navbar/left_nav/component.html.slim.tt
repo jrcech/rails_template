@@ -1,0 +1,5 @@
+/ frozen_string_literal: true
+
+ul class="navbar-nav me-auto"
+  == render Navbar::NavItems::Component.new \
+    nav_items: create_nav_items

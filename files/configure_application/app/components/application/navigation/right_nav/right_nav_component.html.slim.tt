@@ -1,4 +1,0 @@
-/ frozen_string_literal: true
-
-ul class="navbar-nav"
-  == render(Application::Navigation::NavItems::NavItemsComponent.new(current_user: current_user))

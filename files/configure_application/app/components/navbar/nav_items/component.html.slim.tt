@@ -1,9 +1,8 @@
 / frozen_string_literal: true
-- create_nav_items
 
 - @nav_items.each do |nav_item|
   - @nav_item = nav_item
-  - if nav_item.key?(:dropdown_items)
+  - if nav_item.key? :dropdown_items
     li class="dropdown nav-item"
       a [
         id="userDropdown"
@@ -25,5 +24,6 @@
             class: 'dropdown-item'
   
   - else
-    li class="nav-item#{active_class}"
-      = link_to nav_item[:title], nav_item[:path], class: 'nav-link'
+    li class="nav-item"
+      = link_to nav_item[:title], nav_item[:path],
+        class: "nav-link#{active_class}"

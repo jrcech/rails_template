@@ -1,0 +1,23 @@
+# frozen_string_literal: true
+
+module Navbar
+  module LeftNav
+    class Component < ViewComponent::Base
+      def create_nav_items
+        @nav_items = [
+          homepage_button
+        ]
+      end
+
+      private
+
+      def homepage_button
+        {
+          path: admin_root_path,
+          title: 'Dashboard',
+          controller: 'dashboard'
+        }
+      end
+    end
+  end
+end

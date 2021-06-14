@@ -22,7 +22,7 @@ html lang="en"
       'data-turbo-track': 'reload'
 
   body
-    == render(Application::Navigation::NavigationComponent.new(current_user: current_user))
+    == render Navbar::Component.new current_user: current_user
 
     div class="container"
       = flash_messages
