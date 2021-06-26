@@ -1,0 +1,59 @@
+# frozen_string_literal: true
+
+module Header
+  class Component < ViewComponent::Base
+    include Utilities::PathsHelper
+    include Utilities::ResourceHelper
+    include Utilities::ModelHelper
+    include Utilities::ControllerHelper
+    include Utilities::FontAwesomeHelper
+
+    renders_one :heading, lambda { |main_header:|
+      content_tag main_header.present? ? :h1 : :h2 do
+        render Header::Heading::Component.new(
+          header: header
+        )
+      end
+    }
+
+    renders_one :header_buttons, lambda { |header_buttons:|
+      render Buttons::Group::Component.new do |group|
+        group.buttons header_buttons
+      end
+    }
+
+    renders_one :search_form, lambda { |query:|
+      Header::SearchForm::Component.new query: query
+    }
+
+    renders_one :pagination_info, lambda { |pagy:|
+      Header::PagyInfo::Component.new pagy: pagy
+    }
+
+    renders_one :action_buttons, lambda { |action_buttons:|
+      render Buttons::Group::Component.new title: header[:title] do |group|
+        group.buttons action_buttons
+      end
+    }
+
+    renders_one :primary_buttons, lambda { |primary_buttons:|
+      render Buttons::Group::Component.new do |group|
+        group.buttons primary_buttons
+      end
+    }
+
+    renders_one :link_buttons, lambda { |link_buttons:|
+      render Buttons::Group::Component.new do |group|
+        group.buttons link_buttons
+      end
+    }
+
+    def initialize(header:)
+      @header = header
+    end
+
+    private
+
+    attr_reader :header
+  end
+end

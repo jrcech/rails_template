@@ -12,9 +12,10 @@ module Buttons
       include Buttons::Button::Actions::Dropdown
       include Buttons::Button::Actions::Role
 
-      def initialize(button:, dropdown_item: false)
+      def initialize(button:, dropdown_item: false, title: nil)
         @button = button
         @dropdown_item = dropdown_item
+        @title = title
       end
 
       def create_button
@@ -25,7 +26,7 @@ module Buttons
 
       private
 
-      attr_reader :button, :dropdown_item
+      attr_reader :button, :dropdown_item, :title
 
       def evaluate_button
         evaluated_button = button_hash

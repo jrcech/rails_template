@@ -1,0 +1,16 @@
+/ frozen_string_literal: true
+
+= heading
+= header_buttons
+
+div class="row"
+  div class="col-md"
+    = search_form
+    = primary_buttons
+
+  div class="col-md text-center"
+    = pagination_info
+  
+  div class="col-md text-end"
+    = link_buttons
+    = action_buttons
