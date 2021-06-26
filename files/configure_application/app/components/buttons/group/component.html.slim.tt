@@ -1,0 +1,5 @@
+/ frozen_string_literal: true
+
+div class="btn-group" role="group" aria-label="Placeholder buttons"
+  - buttons.each do |button|
+    = button

@@ -1,0 +1,9 @@
+# frozen_string_literal: true
+
+module Buttons
+  module Group
+    class Component < ViewComponent::Base
+      renders_many :buttons, Buttons::Button::Component
+    end
+  end
+end

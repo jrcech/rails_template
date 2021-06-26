@@ -1,0 +1,8 @@
+/ frozen_string_literal: true
+
+- if button == :divider
+  hr class="dropdown-divider"
+- elsif dropdown_item?
+  li = create_button
+- else
+  = create_button

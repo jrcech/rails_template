@@ -1,0 +1,24 @@
+/ frozen_string_literal: true
+
+div class="dropdown"
+  = button
+  
+  / == render Buttons::Button::Component.new button: dropdown_options[:button],
+  /   dropdown: true,
+  /   caret: dropdown_options[:caret],
+  /   title: dropdown_options[:title],
+  /   id: dropdown_button_id
+  
+  ul [
+    class="dropdown-menu#{dropdown_menu_position}"
+    aria-labelledby=dropdown_button_id
+  ]
+    - if dropdown_options[:header].present?
+      li
+        p class="dropdown-header fs-6" = dropdown_options[:header]
+      
+    - dropdown_items.each do |dropdown_item|
+      = dropdown_item
+      
+    / == render Buttons::Button::Component.with_collection @dropdown_items,
+    /   dropdown_item: true

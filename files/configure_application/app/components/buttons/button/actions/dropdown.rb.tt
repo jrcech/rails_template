@@ -1,0 +1,35 @@
+# frozen_string_literal: true
+
+module Buttons
+  module Button
+    module Actions
+      module Dropdown
+        private
+
+        def default_dropdown_button
+          {
+            title: 'Dropdown',
+            path: '#',
+            class: 'btn btn-secondary dropdown-toggle',
+            aria_expanded: false,
+            data: {
+              bs_toggle: 'dropdown'
+            }
+          }
+        end
+
+        def ellipsis_button
+          {
+            path: '#',
+            icon: 'ellipsis-v',
+            class: 'btn btn-light',
+            aria_expanded: false,
+            data: {
+              bs_toggle: 'dropdown'
+            }
+          }
+        end
+      end
+    end
+  end
+end

@@ -14,13 +14,19 @@ module Navbar
       def create_nav_items
         @nav_items = [
           locales_dropdown,
-          user_dropdown
+          user_signed_in? ? user_dropdown : login_button
         ]
       end
 
       private
 
       attr_reader :current_user
+
+      def user_signed_in?
+        return true if @current_user.present?
+
+        false
+      end
 
       def locales_dropdown
         {
@@ -39,6 +45,13 @@ module Navbar
               method: :delete
             }
           ]
+        }
+      end
+
+      def login_button
+        {
+          title: fa_icon('sign-in-alt', text: 'Log in', size: 'sm'),
+          path: new_user_session_path
         }
       end
     end
