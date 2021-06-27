@@ -63,6 +63,8 @@ module Buttons
       end
 
       def title_with_icon
+        return button[:title] if button[:icon].blank?
+
         fa_icon(
           button[:icon],
           text: button[:title],

@@ -10,3 +10,7 @@ mark {
   box-shadow: none;
   outline: none;
 }
+
+.pagination {
+  float: right;
+}
