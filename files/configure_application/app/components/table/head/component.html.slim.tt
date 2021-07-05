@@ -1,0 +1,4 @@
+/ frozen_string_literal: true
+
+thead
+  = render Table::Row::Component.with_collection head_rows, head: true

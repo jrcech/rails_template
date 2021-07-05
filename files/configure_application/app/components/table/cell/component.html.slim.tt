@@ -1,0 +1,7 @@
+/ frozen_string_literal: true
+
+- if head.present?
+  th scope="col"
+    = cell
+- else
+  td = cell

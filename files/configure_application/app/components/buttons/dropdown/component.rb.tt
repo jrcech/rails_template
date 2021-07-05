@@ -6,16 +6,21 @@ module Buttons
       renders_one :button, Buttons::Button::Component
 
       renders_many :dropdown_items, lambda { |button:|
-        Buttons::Button::Component.new(button: button, dropdown_item: true)
+        Buttons::Button::Component.new(
+          button: button,
+          dropdown_item: true,
+          item: item
+        )
       }
 
-      def initialize(**dropdown_options)
+      def initialize(item: nil, **dropdown_options)
         @dropdown_options = dropdown_options
+        @item = item
       end
 
       private
 
-      attr_reader :dropdown_options
+      attr_reader :dropdown_options, :item
 
       def dropdown_button_id
         transliterated_title = I18n.transliterate(dropdown_options[:title])

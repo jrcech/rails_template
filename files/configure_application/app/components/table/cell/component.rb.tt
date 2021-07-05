@@ -1,0 +1,24 @@
+# frozen_string_literal: true
+
+module Table
+  module Cell
+    class Component < ViewComponent::Base
+      include Utilities::PathsHelper
+      include Utilities::ResourceHelper
+      include Utilities::ModelHelper
+      include Utilities::ControllerHelper
+      include Utilities::FontAwesomeHelper
+
+      with_collection_parameter :cell
+
+      def initialize(cell:, head:)
+        @cell = cell
+        @head = head
+      end
+
+      private
+
+      attr_reader :cell, :head
+    end
+  end
+end

@@ -1,0 +1,57 @@
+# frozen_string_literal: true
+
+module Table
+  class Component < ViewComponent::Base
+    include Utilities::PathsHelper
+    include Utilities::ResourceHelper
+    include Utilities::ModelHelper
+    include Utilities::ControllerHelper
+    include Utilities::FontAwesomeHelper
+
+    def initialize(head_rows:, body:, items:, query:, buttons:)
+      @head_rows = head_rows
+      @body = body
+      @items = items
+      @query = query
+      @buttons = buttons
+    end
+
+    def items_collection
+      collection = []
+
+      items.each do |item|
+        cells = []
+        
+        body.each do |cell|
+          cells <<
+            case cell
+            when Array
+              cell.inject(item, :send)
+            when Hash
+              send(cell.keys.first, item.send(cell.values.first), query)
+            else
+              item.send(cell)
+            end
+        end
+
+        cells << index_buttons(item.title, item)
+        collection << cells
+      end
+
+      collection
+    end
+
+    private
+
+    attr_reader :head_rows, :body, :items, :query, :buttons
+
+    def index_buttons(title, item)
+      render Buttons::Dropdown::Component.new(title: title, item: item) do |c|
+        c.button button: :ellipsis_button
+        c.dropdown_items(
+          buttons.first[:ellipsis_button].map { |k| { button: k } }
+        )
+      end
+    end
+  end
+end

@@ -3,13 +3,13 @@
 module ProcessDecorator
   Dir[File.join(__dir__, 'processes', '**', '*.rb')].each { |f| require f }
 
-  methods = []
+  process_methods = []
 
   Dir[File.join(__dir__, 'processes', '*')].each do |file|
-    methods << File.basename(file, '.*').to_sym
+    process_methods << File.basename(file, '.*').to_sym
   end
 
-  methods.each do |method|
+  process_methods.each do |method|
     define_method method do
       @process = method.to_s
 

@@ -1,0 +1,6 @@
+/ frozen_string_literal: true
+
+tr
+  = render Table::Cell::Component.with_collection row, head: head
+  - if head.present?
+    th
