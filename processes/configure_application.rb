@@ -13,6 +13,7 @@ def configure_application
   install_model_tools
   install_pagy
   install_simple_form
+  install_gretel
 
   process_directory
 end
@@ -91,4 +92,8 @@ end
 
 def install_simple_form
   run 'rails generate simple_form:install --bootstrap'
+end
+
+def install_gretel
+  run 'rails generate gretel:install'
 end

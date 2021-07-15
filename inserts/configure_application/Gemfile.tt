@@ -1,4 +1,5 @@
 
+gem 'gretel'
 gem 'oj'
 gem 'pagy'
 gem 'simple_form'
