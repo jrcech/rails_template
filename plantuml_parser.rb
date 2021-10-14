@@ -43,17 +43,18 @@ class MiniP < Parslet::Parser
 
   rule(:class_name) { match('[a-zA-Z]').repeat(1) }
 
-
-  rule(:class_definition) { class_keyword >> space >> class_name.as(:class) >> space? >> class_body }
-
   rule(:attribute_flag) { str('--') >> match('[ 0-9a-zA-Z:-]').repeat }
-  rule(:class_attribute) { match('[0-9a-zA-Z:-]').repeat.as(:attribute) >> space >> attribute_flag.as(:flag) >> new_line }
+
+  rule(:flag_line) { space >> attribute_flag.as(:flags) }
+
+  rule(:class_attribute) { match('[0-9a-zA-Z:-]').repeat.as(:attribute) >> flag_line.maybe >> new_line }
 
 
   rule(:class_attributes) { space? >> class_attribute }
 
-  rule(:class_body) { lparen >> new_line >> class_attributes.repeat >> new_line? >> rparen }
+  rule(:class_body) { lparen >> new_line >> class_attributes.repeat.as(:attributes) >> new_line? >> rparen }
 
+  rule(:class_definition) { class_keyword >> space >> class_name.as(:class) >> space? >> class_body }
 
   rule(:expression) { class_definition }
 

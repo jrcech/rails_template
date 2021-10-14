@@ -5,8 +5,9 @@ skinparam monochrome true
 skinparam shadowing false
 
 class Universe {
-  name:string --unique
+  name:string --unique --search
   shortcut:string --unique
+  shortcut:string
 }
 
 class Supercluster {
