@@ -12,24 +12,10 @@ ap classes_collection
 puts "\n"
 
 puts classes_collection.first
-# p file
 
 puts "\n"
 
-class MiniP < Parslet::Parser
-  # Things
-  # rule(:integer)    { match('[0-9]').repeat(1).as(:int) >> space? }
-  # rule(:operator)   { match('[+]') >> space? }
-
-  # Grammar parts
-  # rule(:sum)        do
-  #   integer.as(:left) >> operator.as(:op) >> expression.as(:right)
-  # end
-  # rule(:arglist)    { expression >> (comma >> expression).repeat }
-  # rule(:funcall)    do
-  #   identifier.as(:funcall) >> lparen >> arglist.as(:arglist) >> rparen
-  # end
-
+class ClassDiagramParser < Parslet::Parser
   rule(:space) { match('\s').repeat(1) }
   rule(:space?) { space.maybe }
 
@@ -49,7 +35,7 @@ class MiniP < Parslet::Parser
 
   rule(:attribute) do
     space? >>
-      match('[0-9a-zA-Z:-]').repeat.as(:attribute) >>
+      match('[0-9a-zA-Z:-_]').repeat.as(:attribute) >>
       attribute_flag.maybe >>
       new_line
   end
@@ -73,8 +59,12 @@ class MiniP < Parslet::Parser
   root :class
 end
 
-begin
-  ap MiniP.new.parse(classes_collection.first)
+model = []
+
+classes_collection.each do |class_definition|
+  model << ClassDiagramParser.new.parse(class_definition)
 rescue Parslet::ParseFailed => e
   puts e.parse_failure_cause.ascii_tree
 end
+
+ap model
