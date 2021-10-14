@@ -3,18 +3,6 @@
 require 'parslet'
 require 'amazing_print'
 
-file = File.read(File.join('./docs', 'test.md'))
-
-classes_collection = file.scan(/class\s[a-zA-Z\s<>_]*\s{[^}]*}/)
-
-ap classes_collection
-
-puts "\n"
-
-puts classes_collection.first
-
-puts "\n"
-
 class ClassDiagramParser < Parslet::Parser
   rule(:space) { match('\s').repeat(1) }
   rule(:space?) { space.maybe }
@@ -59,12 +47,52 @@ class ClassDiagramParser < Parslet::Parser
   root :class
 end
 
-model = []
+class AssociationsParser < Parslet::Parser
+  rule(:space) { match('\s').repeat(1) }
+  rule(:space?) { space.maybe }
+  
+  rule(:left_association) { str('<--') }
+  rule(:right_association) { str('-->') }
 
-classes_collection.each do |class_definition|
-  model << ClassDiagramParser.new.parse(class_definition)
+  rule(:association) { left_association | right_association }
+
+  rule(:class_name) { match('[a-zA-Z "0-9*]').repeat(1) }
+
+  rule(:expression) do
+    class_name.as(:left_class) >>
+      association.as(:association) >>
+      class_name.as(:right_class)
+  end
+
+  root :expression
+end
+
+file = File.read(File.join('./docs', 'test.md'))
+
+classes = file.scan(/class\s[a-zA-Z\s<>_]*\s{[^}]*}/)
+associations = file.scan(/.*(?:<--|-->).*/)
+
+puts "\n"
+
+puts "\n"
+
+model = {
+  classes: [],
+  associations: []
+}
+
+classes.each do |class_definition|
+  model[:classes] << ClassDiagramParser.new.parse(class_definition)
+rescue Parslet::ParseFailed => e
+  puts e.parse_failure_cause.ascii_tree
+end
+
+associations.each do |association|
+  model[:associations] << AssociationsParser.new.parse(association)
 rescue Parslet::ParseFailed => e
   puts e.parse_failure_cause.ascii_tree
 end
 
 ap model
+ap associations
+
