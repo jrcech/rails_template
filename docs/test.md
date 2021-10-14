@@ -65,7 +65,7 @@ enum galaxy_state {
   :quasar
 }
 
-Universe "1" <-- "*" Supercluster
+  Universe "1" <-- "*" Supercluster
 
 Supercluster "1" <-- "*" Cluster
 
