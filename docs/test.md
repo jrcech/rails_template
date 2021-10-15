@@ -80,5 +80,6 @@ Star "1" <-- "*" Comet
 Star "1" <-- "*" Asteroid
 
 Planet "1" <-- "*" Satellite
+Satellite "1" <-- "*" Small
 @enduml
 ```

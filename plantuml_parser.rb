@@ -140,7 +140,23 @@ def deep_hash(hash, value_symbol = nil)
     if value_symbol.nil?
       new_hash[key] = deep_hash(hash, value)
     elsif hash.key?(value_symbol)
-      new_hash[value_symbol] = deep_hash(hash, hash[value_symbol])
+      if hash[value_symbol].is_a? Array
+        arr = []
+
+        hash[value_symbol].each do |array_value|
+          if hash.key? array_value
+            arr << { array_value => deep_hash(hash, hash[array_value]) }
+          else
+            arr << array_value
+          end
+        end
+
+        new_hash[value_symbol] = arr
+      else
+        new_hash[value_symbol] = deep_hash(hash, hash[value_symbol])
+      end
+    else
+      new_hash = value_symbol
     end
   end
 
