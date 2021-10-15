@@ -130,28 +130,17 @@ end
 #     new_hash[key] = { value => associations_hash[value] }
 #   end
 # end
+
 ap associations_hash
-def deep_hash(hash)
+
+def deep_hash(hash, value_symbol = nil)
   new_hash = {}
 
   hash.each do |key, value|
-    if hash.key?(value)
-      # new_hash[key] = { value => hash[value] }
-      # new_hash[key] = { value => { hash[value] => hash[hash[value]] } }
-      new_hash[key] = value_hash(hash, value)
-      # new_hash[key] = deep_hash(value)
-    end
-  end
-
-  new_hash
-end
-
-def value_hash(hash, value_symbol)
-  new_hash = {}
-
-  hash.each do |key, value|
-    if hash.key?(value_symbol)
-      new_hash[value_symbol] = value_hash(hash, hash[value_symbol])
+    if value_symbol.nil?
+      new_hash[key] = deep_hash(hash, value)
+    elsif hash.key?(value_symbol)
+      new_hash[value_symbol] = deep_hash(hash, hash[value_symbol])
     end
   end
 
@@ -159,3 +148,4 @@ def value_hash(hash, value_symbol)
 end
 
 ap deep_hash(associations_hash)
+ap deep_hash(associations_hash).keys

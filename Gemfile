@@ -7,4 +7,5 @@ ruby '3.0.2'
 
 gem 'amazing_print'
 gem 'parslet'
+gem 'rails'
 gem 'rubocop', require: false
