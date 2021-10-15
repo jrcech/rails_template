@@ -13,126 +13,155 @@ class PlantumlParser
   end
 
   def parse
-    model_hash = parse_model
-    associations_hash = transform_associations(model_hash)
-    top_level_classes_array = top_level_classes(associations_hash)
+    model_hash = parse_file
+    base_associations_hash = base_associations(model_hash)
+    top_level_classes_array = top_level_classes(base_associations_hash)
 
-    transform_model_hash(associations_hash, top_level_classes_array)
+    nested_associations_array = nested_associations(
+      base_associations_hash,
+      top_level_classes_array
+    )
+
+    ap nested_associations_array
   end
 
   private
 
   attr_reader :file
 
-  def parse_model
+  def parse_file
     classes = file.scan(/class\s[a-zA-Z\s<>_]*\s{[^}]*}/)
     associations = file.scan(/.*(?:<--|-->).*/)
 
-    model = {
-      classes: [],
-      associations: []
+    {
+      classes: parse_classes(classes),
+      associations: parse_associations(associations)
     }
-
-    classes.each do |class_definition|
-      model[:classes] << PlantumlParser::Class.new.parse(class_definition)
-    rescue Parslet::ParseFailed => e
-      puts e.parse_failure_cause.ascii_tree
-    end
-
-    associations.each do |association|
-      model[:associations] << PlantumlParser::Association.new.parse(association)
-    rescue Parslet::ParseFailed => e
-      puts e.parse_failure_cause.ascii_tree
-    end
-
-    model
   end
 
-  def transform_associations(model)
-    associations_hash = {}
+  def parse_classes(classes)
+    array = []
 
-    model[:associations].each do |association|
-      left_class = association[:left_class].to_s.underscore.to_sym
-      right_class = association[:right_class].to_s.underscore.to_sym
-
-      if associations_hash[left_class].nil?
-        associations_hash[left_class] = right_class
-      elsif associations_hash[left_class].is_a? Array
-        associations_hash[left_class] << right_class
-      else
-        associations_hash[left_class] = [associations_hash[left_class]]
-        associations_hash[left_class] << right_class
-      end
+    classes.each do |class_definition|
+      array << PlantumlParser::Class.new.parse(class_definition)
+    rescue Parslet::ParseFailed => e
+      puts e.parse_failure_cause.ascii_tree
     end
 
-    associations_hash
+    array
+  end
+
+  def parse_associations(associations)
+    array = []
+
+    associations.each do |association|
+      array << PlantumlParser::Association.new.parse(association)
+    rescue Parslet::ParseFailed => e
+      puts e.parse_failure_cause.ascii_tree
+    end
+
+    array
+  end
+
+  def base_associations(model)
+    hash = {}
+
+    model[:associations].each do |association|
+      left_class = class_name_to_sym(association[:left_class])
+      right_class = class_name_to_sym(association[:right_class])
+
+      construct_base_associations(hash, left_class, right_class)
+    end
+
+    hash
+  end
+
+  def construct_base_associations(hash, left_class, right_class)
+    if hash[left_class].nil?
+      hash[left_class] = right_class
+    elsif hash[left_class].is_a? Array
+      hash[left_class] << right_class
+    else
+      hash[left_class] = [hash[left_class]]
+      hash[left_class] << right_class
+    end
+  end
+
+  def class_name_to_sym(name)
+    name.to_s.underscore.to_sym
+  end
+
+  def nested_associations(associations_hash, top_level_classes)
+    array = []
+
+    top_level_classes.each do |top_level_class|
+      array << transform_associations(
+        associations_hash,
+        top_level_class
+      )
+    end
+
+    array
   end
 
   def top_level_classes(associations_hash)
-    top_level = []
+    array = []
 
     associations_hash.each do |key, _|
       next if associations_hash.values.flatten.include? key
 
-      top_level << key
+      array << key
     end
 
-    top_level
+    array
   end
 
-  def transform_model_hash(associations_hash, top_level_classes)
-    full_hash = []
-
-    top_level_classes.each do |top_level_class|
-      full_hash << deep_hash(associations_hash, top_level_class)
-    end
-
-    full_hash
-  end
-
-  def deep_hash(hash, value_symbol = nil)
+  def transform_associations(hash, value_symbol = nil)
     new_hash = {}
 
     hash.each do |key, value|
-      if value_symbol.nil?
-        if hash[key].is_a? Array
-          arr = []
-
-          hash[key].each do |array_value|
-            if hash.key? array_value
-              arr << { array_value => deep_hash(hash, hash[array_value]) }
-            else
-              arr << array_value
-            end
-          end
-
-          new_hash[key] = arr
-        else
-          new_hash[key] = deep_hash(hash, value)
-        end
-
-      elsif hash.key?(value_symbol)
-        if hash[value_symbol].is_a? Array
-          arr = []
-
-          hash[value_symbol].each do |array_value|
-            if hash.key? array_value
-              arr << { array_value => deep_hash(hash, hash[array_value]) }
-            else
-              arr << array_value
-            end
-          end
-
-          new_hash[value_symbol] = arr
-        else
-          new_hash[value_symbol] = deep_hash(hash, hash[value_symbol])
-        end
-      else
-        new_hash = value_symbol
-      end
+      new_hash = new_hash_pair(hash, value_symbol, key, value)
     end
 
     new_hash
+  end
+
+  def new_hash_pair(hash, value_symbol, key, value)
+    new_hash = {}
+
+    if value_symbol.nil?
+      new_hash[key] = new_hash_item(hash, value)
+    elsif hash.key?(value_symbol)
+      new_hash[value_symbol] = new_hash_item(hash, hash[value_symbol])
+    else
+      new_hash = value_symbol
+    end
+
+    new_hash
+  end
+
+  def new_hash_item(hash, value)
+    return iterate_association_array(hash, value) if value.is_a? Array
+
+    transform_associations(hash, value)
+  end
+
+  def iterate_association_array(hash, array_values)
+    array = []
+
+    array_values.each do |array_value|
+      array << transform_array_value(hash, array_value)
+    end
+
+    array
+  end
+
+  def transform_array_value(hash, array_value)
+    if hash.key? array_value
+      { array_value => transform_associations(hash, hash[array_value]) }
+    else
+      array_value
+    end
   end
 end
 
