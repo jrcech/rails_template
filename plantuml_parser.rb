@@ -3,6 +3,16 @@
 require 'parslet'
 require 'amazing_print'
 
+class String
+  def underscore
+    self.gsub(/::/, '/').
+      gsub(/([A-Z]+)([A-Z][a-z])/,'\1_\2').
+      gsub(/([a-z\d])([A-Z])/,'\1_\2').
+      tr("-", "_").
+      downcase
+  end
+end
+
 class ClassDiagramParser < Parslet::Parser
   rule(:space) { match('\s').repeat(1) }
   rule(:space?) { space.maybe }
@@ -105,3 +115,47 @@ end
 ap model
 ap associations
 
+associations_hash = {}
+
+model[:associations].each do |association|
+  left_class = association[:left_class].to_s.underscore.to_sym
+
+  associations_hash[left_class] = association[:right_class].to_s.underscore.to_sym
+end
+
+# new_hash = {}
+# ap associations_hash
+# associations_hash.each do |key, value|
+#   if associations_hash.key? value
+#     new_hash[key] = { value => associations_hash[value] }
+#   end
+# end
+ap associations_hash
+def deep_hash(hash)
+  new_hash = {}
+
+  hash.each do |key, value|
+    if hash.key?(value)
+      # new_hash[key] = { value => hash[value] }
+      # new_hash[key] = { value => { hash[value] => hash[hash[value]] } }
+      new_hash[key] = value_hash(hash, value)
+      # new_hash[key] = deep_hash(value)
+    end
+  end
+
+  new_hash
+end
+
+def value_hash(hash, value_symbol)
+  new_hash = {}
+
+  hash.each do |key, value|
+    if hash.key?(value_symbol)
+      new_hash[value_symbol] = value_hash(hash, hash[value_symbol])
+    end
+  end
+
+  new_hash
+end
+
+ap deep_hash(associations_hash)
