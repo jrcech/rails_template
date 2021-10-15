@@ -78,6 +78,7 @@ System "1" <-- "*" Star
 Galaxy "1" <-- "*" Pulsar
 
 Universe "1" <-- "*" Test
+God "1" <-- "*" Jirka
 
 Pulsar "1" <-- "*" Pulsik
 Pulsar "1" <-- "*" Puls

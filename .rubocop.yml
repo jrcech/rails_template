@@ -4,3 +4,5 @@ Layout/LineLength:
   Max: 80
 Style/RegexpLiteral:
   AllowInnerSlashes: true
+Style/Documentation:
+  Enabled: false

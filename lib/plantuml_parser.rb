@@ -14,7 +14,7 @@ class PlantumlParser
 
   def parse
     model_hash = parse_file
-    base_associations_hash = base_associations(model_hash)
+    base_associations_hash = base_associations(model_hash[:associations])
     top_level_classes_array = top_level_classes(base_associations_hash)
 
     nested_associations_array = nested_associations(
@@ -22,6 +22,9 @@ class PlantumlParser
       top_level_classes_array
     )
 
+    ap model_hash
+    ap base_associations_hash
+    ap top_level_classes_array
     ap nested_associations_array
   end
 
@@ -63,10 +66,10 @@ class PlantumlParser
     array
   end
 
-  def base_associations(model)
+  def base_associations(associations)
     hash = {}
 
-    model[:associations].each do |association|
+    associations.each do |association|
       left_class = class_name_to_sym(association[:left_class])
       right_class = class_name_to_sym(association[:right_class])
 
@@ -74,6 +77,10 @@ class PlantumlParser
     end
 
     hash
+  end
+
+  def class_name_to_sym(name)
+    name.to_s.underscore.to_sym
   end
 
   def construct_base_associations(hash, left_class, right_class)
@@ -87,8 +94,16 @@ class PlantumlParser
     end
   end
 
-  def class_name_to_sym(name)
-    name.to_s.underscore.to_sym
+  def top_level_classes(associations_hash)
+    array = []
+
+    associations_hash.each do |key, _|
+      next if associations_hash.values.flatten.include? key
+
+      array << key
+    end
+
+    array
   end
 
   def nested_associations(associations_hash, top_level_classes)
@@ -99,18 +114,6 @@ class PlantumlParser
         associations_hash,
         top_level_class
       )
-    end
-
-    array
-  end
-
-  def top_level_classes(associations_hash)
-    array = []
-
-    associations_hash.each do |key, _|
-      next if associations_hash.values.flatten.include? key
-
-      array << key
     end
 
     array
@@ -130,9 +133,9 @@ class PlantumlParser
     new_hash = {}
 
     if value_symbol.nil?
-      new_hash[key] = new_hash_item(hash, value)
+      new_hash[key] = new_hash_value(hash, value)
     elsif hash.key?(value_symbol)
-      new_hash[value_symbol] = new_hash_item(hash, hash[value_symbol])
+      new_hash[value_symbol] = new_hash_value(hash, hash[value_symbol])
     else
       new_hash = value_symbol
     end
@@ -140,7 +143,7 @@ class PlantumlParser
     new_hash
   end
 
-  def new_hash_item(hash, value)
+  def new_hash_value(hash, value)
     return iterate_association_array(hash, value) if value.is_a? Array
 
     transform_associations(hash, value)
@@ -167,8 +170,4 @@ end
 
 file = File.read(File.join('./docs', 'test.md'))
 
-ap PlantumlParser.new(file).parse
-
-# ap Hash[*deep_hash(associations_hash).first]
-# ap deep_hash(associations_hash)
-# ap hasher(associations_hash)
+PlantumlParser.new(file).parse
