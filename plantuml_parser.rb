@@ -119,17 +119,17 @@ associations_hash = {}
 
 model[:associations].each do |association|
   left_class = association[:left_class].to_s.underscore.to_sym
+  right_class = association[:right_class].to_s.underscore.to_sym
 
-  associations_hash[left_class] = association[:right_class].to_s.underscore.to_sym
+  if associations_hash[left_class].nil?
+    associations_hash[left_class] = right_class
+  elsif associations_hash[left_class].is_a? Array
+    associations_hash[left_class] << right_class
+  else
+    associations_hash[left_class] = [associations_hash[left_class]]
+    associations_hash[left_class] << right_class
+  end
 end
-
-# new_hash = {}
-# ap associations_hash
-# associations_hash.each do |key, value|
-#   if associations_hash.key? value
-#     new_hash[key] = { value => associations_hash[value] }
-#   end
-# end
 
 ap associations_hash
 
