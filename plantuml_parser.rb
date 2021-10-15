@@ -133,12 +133,41 @@ end
 
 ap associations_hash
 
+def top_level_classes(associations_hash)
+  top_level = []
+
+  associations_hash.each do |key, _|
+    next if associations_hash.values.flatten.include? key
+
+    top_level << key
+  end
+
+  top_level
+end
+
+ap top_level_classes(associations_hash)
+
 def deep_hash(hash, value_symbol = nil)
   new_hash = {}
 
   hash.each do |key, value|
     if value_symbol.nil?
-      new_hash[key] = deep_hash(hash, value)
+      if hash[key].is_a? Array
+        arr = []
+
+        hash[key].each do |array_value|
+          if hash.key? array_value
+            arr << { array_value => deep_hash(hash, hash[array_value]) }
+          else
+            arr << array_value
+          end
+        end
+
+        new_hash[key] = arr
+      else
+        new_hash[key] = deep_hash(hash, value)
+      end
+
     elsif hash.key?(value_symbol)
       if hash[value_symbol].is_a? Array
         arr = []
@@ -163,5 +192,16 @@ def deep_hash(hash, value_symbol = nil)
   new_hash
 end
 
-ap deep_hash(associations_hash)
-ap deep_hash(associations_hash).keys
+def hasher(associations_hash)
+  full_hash = []
+
+  top_level_classes(associations_hash).each do |top_level_class|
+    full_hash << deep_hash(associations_hash, top_level_class)
+  end
+
+  full_hash
+end
+
+# ap Hash[*deep_hash(associations_hash).first]
+# ap deep_hash(associations_hash)
+ap hasher(associations_hash)

@@ -65,21 +65,26 @@ enum galaxy_state {
   :quasar
 }
 
-  Universe "1" <-- "*" Supercluster
+Satellite "1" <-- "*" Small
 
 Supercluster "1" <-- "*" Cluster
+Star "1" <-- "*" Comet
 
+  Universe "1" <-- "*" Supercluster
 Cluster "1" <-- "*" Galaxy
 
 Galaxy "1" <-- "*" System
-
 System "1" <-- "*" Star
+Galaxy "1" <-- "*" Pulsar
+
+Universe "1" <-- "*" Test
+
+Pulsar "1" <-- "*" Pulsik
+Pulsar "1" <-- "*" Puls
 
 Star "1" <-- "*" Planet
-Star "1" <-- "*" Comet
 Star "1" <-- "*" Asteroid
 
 Planet "1" <-- "*" Satellite
-Satellite "1" <-- "*" Small
 @enduml
 ```
