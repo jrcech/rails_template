@@ -5,8 +5,8 @@ skinparam monochrome true
 skinparam shadowing false
 
 class Universe {
-  name:string --unique --search
-  shortcut:string --unique
+  name:string :unique :search
+  shortcut:string :unique
   shortcut:string
 }
 
@@ -60,32 +60,42 @@ enum star_state {
   :pulsar
 }
 
-enum galaxy_state {
-  :live
-  :quasar
+enum galaxy_type {
+  :spiral
+  :elliptical
+  :irregular
 }
+Supercluster "1" -- "*" Planet
+Hypercluster "1" -- "*" Cluster
 
-Satellite "1" <-- "*" Small
+Supercluster "1" -- "*" Cluster
+Star "1" -- "*" Comet
 
-Supercluster "1" <-- "*" Cluster
-Star "1" <-- "*" Comet
+Universe "1" -- "*" Supercluster
+Cluster "1" -- "*" Galaxy
 
-  Universe "1" <-- "*" Supercluster
-Cluster "1" <-- "*" Galaxy
+System "1" -- "*" Star
 
-Galaxy "1" <-- "*" System
-System "1" <-- "*" Star
-Galaxy "1" <-- "*" Pulsar
+Galaxy "1" -- "*" System
+Galaxy "1" -- "*" Pulsar
+Galaxy "1" -- "*" Nebula
+Galaxy "1" -- "*" Quasar
 
-Universe "1" <-- "*" Test
-God "1" <-- "*" Jirka
+Galaxy "0..1" -- "*" BlackHole
+Quasar "0..1" -- "1" BlackHole
+System "0..1" -- "*" BlackHole
 
-Pulsar "1" <-- "*" Pulsik
-Pulsar "1" <-- "*" Puls
+Universe "1" -- "*" DarkMatter
+Universe "1" -- "*" DarkEnergy
 
-Star "1" <-- "*" Planet
-Star "1" <-- "*" Asteroid
+Planet "1" -- "*" Life
+Satellite "1" -- "*" Life
 
-Planet "1" <-- "*" Satellite
+Star "1" -- "*" Planet
+Star "1" -- "*" Asteroid
+
+Planet "1" -- "*" Satellite
+
+Reality "1" -- "*" Beyond
 @enduml
 ```

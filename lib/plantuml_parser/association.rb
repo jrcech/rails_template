@@ -5,14 +5,15 @@ class PlantumlParser
     rule(:space) { match('\s').repeat(1) }
     rule(:space?) { space.maybe }
 
+    rule(:base_association) { str('--') }
     rule(:left_association) { str('<--') }
     rule(:right_association) { str('-->') }
 
-    rule(:association) { left_association | right_association }
+    rule(:association) { base_association | left_association | right_association }
 
     rule(:class_name) { match('[a-zA-Z]').repeat(1) }
 
-    rule(:cardinality) { match('[0-9*"]').repeat(1) }
+    rule(:cardinality) { match('[0-9*"\.]').repeat(1) }
 
     rule(:expression) do
       space? >>

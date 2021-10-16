@@ -16,7 +16,7 @@ class PlantumlParser
 
     rule(:attribute_flag) do
       space >>
-        (str('--') >> match('[ 0-9a-zA-Z:-]').repeat).as(:flags)
+        (str(':') >> match('[ 0-9a-zA-Z:]').repeat).as(:flags)
     end
 
     rule(:attribute) do

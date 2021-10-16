@@ -26,15 +26,64 @@ class PlantumlParser
     ap base_associations_hash
     ap top_level_classes_array
     ap nested_associations_array
+    ap class_generator_commands(model_hash)
+    ap sort_generator_commands(nested_associations_array, class_generator_commands(model_hash))
   end
 
   private
 
   attr_reader :file
 
+  def sort_generator_commands(nested_associations, generator_commands = nil)
+    array = []
+
+    nested_associations.each do |top_level_class|
+      array << some_method(top_level_class)
+    end
+
+    array
+  end
+
+  def some_method(item)
+    array = []
+
+    case item
+    when Hash
+      item.each do |key, value|
+        array << key
+
+        array << some_method(value)
+      end
+    when Array
+      item.each do |array_value|
+        array << some_method(array_value)
+      end
+    else
+      array << item
+    end
+
+    array.flatten
+  end
+
+  def class_generator_commands(model_hash)
+    array = []
+
+    model_hash[:classes].each do |class_definition|
+      attributes = []
+
+      class_definition[:attributes].each do |attribute|
+        attributes << attribute[:attribute]
+      end
+
+      array << "#{class_definition[:class]} #{attributes.join(' ')}"
+    end
+
+    array
+  end
+  
   def parse_file
     classes = file.scan(/class\s[a-zA-Z\s<>_]*\s{[^}]*}/)
-    associations = file.scan(/.*(?:<--|-->).*/)
+    associations = file.scan(/.*(?:<--|-->|--).*/)
 
     {
       classes: parse_classes(classes),
@@ -106,14 +155,16 @@ class PlantumlParser
     array
   end
 
-  def nested_associations(associations_hash, top_level_classes)
+  def nested_associations(associations_hash, value)
     array = []
 
-    top_level_classes.each do |top_level_class|
-      array << transform_associations(
-        associations_hash,
-        top_level_class
-      )
+    case value
+    when Array
+      value.each do |array_value|
+        array << transform_associations(associations_hash, array_value)
+      end
+    else
+      array << transform_associations(associations_hash, value)
     end
 
     array
@@ -161,7 +212,7 @@ class PlantumlParser
 
   def transform_array_value(hash, array_value)
     if hash.key? array_value
-      { array_value => transform_associations(hash, hash[array_value]) }
+      { array_value => nested_associations(hash, hash[array_value]) }
     else
       array_value
     end
