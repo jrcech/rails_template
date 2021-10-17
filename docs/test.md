@@ -65,8 +65,6 @@ enum galaxy_type {
   :elliptical
   :irregular
 }
-Supercluster "1" -- "*" Planet
-Hypercluster "1" -- "*" Cluster
 
 Supercluster "1" -- "*" Cluster
 Star "1" -- "*" Comet

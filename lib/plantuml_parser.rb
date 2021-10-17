@@ -13,57 +13,16 @@ class PlantumlParser
   end
 
   def parse
-    model_hash = parse_file
-    base_associations_hash = base_associations(model_hash[:associations])
-    top_level_classes_array = top_level_classes(base_associations_hash)
+    @parsed_file = parse_file
+    @associations = base_associations
 
-    nested_associations_array = nested_associations(
-      base_associations_hash,
-      top_level_classes_array
-    )
-
-    ap model_hash
-    ap base_associations_hash
-    ap top_level_classes_array
-    ap nested_associations_array
-    ap class_generator_commands(model_hash)
-    ap sort_generator_commands(nested_associations_array, class_generator_commands(model_hash))
+    ap @parsed_file
+    ap @associations
   end
 
   private
 
-  attr_reader :file
-
-  def sort_generator_commands(nested_associations, generator_commands = nil)
-    array = []
-
-    nested_associations.each do |top_level_class|
-      array << some_method(top_level_class)
-    end
-
-    array
-  end
-
-  def some_method(item)
-    array = []
-
-    case item
-    when Hash
-      item.each do |key, value|
-        array << key
-
-        array << some_method(value)
-      end
-    when Array
-      item.each do |array_value|
-        array << some_method(array_value)
-      end
-    else
-      array << item
-    end
-
-    array.flatten
-  end
+  attr_reader :file, :associations, :parsed_file
 
   def class_generator_commands(model_hash)
     array = []
@@ -80,7 +39,7 @@ class PlantumlParser
 
     array
   end
-  
+
   def parse_file
     classes = file.scan(/class\s[a-zA-Z\s<>_]*\s{[^}]*}/)
     associations = file.scan(/.*(?:<--|-->|--).*/)
@@ -115,17 +74,36 @@ class PlantumlParser
     array
   end
 
-  def base_associations(associations)
+  def base_associations
     hash = {}
 
-    associations.each do |association|
+    parsed_file[:associations].each do |association|
       left_class = class_name_to_sym(association[:left_class])
-      right_class = class_name_to_sym(association[:right_class])
+      left_cardinality = association[:left_cardinality].to_s.gsub('"', '')
 
-      construct_base_associations(hash, left_class, right_class)
+      right_class = class_name_to_sym(association[:right_class])
+      right_cardinality = association[:right_cardinality].to_s.gsub('"', '')
+
+      if hash[left_class].nil?
+        hash[left_class] = { belongs_to: [], has_many: [] }
+      end
+
+      hash[left_class][:belongs_to] << right_class if right_cardinality == '1'
+      hash[left_class][:has_many] << right_class if right_cardinality == '*'
+
+      if hash[right_class].nil?
+        hash[right_class] = { belongs_to: [], has_many: [] }
+      end
+
+      hash[right_class][:belongs_to] << left_class if left_cardinality == '1'
+      hash[right_class][:has_many] << left_class if left_cardinality == '*'
     end
 
     hash
+  end
+
+  def belongs_to_class(class_symbol, cardinality)
+    class_symbol if cardinality == '1'
   end
 
   def class_name_to_sym(name)
@@ -143,80 +121,26 @@ class PlantumlParser
     end
   end
 
-  def top_level_classes(associations_hash)
-    array = []
-
-    associations_hash.each do |key, _|
-      next if associations_hash.values.flatten.include? key
-
-      array << key
-    end
-
-    array
-  end
-
-  def nested_associations(associations_hash, value)
-    array = []
-
-    case value
-    when Array
-      value.each do |array_value|
-        array << transform_associations(associations_hash, array_value)
-      end
-    else
-      array << transform_associations(associations_hash, value)
-    end
-
-    array
-  end
-
-  def transform_associations(hash, value_symbol = nil)
-    new_hash = {}
-
-    hash.each do |key, value|
-      new_hash = new_hash_pair(hash, value_symbol, key, value)
-    end
-
-    new_hash
-  end
-
-  def new_hash_pair(hash, value_symbol, key, value)
-    new_hash = {}
-
-    if value_symbol.nil?
-      new_hash[key] = new_hash_value(hash, value)
-    elsif hash.key?(value_symbol)
-      new_hash[value_symbol] = new_hash_value(hash, hash[value_symbol])
-    else
-      new_hash = value_symbol
-    end
-
-    new_hash
-  end
-
-  def new_hash_value(hash, value)
-    return iterate_association_array(hash, value) if value.is_a? Array
-
-    transform_associations(hash, value)
-  end
-
-  def iterate_association_array(hash, array_values)
-    array = []
-
-    array_values.each do |array_value|
-      array << transform_array_value(hash, array_value)
-    end
-
-    array
-  end
-
-  def transform_array_value(hash, array_value)
-    if hash.key? array_value
-      { array_value => nested_associations(hash, hash[array_value]) }
-    else
-      array_value
-    end
-  end
+  collection = {
+    universe: {
+      belongs_to: [
+        nil
+      ],
+      has_many: [
+        :supercluster,
+        :dark_matter,
+        :dark_energy
+      ],
+      has_one: nil
+    },
+    black_hole: {
+      belongs_to: [
+        :quasar,
+        :system,
+        :galaxy
+      ]
+    }
+  }
 end
 
 file = File.read(File.join('./docs', 'test.md'))
