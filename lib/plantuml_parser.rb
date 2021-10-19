@@ -15,14 +15,17 @@ class PlantumlParser
   def parse
     @parsed_file = parse_file
     @associations = base_associations
+    @attributes = transform_attributes
 
     ap @parsed_file
     ap @associations
+    ap @attributes
+    ap associations_with_attributes
   end
 
   private
 
-  attr_reader :file, :associations, :parsed_file
+  attr_reader :file, :associations, :parsed_file, :attributes
 
   def class_generator_commands(model_hash)
     array = []
@@ -100,6 +103,47 @@ class PlantumlParser
     end
 
     hash
+  end
+
+  def transform_attributes
+    hash = {}
+
+    parsed_file[:classes].each do |class_definition|
+      class_name = class_definition[:class].to_s.underscore.to_sym
+
+      hash[class_name] = {
+        attributes: iterate_attributes(class_definition[:attributes])
+      }
+    end
+
+    hash
+  end
+
+  def iterate_attributes(attributes)
+    array = []
+
+    attributes.each do |attribute|
+      array << {
+        name: attribute[:name].to_s,
+        flags: transform_flags(attribute[:flags])
+      }
+    end
+
+    array
+  end
+
+  def transform_flags(flags)
+    array = []
+
+    flags.each do |flag|
+      array << flag[:flag].to_s.tr(':', '').to_sym
+    end
+
+    array
+  end
+
+  def associations_with_attributes
+    associations.merge(attributes) { |_, new, old| new.merge(old) }
   end
 
   def belongs_to_class(class_symbol, cardinality)
