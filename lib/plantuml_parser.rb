@@ -164,27 +164,6 @@ class PlantumlParser
       hash[left_class] << right_class
     end
   end
-
-  collection = {
-    universe: {
-      belongs_to: [
-        nil
-      ],
-      has_many: [
-        :supercluster,
-        :dark_matter,
-        :dark_energy
-      ],
-      has_one: nil
-    },
-    black_hole: {
-      belongs_to: [
-        :quasar,
-        :system,
-        :galaxy
-      ]
-    }
-  }
 end
 
 file = File.read(File.join('./docs', 'test.md'))
