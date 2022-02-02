@@ -19,7 +19,7 @@ directory 'inserts', 'tmp/inserts'
 
 after_bundle do
   install_rails_linters
-  install_frontend_linters
+  install_frontend_linters # TODO
   install_tests
   install_devise
 

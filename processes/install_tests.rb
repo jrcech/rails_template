@@ -4,6 +4,7 @@ def install_tests
   install_gems
 
   configure_rspec
+  configure_capybara
   configure_simplecov
   configure_bullet
 
@@ -31,6 +32,6 @@ end
 def configure_bullet
   template_into_file(
     'config/environments/development.rb',
-    after: "ActiveSupport::EventedFileUpdateChecker\n"
+    after: "config.assets.quiet = true\n"
   )
 end
