@@ -9,20 +9,15 @@ end
 
 self.class.prepend ProcessDecorator
 
-install_generators
+install_generators #TODO
 
 configure_database
 
-add_blank_line 'Gemfile', "gem 'rails'"
 remove_lines 'Gemfile', 'tzinfo-data'
 
 directory 'inserts', 'tmp/inserts'
 
 after_bundle do
-  run 'spring stop'
-
-  remove_dir 'app/assets'
-
   install_rails_linters
   install_frontend_linters
   install_tests

@@ -29,9 +29,13 @@ Metrics/BlockLength:
     - 'shared_examples'
     - 'draw'
     - 'define'
+    - 'factory'
 Metrics/MethodLength:
   Exclude:
     - 'db/migrate/*'
+  CountAsOne:
+    - 'array'
+    - 'hash'
 Metrics/AbcSize:
   Exclude:
     - 'db/migrate/*'
