@@ -1,3 +1,6 @@
+# Model of the Universe for testing Rails template UML Parser
+This model is deeply nested for testing purposes.
+
 ```plantuml
 @startuml
 

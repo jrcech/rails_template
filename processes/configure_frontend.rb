@@ -24,7 +24,7 @@ def restyle_js_files
 end
 
 def configure_js
-  template_to_file(
+  template_into_file(
     'app/javascript/packs/application.js',
     after: "import \"channels\"\n"
   )

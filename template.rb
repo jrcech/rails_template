@@ -31,15 +31,15 @@ after_bundle do
   configure_application
   configure_frontend
 
-  install_overcommit
+  # install_overcommit
 
   remove_dir 'tmp/inserts'
 
   run 'rails db:seed'
 
-  run 'rspec'
+  # run 'rspec'
 
-  run "lsof -n +c 0 | cut -f1 -d' ' | uniq -c | sort | tail"
+  # run "lsof -n +c 0 | cut -f1 -d' ' | uniq -c | sort | tail"
 
   git add: '.'
   git commit: "-a -m 'Initial commit'"
