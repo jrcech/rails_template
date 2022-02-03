@@ -3,8 +3,6 @@
 def configure_application
   install_gems
 
-  configure_generators
-  # configure_i18n
   configure_seedbank
   configure_git
   install_view_components
@@ -14,12 +12,6 @@ def configure_application
   install_gretel
 
   process_directory
-end
-
-def configure_generators
-  remove_lines 'config/application.rb', 'config.generators.system_tests'
-
-  template_into_file 'config/application.rb', before: second_last_end
 end
 
 def install_model_tools

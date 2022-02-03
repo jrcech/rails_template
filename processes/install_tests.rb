@@ -7,6 +7,7 @@ def install_tests
   configure_capybara
   configure_simplecov
   configure_bullet
+  configure_generation
 
   process_directory
 end
@@ -33,5 +34,12 @@ def configure_bullet
   template_into_file(
     'config/environments/development.rb',
     after: "config.assets.quiet = true\n"
+  )
+end
+
+def configure_generation
+  template_into_file(
+    'config/application.rb',
+    after: "config.generators do |generator|\n"
   )
 end

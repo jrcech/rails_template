@@ -22,7 +22,7 @@ after_bundle do
   install_frontend_linters # TODO
   install_tests
 
-  configure_layout # Rewuires slim, RSpec, local
+  configure_layout # Rewuires slim, RSpec, locale
 
   install_devise
 
