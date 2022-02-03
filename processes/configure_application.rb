@@ -3,24 +3,13 @@
 def configure_application
   install_gems
 
-  configure_seedbank
   configure_git
   install_view_components
-  install_model_tools
   install_pagy
   install_simple_form
   install_gretel
 
   process_directory
-end
-
-def install_model_tools
-  run 'rails generate annotate:install'
-  run 'rails generate erd:install'
-end
-
-def configure_seedbank
-  remove_file 'db/seeds.rb'
 end
 
 def configure_git
