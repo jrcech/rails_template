@@ -7,6 +7,9 @@ def install_devise
   configure_rolify
   configure_users
   configure_routes
+  configure_rspec
+  configure_controllers
+  configure_mailer
 
   process_directory
 
@@ -88,5 +91,55 @@ def configure_routes
   template_into_file(
     'config/routes.rb',
     after: "Rails.application.routes.draw do\n"
+  )
+
+  insert_into_file(
+    'config/routes.rb',
+    read_insert_file('config/routes_devise_for'),
+    after: "scope '(:locale)'"
+  )
+end
+
+def configure_rspec
+  template_into_file(
+    'spec/support/shared_examples/requests/get_index_examples.rb',
+    before: second_last_end
+  )
+
+  gsub_file(
+    'spec/requests/admin/dashboard_request_spec.rb',
+    'GET /index',
+    'GET /index authenticated'
+  )
+end
+
+def configure_controllers
+  template_into_file(
+    'app/controllers/admin/admin_controller.rb',
+    after: "class AdminController < ApplicationController\n"
+  )
+end
+
+def configure_mailer
+  template_into_file(
+    'config/environments/development.rb',
+    after: "config.action_mailer.perform_caching = false\n"
+  )
+
+  template_into_file(
+    'config/environments/test.rb',
+    after: "config.action_mailer.perform_caching = false\n"
+  )
+end
+
+def configure_flash_messages
+  template_into_file(
+    'app/views/layouts/admin.rb',
+    after: "body\n"
+  )
+
+  template_into_file(
+    'app/views/layouts/application.rb',
+    after: "body\n"
   )
 end

@@ -4,8 +4,7 @@ def configure_application
   install_gems
 
   configure_generators
-  configure_mailer
-  configure_i18n
+  # configure_i18n
   configure_seedbank
   configure_slim
   configure_git
@@ -24,24 +23,12 @@ def configure_generators
   template_into_file 'config/application.rb', before: second_last_end
 end
 
-def configure_mailer
-  template_into_file(
-    'config/environments/development.rb',
-    after: "config.action_mailer.perform_caching = false\n"
-  )
-
-  template_into_file(
-    'config/environments/test.rb',
-    after: "config.action_mailer.perform_caching = false\n"
-  )
-end
-
-def configure_i18n
-  template_into_file(
-    'app/controllers/application_controller.rb',
-    after: "class ApplicationController < ActionController::Base\n"
-  )
-end
+# def configure_i18n
+#   template_into_file(
+#     'app/controllers/application_controller.rb',
+#     after: "class ApplicationController < ActionController::Base\n"
+#   )
+# end
 
 def install_model_tools
   run 'rails generate annotate:install'

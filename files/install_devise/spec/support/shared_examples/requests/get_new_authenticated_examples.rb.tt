@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-RSpec.shared_examples 'GET admin examples' do |path|
-  describe "GET #{path}" do
+RSpec.shared_examples 'GET /new authenticated' do
+  describe 'GET /new' do
     context 'with a guest' do
       before do
-        get path
+        get url_for action: :new
       end
 
-      it 'responds successfuly' do
+      it 'responds successfully' do
         expect(response).to redirect_to '/users/sign_in'
       end
 
@@ -19,7 +19,8 @@ RSpec.shared_examples 'GET admin examples' do |path|
     context 'with an authenticated user' do
       before do
         sign_in_user
-        get path
+
+        get url_for action: :new
       end
 
       it 'responds successfully' do

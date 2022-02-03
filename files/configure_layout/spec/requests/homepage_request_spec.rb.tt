@@ -3,5 +3,9 @@
 require 'rails_helper'
 
 RSpec.describe 'Homepage', type: :request do
-  include_examples 'GET examples', '/'
+  before do
+    resource_for :root
+  end
+
+  include_examples 'GET /index'
 end
