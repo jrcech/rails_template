@@ -30,6 +30,7 @@ end
 
 def generate_devise_user
   run 'rails generate devise User'
+
   uncomment_lines Dir['./db/migrate/*_devise_create_users.rb'].first, /t\.|add/
 end
 

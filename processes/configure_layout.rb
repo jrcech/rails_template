@@ -1,4 +1,6 @@
 def configure_layout
+  install_gems
+
   template_into_file(
     'config/routes.rb',
     after: 'Rails.application.routes.draw do'

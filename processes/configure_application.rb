@@ -6,7 +6,6 @@ def configure_application
   configure_generators
   # configure_i18n
   configure_seedbank
-  configure_slim
   configure_git
   install_view_components
   install_model_tools
@@ -23,13 +22,6 @@ def configure_generators
   template_into_file 'config/application.rb', before: second_last_end
 end
 
-# def configure_i18n
-#   template_into_file(
-#     'app/controllers/application_controller.rb',
-#     after: "class ApplicationController < ActionController::Base\n"
-#   )
-# end
-
 def install_model_tools
   run 'rails generate annotate:install'
   run 'rails generate erd:install'
@@ -37,10 +29,6 @@ end
 
 def configure_seedbank
   remove_file 'db/seeds.rb'
-end
-
-def configure_slim
-  remove_file 'app/views/layouts/application.html.erb'
 end
 
 def configure_git
