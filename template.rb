@@ -27,6 +27,8 @@ after_bundle do
 
   install_devise
 
+  install_bootstrap
+
   configure_application
   configure_frontend
 
