@@ -31,7 +31,6 @@ after_bundle do
   configure_system_test
 
   configure_application
-  configure_frontend
 
   # install_overcommit
 
