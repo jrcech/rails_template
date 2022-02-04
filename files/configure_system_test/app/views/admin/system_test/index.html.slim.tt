@@ -1,0 +1,59 @@
+/ frozen_string_literal: true
+
+h1 System tests
+
+p Various system integrity tests for tools.
+
+h2 CSS
+
+p
+  ' Following text should be invisible if CSS works properly:
+  span class="css-test" CSS not loaded.
+
+
+h2 Hotwire
+
+p Information about Turbo and Stimulus should be beneath this text:
+
+div data-controller="system-test"
+  p data-system-test-target="stimulusTest"
+  p data-system-test-target="turboTest"
+
+h2 Bootstrap 5
+
+h3 CSS
+
+p
+  ' Following text should be invisible if Bootstrap CSS works properly:
+  span class="d-none" Bootstrap CSS is not loaded.
+
+h3 Javascript
+
+div class="dropdown"
+  button [
+    class="btn btn-secondary dropdown-toggle"
+    type="button"
+    id="dropdownMenuButton1"
+    data-bs-toggle="dropdown"
+    aria-expanded="false"
+  ] Click dropdown button to show menu
+
+  ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1"
+    li
+      a class="dropdown-item" href="#" Bootstrap dropdowns are working
+
+button [
+  type="button"
+  class="btn btn-secondary"
+  data-bs-target="tooltip"
+  data-bs-placement="right"
+  title="Bootstrap tooltips are working"
+] Hover over to display a tooltip
+
+button [
+  type="button"
+  class="btn btn btn-danger"
+  data-bs-target="popover"
+  title="Popover test"
+  data-bs-content="Bootstrap popovers are working"
+] Click to toggle popover

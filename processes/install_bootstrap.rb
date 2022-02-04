@@ -7,6 +7,8 @@ def install_bootstrap
   configure_bootstrap_pins
   configure_bootstrap_js
   configure_scss
+  add_stimulus_controller
+  configure_stimulus_controller
 end
 
 def configure_assets
@@ -32,4 +34,22 @@ end
 
 def configure_scss
   remove_file 'app/stylesheets/application.css'
+
+  template 'app/stylesheets/application.scss.tt'
+end
+
+def add_stimulus_controller
+  template 'app/javascript/controller/bs_controller.tt'
+end
+
+def configure_stimulus_controller
+  template_into_file(
+    'app/views/layout/application.html.slim',
+    after: 'body'
+  )
+
+  template_into_file(
+    'app/views/layout/admin.html.slim',
+    after: 'body'
+  )
 end

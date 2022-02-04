@@ -1,0 +1,1 @@
+      get :system_test, to: 'system_test#index'

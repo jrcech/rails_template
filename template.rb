@@ -26,8 +26,9 @@ after_bundle do
   configure_layout # Rewuires slim, RSpec, locale
 
   install_devise
-
   install_bootstrap
+
+  configure_system_test
 
   configure_application
   configure_frontend
