@@ -21,6 +21,7 @@ after_bundle do
   install_rails_linters
   install_frontend_linters # TODO
   install_tests
+  configure_model_tools
 
   configure_layout # Rewuires slim, RSpec, locale
 
