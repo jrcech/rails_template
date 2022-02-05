@@ -30,6 +30,8 @@ after_bundle do
 
   configure_system_test
 
+  install_view_components
+
   configure_application
 
   # install_overcommit
