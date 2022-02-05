@@ -5,7 +5,6 @@ def configure_application
 
   configure_git
   install_pagy
-  install_simple_form
   install_gretel
 
   process_directory
@@ -35,10 +34,6 @@ def install_pagy
     'app/javascript/packs/application.js',
     after: "import \"channels\"\n"
   )
-end
-
-def install_simple_form
-  run 'rails generate simple_form:install --bootstrap'
 end
 
 def install_gretel
