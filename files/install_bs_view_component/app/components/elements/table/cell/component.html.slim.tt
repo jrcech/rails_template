@@ -1,0 +1,4 @@
+/ frozen_string_literal: true
+
+= content_tag cell_element, cell_attributes do
+  = cell_content

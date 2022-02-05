@@ -1,0 +1,8 @@
+/ frozen_string_literal: true
+
+= content_tag :tr, tr_attributes do
+  = render Elements::Table::Cell::Component.with_collection row,
+    thead: thead,
+    buttons: buttons
+
+  = content_tag :th if thead.present? && buttons.present?

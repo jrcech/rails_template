@@ -30,7 +30,9 @@ after_bundle do
 
   configure_system_test
 
-  install_view_components
+  install_view_component
+
+  install_bs_view_component
 
   configure_application
 

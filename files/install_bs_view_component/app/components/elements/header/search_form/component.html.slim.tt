@@ -1,0 +1,26 @@
+/ frozen_string_literal: true
+
+= simple_form_for '',
+  url: path_for(:search),
+  method: :get,
+  html: { id: "search-#{model_plural}" } do |f|
+
+  div class="input-group"
+
+    - if params[:items]
+      = f.input :page, as: :hidden, input_html: { value: 1 }
+      = f.input :items, as: :hidden, input_html: { value: params[:items] }
+
+    = f.input_field :search_query,
+      placeholder: :translate,
+      value: search_query,
+      type: :search,
+      label: false,
+      class: 'form-control'
+
+    div class="input-group-append"
+
+      = button_tag type: :submit,
+        class: 'btn btn-primary',
+        data: { disable_with: t('simple_form.submits.search.disable_with') }
+        = fa_icon(action_icon(:search))

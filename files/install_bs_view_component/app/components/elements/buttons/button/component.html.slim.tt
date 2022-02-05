@@ -1,0 +1,10 @@
+/ frozen_string_literal: true
+
+- if divider?
+  hr class="dropdown-divider"
+- elsif dropdown_item?
+  li = create_button
+- elsif nav_item?
+  li class="nav-item" = create_button
+- else
+  = create_button
