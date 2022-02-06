@@ -39,7 +39,7 @@ def configure_scss
 end
 
 def add_stimulus_controller
-  template 'app/javascript/controller/bs_controller.tt'
+  template 'app/javascript/controller/bs_controller.js.tt'
 end
 
 def configure_stimulus_controller
