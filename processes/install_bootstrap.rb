@@ -13,8 +13,8 @@ end
 
 def configure_assets
   append_to_file(
-    'config/initializers/assets.rb',
-    read_insert_file('config/initializers/assets')
+    'app/assets/config/manifest.js',
+    read_insert_file('app/assets/config/manifest')
   )
 end
 
