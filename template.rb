@@ -19,7 +19,7 @@ directory 'inserts', 'tmp/inserts'
 
 after_bundle do
   install_rails_linters
-  install_frontend_linters # TODO
+  install_eslint
   install_tests
   configure_model_tools
 
@@ -27,6 +27,7 @@ after_bundle do
 
   install_devise
   install_bootstrap
+  install_pagy
 
   configure_system_test
 
