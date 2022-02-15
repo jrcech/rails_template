@@ -4,28 +4,35 @@ def install_pagy
   template 'config/initializers/pagy.rb.tt'
   template 'app/assets/stylesheets/pagy.scss.tt'
 
-  template_into_file(
-    'app/controllers/application_controller.rb',
-    after: "class ApplicationController < ActionController::Base\n"
-  )
+  add_pagy_js
+  add_pagy_backend
+  add_pagy_frontend
+  install_pagy_controller
+end
 
+def add_pagy_js
+  template_into_file(
+    'package.json',
+    before: 'esbuild app/javascript/*.*'
+  )
+end
+
+def install_pagy_controller
+  template 'app/javascript/controllers/pagy_controller.js.tt'
+
+  run 'stimulus:manifest:update'
+end
+
+def add_pagy_frontend
   template_into_file(
     'app/helpers/application_helper.rb',
     after: "module ApplicationHelper\n"
   )
+end
 
-  append_to_file(
-    'app/javascript/application.js',
-    read_insert_file('app/javascript/application')
-  )
-
-  append_to_file(
-    'app/assets/config/manifest.js',
-    read_insert_file('app/assets/config/manifest')
-  )
-
-  append_to_file(
-    'config/importmap.rb',
-    read_insert_file('config/importmap')
+def add_pagy_backend
+  template_into_file(
+    'app/controllers/application_controller.rb',
+    after: "class ApplicationController < ActionController::Base\n"
   )
 end

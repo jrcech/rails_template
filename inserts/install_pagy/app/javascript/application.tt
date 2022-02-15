@@ -1,3 +1,0 @@
-import Pagy from "pagy-module";
-
-window.addEventListener("turbo:load", Pagy.init);
