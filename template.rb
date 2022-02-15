@@ -37,7 +37,7 @@ after_bundle do
 
   configure_application
 
-  # install_overcommit
+  install_overcommit
 
   remove_dir 'tmp/inserts'
 
