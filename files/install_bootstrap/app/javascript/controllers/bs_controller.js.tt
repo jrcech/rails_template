@@ -4,13 +4,11 @@ import * as bootstrap from 'bootstrap';
 export default class extends Controller {
   static targets = ['tooltip', 'popover'];
 
-  connect() {
-    this.tooltipTargets.map(
-      (tooltipTriggerEl) => new bootstrap.Tooltip(tooltipTriggerEl)
-    );
+  tooltipTargetConnected(target) {
+    return new bootstrap.Tooltip(target);
+  }
 
-    this.popoverTargets.map(
-      (popoverTriggerEl) => new bootstrap.Popover(popoverTriggerEl)
-    );
+  popoverTargetConnected(target) {
+    return new bootstrap.Popover(target);
   }
 }
