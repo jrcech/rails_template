@@ -21,6 +21,7 @@ class PlantumlParser
     ap @associations
     ap @attributes
     ap associations_with_attributes
+    ap class_generator_commands(model_hash)
   end
 
   private
@@ -166,6 +167,6 @@ class PlantumlParser
   end
 end
 
-file = File.read(File.join('./docs', 'test.md'))
+file = File.read(File.join('./docs', 'blogger.md'))
 
 PlantumlParser.new(file).parse
