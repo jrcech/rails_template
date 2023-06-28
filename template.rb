@@ -19,7 +19,7 @@ directory 'inserts', 'tmp/inserts'
 
 after_bundle do
   install_rails_linters
-  install_eslint
+  install_eslint #TODO Stylelint
   install_tests
   configure_model_tools
 

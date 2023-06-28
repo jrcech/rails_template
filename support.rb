@@ -36,7 +36,7 @@ def remove_lines(file, term)
   file_lines = ''
 
   IO.readlines(file).each do |line|
-    file_lines += line unless line.include? term
+    file_lines += line unless line.include?(term)
   end
 
   File.open(file, 'w') do |opened_file|
@@ -48,7 +48,7 @@ def add_blank_line(file, term)
   file_lines = ''
 
   IO.readlines(file).each do |line|
-    next file_lines += "#{line}\n" if line.include? term
+    next file_lines += "#{line}\n" if line.include?(term)
 
     file_lines += line
   end
@@ -96,6 +96,7 @@ end
 
 def install_gems
   append_to_file 'Gemfile', read_insert_file('Gemfile')
+
   run 'bundle install'
 end
 

@@ -32,13 +32,13 @@ class Review {
   content:text
 }
 
-User "1" <-- "*" Article
+User "1" -- "*" Article
 
-Article "1" <-- "*" Review
-Review "1" <-- "*" Comment
+Article "1" -- "*" Review
+Review "1" -- "*" Comment
 
-Article "1" <-- "*" LanguageAssignment
-Language "1" <-- "*" LanguageAssignment
+Article "1" -- "*" LanguageAssignment
+Language "1" -- "*" LanguageAssignment
 
 @enduml
 ```

@@ -14,7 +14,9 @@ end
 
 def configure_rspec
   run 'rails generate rspec:install'
+
   uncomment_lines 'spec/rails_helper.rb', /'spec', 'support'/
+
   append_to_file '.rspec', read_insert_file('.rspec')
 end
 
