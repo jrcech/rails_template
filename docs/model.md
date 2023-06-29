@@ -1,76 +1,45 @@
+# Blogger model diagram in UML
+
 ```plantuml
 @startuml
 
-skinparam monochrome true
-skinparam shadowing false
-
-class DevOps {
-  docker
-  ansible
-  terraForm
-  docker_compose
-  gitlab_ci
+class User {
+  email:string :required :unique :search
+  username:string :unique :search
+  first_name:string :search
+  last_name:string :search
 }
 
-class Application {
-  -- layout --
-  application
-  admin
-  -- template engine --
-  slim
-  -- test framework --
-  rspec
-  faker
-  capybara
-  factory_bot
-  -- mailer --
-  mailgun
-  -- localization --
-  i18n
-  globalize
-  -- overcommit --
-  all
-  -- debug --
-  all
+class Article {
+  title:string :required :search
+  content:text :required
 }
 
-class User <<devise>> {
-  email: String
-  username: String
-  first_name: String
-  last_name: String
-  -- search --
-  email
-  username
-  first_name
-  last_name
-  -- devise --
-  database_authenticatable
-  registerable
-  recoverable
-  rememberable
-  validatable
-  trackable
-  confirmable
-  lockable
-  omniauthable
-  -- omniauth providers --
-  facebook
-  google
-  -- rolify --
-  member
-  admin
-  owner
+class Technology {
+  title:string :required :search
+  shortcut:string :search
+  homepage:string
 }
 
-class Article <<acts_as_taggable_on>> {
-  title: String
-  content: Text
-  -- search --
-  title
+class Comment {
+  title:string :required :search
+  content:text :required
 }
 
-User "1" <-- "*" Article
+class Review {
+  title:string :required :search
+  content:text :required
+}
+
+User "1" -- "*" Article
+User "1" -- "*" Review
+User "1" -- "*" Comment
+
+Article "1" -- "*" Review
+Article "1" -- "*" Comment
+
+Article "1" -- "*" TechnologyAssignment
+Technology "1" -- "*" TechnologyAssignment
 
 @enduml
 ```

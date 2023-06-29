@@ -9,7 +9,7 @@ end
 
 self.class.prepend ProcessDecorator
 
-install_generators #TODO
+install_generators
 
 configure_database
 
@@ -19,11 +19,11 @@ directory 'inserts', 'tmp/inserts'
 
 after_bundle do
   install_rails_linters
-  install_eslint #TODO Stylelint
+  install_eslint
   install_tests
   configure_model_tools
 
-  configure_layout # Rewuires slim, RSpec, locale
+  configure_layout
 
   install_devise
   install_bootstrap
@@ -43,13 +43,6 @@ after_bundle do
 
   run 'rails db:seed'
 
-  # run 'rspec'
-
-  # run "lsof -n +c 0 | cut -f1 -d' ' | uniq -c | sort | tail"
-
   git add: '.'
   git commit: "-a -m 'Initial commit'"
-
-  # run 'rubocop --auto-correct-all'
-  # run 'yarn run eslint . --fix'
 end
