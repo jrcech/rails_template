@@ -1,9 +1,6 @@
 ```plantuml
 @startuml
 
-skinparam monochrome true
-skinparam shadowing false
-
 class User {
   email:string :unique :search
   username:string :search
