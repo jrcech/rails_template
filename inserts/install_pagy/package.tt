@@ -1,1 +1,0 @@
-NODE_PATH=\"$(bundle show 'pagy')/lib/javascripts\"

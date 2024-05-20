@@ -1,28 +1,25 @@
 
-group :development do
-  gem 'better_errors'
-  gem 'binding_of_caller'
-  gem 'letter_opener'
-  gem 'pry-awesome_print'
-  gem 'pry-rails'
-end
+gem 'faker', '~> 3.3', '>= 3.3.1'
 
 group :development, :test do
-  gem 'amazing_print'
-  gem 'bullet'
-  gem 'factory_bot_rails'
-  gem 'faker'
-  gem 'pry-byebug'
-  gem 'rspec-rails'
+  # Debugging tools
+  gem 'amazing_print', '~> 1.6', require: false
+  gem 'bullet', '~> 7.1', '>= 7.1.6'
+
+  # Test framework
+  gem 'rspec-rails', '~> 6.1', '>= 6.1.2'
+
+  # Test tools
+  gem 'factory_bot_rails', '~> 6.4', '>= 6.4.3'
 end
 
 group :test do
-  gem 'capybara'
-  gem 'selenium-webdriver'
-  gem 'shoulda-matchers'
-  gem 'simplecov', require: false
-  gem 'vcr'
-  gem 'w3c_validators'
-  gem 'webdrivers', require: false
-  gem 'webmock'
+  gem 'capybara', '~> 3.40'
+  gem 'capybara-email', '~> 3.0', '>= 3.0.2'
+  gem 'selenium-webdriver', '~> 4.19'
+  gem 'shoulda-matchers', '~> 6.2'
+  gem 'simplecov', '~> 0.22.0', require: false
+  gem 'timecop', '~> 0.9.8'
+  gem 'vcr', '~> 6.2'
+  gem 'webmock', '~> 3.23'
 end

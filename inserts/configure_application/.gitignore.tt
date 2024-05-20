@@ -1,6 +1,12 @@
 
+/.idea
 .DS_Store
-.idea
-.env
-.env.*
 /coverage
+
+# Ignore credentials keys.
+/config/credentials/*.key
+
+# Terraform
+/.terraform
+*.tfstate
+*.tfstate.backup

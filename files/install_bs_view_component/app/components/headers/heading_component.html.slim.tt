@@ -1,0 +1,16 @@
+div class="d-flex align-items-center mt-3"
+  = content_tag main_header.present? ? :h1 : :h2 do
+    = render Icons::FontAwesomeComponent.new icon: header[:icon],
+      title: header[:title],
+      text: header[:title]
+
+    br
+
+    - if header.key? :related
+      small
+        = render Icons::FontAwesomeComponent.new icon: header[:related][:icon],
+          title: header[:related][:title],
+          text: header[:related][:title],
+          class: 'fa-1x'
+
+  = render Buttons::ButtonComponent.with_collection(buttons)

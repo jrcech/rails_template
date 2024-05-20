@@ -1,0 +1,26 @@
+= form_with url: path_for_search,
+  method: :get,
+  html: { id: "search-#{model}" } do |f|
+
+  div class="input-group"
+
+    - if params[:items]
+      = f.hidden_field :page, input_html: { value: 1 }
+      = f.hidden_field :items, input_html: { value: params[:items] }
+
+    = f.search_field :search_query,
+      placeholder: :translate,
+      value: search_query,
+      type: :search,
+      label: false,
+      class: 'form-control'
+
+    div class="input-group-append"
+
+      = button_tag type: :submit,
+        class: 'btn btn-primary',
+        title: 'Search submit',
+        data: { disable_with: t('simple_form.submits.search.disable_with') }
+
+        = render Icons::FontAwesomeComponent.new icon: 'search',
+          title: 'search_button'

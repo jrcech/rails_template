@@ -83,7 +83,3 @@ bundle exec rails new <ApplicationName> --database=postgresql --skip-test --java
   ]
 }
 ```
-
-```log
-bundle exec rails generate scaffold Article title:string[required search] content:text[required] user:references review:has_many
-```

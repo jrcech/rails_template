@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require_relative 'support/commented_files'
 
 def remove_comments_from_files(files, inline: false)

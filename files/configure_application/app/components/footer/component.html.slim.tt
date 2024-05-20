@@ -1,8 +1,0 @@
-/ frozen_string_literal: true
-
-footer class="row"
-  div class="col-md"
-    = per_page_dropdown
-    
-  div class="col-md"
-    == pagy_bootstrap_nav_js(pagy)

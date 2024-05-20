@@ -1,0 +1,4 @@
+= content_tag :ul, nav_attributes
+  = render Buttons::ButtonComponent.with_collection(nav_items,
+    wrapper_element: :li,
+    wrapper_attributes: { class: 'nav-item' })

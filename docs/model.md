@@ -3,7 +3,7 @@
 ```plantuml
 @startuml
 
-class User <<Authentication>> {
+class User {
   email:string :required :unique :search
   username:string :unique :search
   first_name:string :search

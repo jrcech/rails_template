@@ -1,6 +1,2 @@
-
-gem 'gretel'
-gem 'oj'
-gem 'pagy'
-gem 'simple_form'
-gem 'view_component'
+gem 'gretel', '~> 5.0'
+gem 'kamal', '~> 1.5', '>= 1.5.2'

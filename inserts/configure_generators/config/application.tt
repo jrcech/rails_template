@@ -1,0 +1,10 @@
+
+    # Use SQL format to store schema info
+    config.active_record.schema_format = :sql
+
+    config.generators do |generator|
+      generator.stylesheets false
+      generator.view_specs false
+      generator.routing_specs false
+      generator.helper false
+    end

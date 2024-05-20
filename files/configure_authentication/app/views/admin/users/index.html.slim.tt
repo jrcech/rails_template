@@ -1,0 +1,33 @@
+ruby:
+  breadcrumb :records, :users
+
+  def thead
+    [
+      {
+        cells: [
+          search_icon(t('tables.headings.name')),
+          search_icon(t('tables.headings.email'))
+        ]
+      }
+    ]
+  end
+
+  def collection
+    index_data(
+      @users,
+      :highlight_full_name,
+      :highlight_email
+    )
+  end
+
+= render Headers::HeaderComponent.new(header: index_header(:users),
+  main_header: true,
+  search_query: @search_query,
+  pagy: @pagy,
+  action_buttons: [new_button(:users)],
+  path_for_search: search_admin_users_path)
+
+= render Tables::TableComponent.new(collection:, thead:)
+
+= render Footers::FooterComponent.new(left_dropdown: per_page_button(@pagy),
+  pagination: @pagy)

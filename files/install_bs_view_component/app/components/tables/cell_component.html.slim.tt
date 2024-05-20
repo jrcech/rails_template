@@ -1,0 +1,2 @@
+= content_tag alter_element, cell_attributes do
+  = cell

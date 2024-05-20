@@ -1,0 +1,22 @@
+= form_with model: [:admin, comment], class: 'mb-3' do |form|
+  - if form.object.errors.any?
+    div class="alert alert-danger"
+      ul
+        - form.object.errors.full_messages.each do |message|
+          li = message
+
+  div class="form-group mb-3"
+    = form.label :title, class: 'form-label'
+    = form.text_field :title, class: 'form-control'
+
+  div class="form-group mb-3"
+    = form.label :content, class: 'form-label'
+    = form.text_area :content, class: 'form-control'
+
+  div class="form-group mb-3"
+    = form.label :article_id, 'Article', class: 'form-label'
+    = form.collection_select :article_id, Article.all, :id, :title, {}, { class: 'form-control' }
+
+  div
+    = form.button :submit, class: 'btn btn-primary'
+    = link_to 'Cancel', :back, class: 'btn btn-outline-secondary'

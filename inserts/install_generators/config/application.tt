@@ -1,7 +1,0 @@
-
-    config.generators do |generator|
-      generator.stylesheets false
-      generator.view_specs false
-      generator.routing_specs false
-      generator.helper false
-    end

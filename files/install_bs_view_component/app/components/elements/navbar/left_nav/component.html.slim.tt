@@ -1,5 +1,0 @@
-/ frozen_string_literal: true
-
-ul class="navbar-nav me-auto"
-  = render Elements::Buttons::Button::Component.with_collection create_nav_items,
-    type: :nav_item

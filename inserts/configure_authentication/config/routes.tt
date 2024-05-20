@@ -1,0 +1,6 @@
+    scope module: :authentication do
+      resource :session, only: %i[new create destroy]
+      resource :registration, only: %i[new create]
+      resource :password_reset, only: %i[new edit create update]
+      resource :password, only: %i[edit update]
+    end

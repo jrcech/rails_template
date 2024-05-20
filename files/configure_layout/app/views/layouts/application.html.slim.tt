@@ -1,21 +1,26 @@
-/ frozen_string_literal: true
-
 doctype html
 html lang="en"
   head
-    title <%= camelized %>
+    title = application_name
 
     meta charset="utf-8"
-    meta [
-      name="viewport"
-      content="width=device-width, initial-scale=1"
-    ]
+    meta name="viewport" content="width=device-width, initial-scale=1"
 
     = csrf_meta_tags
     = csp_meta_tag
 
     = stylesheet_link_tag 'application', 'data-turbo-track': 'reload'
-    = javascript_importmap_tags
+    = javascript_include_tag 'application', 'data-turbo-track': 'reload', type: 'module'
 
-  body
-    = yield
+  body data-controller="bs"
+    = render Navbars::NavbarComponent.new(brand: application_name,
+      left_nav: left_nav,
+      right_nav: right_nav)
+
+    div class="container"
+      nav aria-label="breadcrumb" class="mt-3"
+        = breadcrumbs style: :bootstrap5
+
+      = yield
+
+      = render Toasts::ToastComponent.new(flash:)

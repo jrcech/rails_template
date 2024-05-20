@@ -1,0 +1,5 @@
+table class="index-table table table-striped table-hover"
+  = render Tables::HeadComponent.new(thead:)
+  
+  tbody
+    = render Tables::RowComponent.with_collection(collection)

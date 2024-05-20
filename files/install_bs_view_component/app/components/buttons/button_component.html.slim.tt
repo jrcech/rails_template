@@ -1,0 +1,9 @@
+- if button.dig(:dropdown_items).present?
+  = render Buttons::DropdownComponent.new(**button)
+
+- elsif button.dig(:wrapper_element).present?
+  = content_tag button.dig(:wrapper_element), button.dig(:wrapper_attributes)
+    = render Buttons::LinkComponent.new(**button)
+
+- else
+  = render Buttons::LinkComponent.new(**button)

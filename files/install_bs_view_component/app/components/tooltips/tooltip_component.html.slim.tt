@@ -1,0 +1,9 @@
+= options[:text_before]
+
+'
+
+= render Icons::FontAwesomeComponent.new(icon:,
+  title:,
+  **construct_options)
+
+= options[:text_after]

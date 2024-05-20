@@ -1,0 +1,22 @@
+= form_with model: [:admin, technology], class: 'mb-3' do |form|
+  - if form.object.errors.any?
+    div class="alert alert-danger"
+      ul
+        - form.object.errors.full_messages.each do |message|
+          li = message
+
+  div class="form-group mb-3"
+    = form.label :title, class: 'form-label'
+    = form.text_field :title, class: 'form-control'
+
+  div class="form-group mb-3"
+    = form.label :shortcut, class: 'form-label'
+    = form.text_field :shortcut, class: 'form-control'
+
+  div class="form-group mb-3"
+    = form.label :homepage, class: 'form-label'
+    = form.text_area :homepage, class: 'form-control'
+
+  div
+    = form.button :submit, class: 'btn btn-primary'
+    = link_to 'Cancel', :back, class: 'btn btn-outline-secondary'

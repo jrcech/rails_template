@@ -1,45 +1,27 @@
-# frozen_string_literal: true
-
 def install_tests
-  install_gems
+  append_to_file 'Gemfile', read_insert_file('Gemfile')
 
-  configure_rspec
-  configure_capybara
-  configure_simplecov
-  configure_bullet
-  configure_generation
+  configure_bullet_development
+  configure_test_generators
 
   process_directory
 end
 
-def configure_rspec
-  run 'rails generate rspec:install'
-
-  uncomment_lines 'spec/rails_helper.rb', /'spec', 'support'/
-
-  append_to_file '.rspec', read_insert_file('.rspec')
-end
-
-def configure_capybara
-  template_into_file 'spec/rails_helper.rb', after: "require 'rspec/rails'\n"
-end
-
-def configure_simplecov
-  insert_into_file(
-    'spec/rails_helper.rb',
-    read_insert_file('spec/rails_helper_simplecov'),
-    before: "require 'spec_helper'"
-  )
-end
-
-def configure_bullet
+def configure_bullet_development
   template_into_file(
     'config/environments/development.rb',
-    after: "config.assets.quiet = true\n"
+    after: "config.action_controller.raise_on_missing_callback_actions = true\n"
   )
 end
 
-def configure_generation
+def configure_bullet_test
+  template_into_file(
+    'config/environments/test.rb',
+    after: "config.action_controller.raise_on_missing_callback_actions = true\n"
+  )
+end
+
+def configure_test_generators
   template_into_file(
     'config/application.rb',
     after: "config.generators do |generator|\n"

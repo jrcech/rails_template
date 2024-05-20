@@ -1,9 +1,15 @@
+  concern :searchable do
+    get 'search', action: :search, on: :collection, as: :search
+  end
+
+  get 'up', to: 'rails/health#show', as: :rails_health_check
+
+  root to: 'homepage#index'
+
   scope '(:locale)', locale: /en|cs/ do
     namespace :admin do
       root to: 'dashboard#index'
     end
 
     get '/:locale', to: 'homepage#index'
-
-    root to: 'homepage#index'
   end

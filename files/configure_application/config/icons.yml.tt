@@ -1,0 +1,22 @@
+models:
+  users: 'users'
+actions:
+  related: 'share'
+  options: 'cogs'
+  details: 'info'
+  show: 'info'
+  edit: 'pen'
+  new: 'plus'
+  destroy: 'trash'
+  archive: 'archive'
+  unarchive: 'archive'
+  duplicate: 'files-o'
+  preview: 'eye'
+  export: 'download'
+  import: 'upload'
+  add: 'plus-square'
+  search: 'search'
+states:
+  archived: 'archive'
+  in_development: 'code'
+  finished: 'check'

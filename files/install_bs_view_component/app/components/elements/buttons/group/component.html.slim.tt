@@ -1,5 +1,0 @@
-/ frozen_string_literal: true
-
-div class="btn-group" role="group" aria-label=aria_label_title
-  = render Elements::Buttons::Button::Component.with_collection buttons,
-    item: item

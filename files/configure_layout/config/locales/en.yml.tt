@@ -1,0 +1,57 @@
+en:
+  hello: "Hello world"
+  models:
+  controller:
+    dashboard: "Dashboard"
+  actions:
+    new: "New %{record}"
+    edit: "Edit"
+    show: "Show"
+    destroy: "Destroy"
+  headers:
+    new: "New %{record}"
+    edit: "Edit %{record}"
+    edit_nested: "Edit %{record} %{nested_items}"
+  confirmations:
+    destroy:
+      title: "Confirm %{model} destruction"
+      confirm: "Do you really want to delete %{record}? There is no undo!"
+      commit: "Yes, delete %{model}"
+      cancel: "No"
+  tables:
+    headings:
+      id: "ID"
+      title: "Title"
+      updated_at: "Updated at"
+      approved: "Approved"
+      optional: "Optional"
+      type: "Type"
+      date: "Date"
+      from: "From"
+      to: "To"
+      icon: "Icon"
+      name: "Name"
+      email: "E-Mail"
+      roles: "Roles"
+      content: "Content"
+  details:
+    id: "ID"
+    email: "E-Mail"
+    role: "Role"
+    title: "Title"
+    content: "Content"
+  tooltips:
+    search: "This column is used in search"
+    remove: "Remove"
+    users: "Users"
+  success:
+    create: "%{model} '%{record}' was successfully created."
+    update: "%{model} '%{record}' was successfully updated."
+    destroy: "%{model} '%{record}' was successfully destroyed."
+    change_role: "User role was successfully changed to %{role}."
+  errors:
+    create: "%{model} wasn't created!"
+    update: "%{model} '%{record}' wasn't updated!"
+    destroy: "%{model} '%{record}' wasn't destroyed!"
+    change_role: "User role can't be changed!"
+    destroy_yourself: "You can't destroy yourself!"

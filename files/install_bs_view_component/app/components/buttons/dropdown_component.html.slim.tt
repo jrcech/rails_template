@@ -1,0 +1,6 @@
+= content_tag dropdown_element(**button), class: dropdown_class(**button)
+  = render Buttons::ButtonComponent.new(**button)
+
+  ul class=menu_class(**button)
+    = render Buttons::ButtonComponent.with_collection(dropdown_items,
+      wrapper_element: :li)

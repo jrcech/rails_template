@@ -1,3 +1,2 @@
-
-gem 'oj'
-gem 'pagy'
+gem 'oj', '~> 3.16', '>= 3.16.3'
+gem 'pagy', '~> 8.3'

@@ -1,0 +1,19 @@
+div class="toast-container position-fixed top-0 end-0 mt-5 p-3"
+  - flash.each do |type, message|
+    div [
+      id="toast-#{type}"
+      class="toast align-items-center fs-6"
+      role="alert"
+      aria-live="assertive"
+      aria-atomic="true"
+      data-bs-target="toast"
+    ]
+      div class="toast-header #{text_color_class_for(type)} #{bg_color_class_for(type)} bg-opacity-25"
+        = render Icons::FontAwesomeComponent.new(icon: icon_for(type), title: title_for(type), fixed_width: true)
+
+        strong class="me-auto" = title_for(type)
+        small = Time.current.to_fs(:short)
+        button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"
+
+      div class="toast-body"
+        = message

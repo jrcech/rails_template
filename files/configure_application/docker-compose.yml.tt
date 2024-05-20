@@ -1,0 +1,102 @@
+x-app: &default-app
+  build:
+    context: "."
+    args:
+      - "RAILS_ENV=${RAILS_ENV:-development}"
+      - "BUNDLE_WITHOUT=${BUNDLE_WITHOUT:-}"
+  depends_on:
+    - "postgres"
+  env_file:
+    - ".env.development"
+  user: rails:rails
+  restart: "${DOCKER_RESTART_POLICY:-unless-stopped}"
+  stop_grace_period: "3s"
+  tty: true
+  volumes:
+    - ".:/rails"
+
+x-assets: &default-assets
+  build:
+    context: "."
+    target: "build"
+    args:
+      - "RAILS_ENV=${RAILS_ENV:-development}"
+      - "BUNDLE_WITHOUT=${BUNDLE_WITHOUT:-}"
+  profiles:
+    - "assets"
+  env_file:
+    - ".env.development"
+  restart: "${DOCKER_RESTART_POLICY:-unless-stopped}"
+  stop_grace_period: "3s"
+  tty: true
+  volumes:
+    - ".:/rails"
+
+x-selenium: &default-selenium
+  ports:
+    - "5900:5900"
+  logging:
+    driver: none
+
+services:
+  web:
+    <<: *default-app
+    deploy:
+      resources:
+        limits:
+          cpus: "${DOCKER_WEB_CPUS:-0}"
+          memory: "${DOCKER_WEB_MEMORY:-0}"
+    healthcheck:
+      test: "${DOCKER_WEB_HEALTHCHECK_TEST:-curl localhost:3000/up}"
+      interval: "60s"
+      timeout: "3s"
+      start_period: "5s"
+      retries: 3
+    ports:
+      - "3000:3000"
+      - "4000:4000"
+    profiles:
+      - "web"
+
+  test:
+    <<: *default-app
+    depends_on:
+      - "postgres"
+      - "selenium-chrome"
+    profiles:
+      - "test"
+    environment:
+      - "RAILS_ENV=test"
+    command: "bundle exec rspec"
+
+  js:
+    <<: *default-assets
+    command: "bun run build --watch"
+
+  css:
+    <<: *default-assets
+    command: "bun run watch:css"
+
+  postgres:
+    image: postgres:15.6-alpine3.19
+    profiles:
+      - "postgres"
+    env_file:
+      - ".env.development"
+    volumes:
+      - data:/var/lib/postgresql/data
+
+  selenium-chrome:
+    <<: *default-selenium
+    image: selenium/standalone-chrome
+    profiles:
+      - "selenium-chrome"
+
+  seleniarm-chromium:
+    <<: *default-selenium
+    image: seleniarm/standalone-chromium
+    profiles:
+      - "seleniarm-chromium"
+
+volumes:
+  data:

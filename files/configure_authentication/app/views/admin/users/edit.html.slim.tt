@@ -1,0 +1,5 @@
+- breadcrumb :edit, @user, @user_presenter
+
+h1 = t('headers.edit', record: @user_presenter.title)
+
+= render Forms::UsersFormComponent.new(user: @user)

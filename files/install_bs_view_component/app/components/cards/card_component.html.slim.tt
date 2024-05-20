@@ -1,0 +1,8 @@
+div class="card mt-1"
+  div class="card-body"
+    - details.each do |detail|
+      p
+        strong
+          = t("details.#{detail}")
+          ' :
+        = item_presenter.send(detail)

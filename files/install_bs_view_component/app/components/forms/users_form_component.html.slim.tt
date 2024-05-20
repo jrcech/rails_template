@@ -1,0 +1,35 @@
+= form_with model: [:admin, user], class: 'mb-3' do |form|
+  - if form.object.errors.any?
+    div class="alert alert-danger"
+      ul
+        - form.object.errors.full_messages.each do |message|
+          li = message
+
+  div class="form-group mb-3"
+    = form.label :email, class: 'form-label'
+    = form.email_field :email, class: 'form-control'
+
+  div class="form-group mb-3"
+    = form.label :first_name, class: 'form-label'
+    = form.text_field :first_name, class: 'form-control'
+
+  div class="form-group mb-3"
+    = form.label :last_name, class: 'form-label'
+    = form.text_field :last_name, class: 'form-control'
+
+  div class="form-group mb-3"
+    = form.label :user_name, class: 'form-label'
+    = form.text_field :user_name, class: 'form-control'
+
+  - if user.new_record?
+    div class="form-group mb-3"
+      = form.label :password, class: 'form-label'
+      = form.password_field :password, class: 'form-control'
+
+    div class="form-group mb-3"
+      = form.label :password_confirmation, class: 'form-label'
+      = form.password_field :password_confirmation, class: 'form-control'
+
+  div
+    = form.button :submit, class: 'btn btn-primary'
+    = link_to 'Cancel', :back, class: 'btn btn-outline-secondary'

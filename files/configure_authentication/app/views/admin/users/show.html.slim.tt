@@ -1,0 +1,23 @@
+ruby:
+  breadcrumb :record, @user, @user_presenter
+
+  def details
+    %i(
+      id
+      email
+      first_name
+      last_name
+      user_name
+      created_at
+      updated_at
+    )
+  end
+
+= render Headers::HeaderComponent.new(header: header(@user_presenter),
+  main_header: true,
+  item: @user,
+  header_buttons: action_buttons(@user_presenter))
+
+= render Cards::CardComponent.new(item: @user,
+  item_presenter: @user_presenter,
+  details:)

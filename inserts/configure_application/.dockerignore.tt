@@ -1,0 +1,9 @@
+
+/.idea
+.DS_Store
+/coverage
+
+# Terraform
+/.terraform
+*.tfstate
+*.tfstate.backup

@@ -1,0 +1,22 @@
+  # Development tools
+  gem 'annotate', '~> 3.2'
+  gem 'better_errors', '~> 2.10', '>= 2.10.1'
+  gem 'binding_of_caller', '~> 1.0', '>= 1.0.1'
+  gem 'letter_opener', '~> 1.10'
+
+  # Run all static code quality analysis tools with Git hooks on every commit
+  gem 'overcommit', '~> 0.63.0', require: false
+
+  # Static code quality analysis tools
+  gem 'brakeman', '~> 6.1', '>= 6.1.2', require: false
+  gem 'bundler-audit', '~> 0.9.1', require: false
+  gem 'fasterer', '~> 0.11.0', require: false
+  gem 'flay', '~> 2.13', '>= 2.13.2', require: false
+  gem 'reek', '~> 6.3', require: false
+  gem 'rubocop-capybara', '~> 2.20', require: false
+  gem 'rubocop-factory_bot', '~> 2.25', '>= 2.25.1', require: false
+  gem 'rubocop-performance', '~> 1.21', require: false
+  gem 'rubocop-rails', '~> 2.24', '>= 2.24.1', require: false
+  gem 'rubocop-rspec', '~> 2.29', '>= 2.29.1', require: false
+  gem 'rubycritic', '~> 4.9', require: false
+  gem 'slim_lint', '~> 0.27.0', require: false

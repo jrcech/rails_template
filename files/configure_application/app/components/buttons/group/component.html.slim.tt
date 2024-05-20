@@ -1,5 +1,0 @@
-/ frozen_string_literal: true
-
-div class="btn-group" role="group" aria-label="#{title} buttons"
-  - buttons.each do |button|
-    = button

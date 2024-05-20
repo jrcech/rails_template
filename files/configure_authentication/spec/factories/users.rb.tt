@@ -1,0 +1,17 @@
+FactoryBot.define do
+  factory :user do
+    auth_token { nil }
+    email { Faker::Internet.email }
+    first_name { nil }
+    last_name { nil }
+    password { Faker::Internet.password(min_length: 8) }
+    user_name { nil }
+
+    trait :all do
+      first_name { Faker::Name.first_name }
+      last_name { Faker::Name.last_name }
+      user_name { Faker::Internet.username(specifier: 5..8) }
+      auth_token { Faker::Alphanumeric.alphanumeric(number: 32) }
+    end
+  end
+end

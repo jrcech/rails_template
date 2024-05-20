@@ -1,6 +1,0 @@
-/ frozen_string_literal: true
-
-thead
-  = render Elements::Table::Row::Component.with_collection thead,
-    thead: true,
-    buttons: buttons

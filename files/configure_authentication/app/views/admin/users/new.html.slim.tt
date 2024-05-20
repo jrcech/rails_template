@@ -1,0 +1,5 @@
+- breadcrumb :new, :users
+
+h1 = t('headers.new', record: t('models.users.one'))
+
+= render Forms::UsersFormComponent.new(user: @user)

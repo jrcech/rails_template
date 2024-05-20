@@ -1,8 +1,49 @@
+require:
+  - rubocop-performance
+
 AllCops:
   NewCops: enable
-Layout/LineLength:
-  Max: 80
-Style/RegexpLiteral:
-  AllowInnerSlashes: true
+
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+
+Metrics/BlockLength:
+  CountAsOne:
+    - 'array'
+    - 'method_call'
+    - 'hash'
+    - 'heredoc'
+  AllowedMethods:
+    - 'configure'
+    - 'draw'
+    - 'class_methods'
+
+Metrics/ClassLength:
+  CountAsOne:
+    - 'array'
+    - 'method_call'
+    - 'hash'
+    - 'heredoc'
+
+Metrics/MethodLength:
+  CountAsOne:
+    - 'array'
+    - 'method_call'
+    - 'hash'
+    - 'heredoc'
+
+Metrics/ModuleLength:
+  CountAsOne:
+    - 'array'
+    - 'method_call'
+    - 'hash'
+    - 'heredoc'
+
 Style/Documentation:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/RedundantFetchBlock:
   Enabled: false

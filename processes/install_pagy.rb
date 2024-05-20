@@ -1,26 +1,10 @@
 def install_pagy
-  install_gems
+  template_into_file 'Gemfile', before: 'group :development, :test do'
 
-  template 'config/initializers/pagy.rb.tt'
-  template 'app/assets/stylesheets/pagy.scss.tt'
-
-  add_pagy_js
   add_pagy_backend
   add_pagy_frontend
-  install_pagy_controller
-end
 
-def add_pagy_js
-  template_into_file(
-    'package.json',
-    before: 'esbuild app/javascript/*.*'
-  )
-end
-
-def install_pagy_controller
-  template 'app/javascript/controllers/pagy_controller.js.tt'
-
-  run 'stimulus:manifest:update'
+  process_directory
 end
 
 def add_pagy_frontend

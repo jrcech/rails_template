@@ -1,0 +1,74 @@
+require:
+  - rubocop-capybara
+  - rubocop-factory_bot
+  - rubocop-performance
+  - rubocop-rails
+  - rubocop-rspec
+
+AllCops:
+  NewCops: enable
+
+Rails/UnknownEnv:
+  Environments:
+    - 'development'
+    - 'test'
+    - 'production'
+    - 'staging'
+
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+
+Metrics/BlockLength:
+  CountAsOne:
+    - 'array'
+    - 'method_call'
+    - 'hash'
+    - 'heredoc'
+  AllowedMethods:
+    - 'configure'
+    - 'draw'
+    - 'class_methods'
+
+Metrics/ClassLength:
+  CountAsOne:
+    - 'array'
+    - 'method_call'
+    - 'hash'
+    - 'heredoc'
+
+Metrics/MethodLength:
+  CountAsOne:
+    - 'array'
+    - 'method_call'
+    - 'hash'
+    - 'heredoc'
+
+Metrics/ModuleLength:
+  CountAsOne:
+    - 'array'
+    - 'method_call'
+    - 'hash'
+    - 'heredoc'
+
+RSpec/ExampleLength:
+  CountAsOne:
+    - 'array'
+    - 'method_call'
+    - 'hash'
+    - 'heredoc'
+
+RSpec/ImplicitSubject:
+  EnforcedStyle: 'single_statement_only'
+
+Style/Documentation:
+  Enabled: false
+
+Style/MixinUsage:
+  Exclude:
+    - 'db/seeds.rb'
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/RedundantFetchBlock:
+  Enabled: false

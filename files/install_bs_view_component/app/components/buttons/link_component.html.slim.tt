@@ -1,0 +1,8 @@
+= link_to(construct_title,
+  button[:path],
+  class: construct_class,
+  method: button[:link_method],
+  role: 'button',
+  id: button[:id],
+  'aria-expanded': button[:aria_expanded],
+  data: button[:data])

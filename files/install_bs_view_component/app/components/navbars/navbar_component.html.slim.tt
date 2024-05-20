@@ -1,0 +1,27 @@
+nav class="navbar navbar-expand-lg bg-dark mb-4" data-bs-theme="dark"
+  div class="container"
+    = render Buttons::ButtonComponent.new(title: brand,
+      path: root_path,
+      button_class: 'navbar-brand')
+
+    button [
+      class="navbar-toggler"
+      type="button"
+      data-toggle="collapse"
+      data-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    ]
+      span class="navbar-toggler-icon"
+    
+    div class="collapse navbar-collapse" id="navbarSupportedContent"
+      = render Navs::NavComponent.new nav_items: left_nav,
+        type: :left_nav,
+        navbar: true,
+        id: 'leftNavbarNav'
+      
+      = render Navs::NavComponent.new nav_items: right_nav,
+        type: :right_nav,
+        navbar: true,
+        id: 'rightNavbarNav'

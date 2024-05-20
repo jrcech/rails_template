@@ -1,0 +1,25 @@
+div class="row justify-content-center"
+  div class="col-12 col-md-7 col-lg-5"
+    h1 class="mb-4" Update Password
+
+    = form_with model: current_user, url: password_path, class: 'mb-3' do |form|
+      - if form.object.errors.any?
+        div class="alert alert-danger"
+          ul
+            - form.object.errors.full_messages.each do |message|
+              li = message
+
+      div class="form-group mb-3"
+        = form.label :password_challenge, 'Current password', class: 'form-label'
+        = form.password_field :password_challenge, class: 'form-control', placeholder: 'Current password'
+
+      div class="form-group mb-3"
+        = form.label :password, 'New password', class: 'form-label'
+        = form.password_field :password, class: 'form-control', placeholder: 'New password'
+
+      div class="form-group mb-3"
+        = form.label :password_confirmation, class: 'form-label'
+        = form.password_field :password_confirmation, class: 'form-control', placeholder: 'Confirm new password'
+
+      div
+        = form.submit 'Update password', class: 'btn btn-primary'

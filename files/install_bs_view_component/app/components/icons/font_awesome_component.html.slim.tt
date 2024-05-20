@@ -1,0 +1,6 @@
+= tag.i class: construct_class,
+  title: title,
+  data: construct_data
+
+span class="ms-1"
+  = options&.dig(:text)

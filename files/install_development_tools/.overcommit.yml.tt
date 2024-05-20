@@ -1,0 +1,31 @@
+CommitMsg:
+  ALL:
+    on_warn: fail
+PreCommit:
+  ALL:
+    on_fail: warn
+  BundleAudit:
+    enabled: true
+  BundleCheck:
+    enabled: true
+  BundleOutdated:
+    enabled: true
+  Fasterer:
+    enabled: true
+  Flay:
+    enabled: true
+  JsonSyntax:
+    enabled: true
+  Reek:
+    enabled: true
+  RuboCop:
+    enabled: true
+  SlimLint:
+    enabled: true
+  YamlSyntax:
+    enabled: true
+PrePush:
+  ALL:
+    on_fail: warn
+  Brakeman:
+    enabled: true

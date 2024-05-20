@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require_relative 'support'
 require_relative 'process_decorator'
 
@@ -9,40 +7,36 @@ end
 
 self.class.prepend ProcessDecorator
 
-install_generators
+directory 'inserts', 'tmp/inserts'
 
+configure_generators
 configure_database
 
 remove_lines 'Gemfile', 'tzinfo-data'
 
-directory 'inserts', 'tmp/inserts'
-
 after_bundle do
-  install_rails_linters
-  install_eslint
+  install_development_tools
   install_tests
   configure_model_tools
 
   configure_layout
 
-  install_devise
-  install_bootstrap
+  configure_authentication
   install_pagy
 
-  configure_system_test
-
-  install_view_component
+  configure_integrations_test
 
   install_bs_view_component
 
   configure_application
 
-  install_overcommit
-
   remove_dir 'tmp/inserts'
 
-  run 'rails db:seed'
+  run 'bundle install'
+  run 'rails stimulus:manifest:update'
+  run 'rails pagy:link_module'
+  run 'bun run build'
 
-  git add: '.'
-  git commit: "-a -m 'Initial commit'"
+  run 'rails db:migrate'
+  run 'rails db:seed'
 end

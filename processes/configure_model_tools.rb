@@ -1,23 +1,7 @@
-# frozen_string_literal: true
-
 def configure_model_tools
-  install_gems
+  template_into_file 'Gemfile', before: 'group :development, :test do'
 
-  install_seedbank
-  install_erd
-  install_annotate
+  remove_file 'db/seeds.rb'
 
   process_directory
-end
-
-def install_seedbank
-  remove_file 'db/seeds.rb'
-end
-
-def install_erd
-  run 'rails generate erd:install'
-end
-
-def install_annotate
-  run 'rails generate annotate:install'
 end

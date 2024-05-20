@@ -1,0 +1,4 @@
+= content_tag :tr, tr_attributes do
+  = render Tables::CellComponent.with_collection(row[:cells],
+    cell_element:,
+    cell_attributes:)

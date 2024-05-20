@@ -1,0 +1,2 @@
+div class="btn-group" role="group" aria-label=aria_label_title
+  = render Buttons::ButtonComponent.with_collection buttons
