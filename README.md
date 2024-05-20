@@ -2,6 +2,12 @@
 
 Ruby on Rails 7.1 template for generating a new project with some pre-configured settings.
 
+Checkout [DEMO](http://49.12.193.13) of an application.
+
+Login with:
+- email: `test@example.com`
+- password: `123456789`
+
 ## What this template does?
 
 ### Generates a new Rails project
